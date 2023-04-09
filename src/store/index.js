@@ -9,6 +9,7 @@ export default createStore({
     SideMenuIndex: 0,
     ShowPopUp: 0,
     UserLang: 1,
+    TheTaskID: 0,
     AppInfo: {
       AppLogo: "",
       AppName: "Pricing Gate",

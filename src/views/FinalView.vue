@@ -343,17 +343,24 @@ export default {
         let ThePureURL = window.location.href;
         let TheCode = '';
         let TheTaskID = '';
+        const Api_Url = this.$store.state['Api_Url'];
         if (ThePureURL.indexOf("taskid") != -1) {
-            TheTaskID = ThePureURL.split('taskid=')[1];
-            main.SaveTheTaskId(TheTaskID);
+            TheTaskID = ThePureURL.split('taskid=')[1].split('&')[0];
+            axios.post(Api_Url, {
+                api_name: "SaveTaskId",
+                the_code: TheTaskID
+            }).then(function (res) {
+                console.log(res.data);
+                main.$store.state['TheTaskID'] = TheTaskID;
+            });
         }
         else {
-            const Api_Url = this.$store.state['Api_Url'];
             axios.post(Api_Url, {
                 api_name: "GetTaskId",
             }).then(function (res) {
-                let TheTaskID = res.data['task_id'];
+                TheTaskID = res.data['task_id'];
                 console.log(TheTaskID);
+                main.$store.state['TheTaskID'] = TheTaskID;
             });
         }
         if (ThePureURL.indexOf("code") != -1) {
@@ -363,6 +370,7 @@ export default {
         else {
             main.FillAppInfo();
         }
+
 
     },
     methods: {
@@ -477,6 +485,7 @@ export default {
                 api_name: "GetAllProducts",
             }).then(function (res) {
                 let TheProducts = res.data['data'];
+                // alert(TheProducts);
                 if (TheProducts === undefined) {
                     window.location = 'https://accounts.zoho.com/oauth/v2/auth?response_type=code&client_id=1000.R3K41GUMKFVW5K825Z6PZ6JU1HTQ3Q&scope=ZohoCRM.modules.ALL&redirect_uri=https://webform.designido.net&prompt=consent';
                 }

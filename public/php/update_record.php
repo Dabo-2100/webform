@@ -7,7 +7,6 @@ class UpdateRecords
         $Access_Token = fread($myfile, filesize("token.txt"));
         fclose($myfile);
         $curl_pointer = curl_init();
-
         $curl_options = array();
         $url = "https://www.zohoapis.com/crm/v2/Deal_Requirements";
 
@@ -18,8 +17,8 @@ class UpdateRecords
         $requestBody = array();
         $recordArray = array();
         $recordObject = array();
-        $recordObject["Unit_Price"] = 1147;
         $recordObject["id"] = "5032485000000683205";
+        $recordObject["Unit_Price"] = 1147;
         $recordArray[] = $recordObject;
 
         $requestBody["data"] = $recordArray;

@@ -2,7 +2,70 @@
 header("Access-Control-Allow-Origin: *"); //To Allow Access From Other Servers
 header("Access-Control-Allow-Methods: POST"); //To Allow POST 
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
-require("get_records.php");
+$pdo = require_once 'connect.php';
+$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+
+function get_access_token($code = 0, $pdo)
+{
+    $fianl = '';
+    if ($code == 0) {
+        $sql = "SELECT access_token From app_info WHERE (record_id = 1)";
+        $statement = $pdo->prepare($sql);
+        $statement->execute();
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        if ($result) {
+            $fianl = $result["access_token"];
+        }
+    } else {
+        $post = [
+            'code' => $code,
+            'redirect_uri' => 'https://webform.designido.net',
+            'client_id' => '1000.R3K41GUMKFVW5K825Z6PZ6JU1HTQ3Q',
+            'client_secret' => '95853f787c210aab15a7fa69b90d565470fe0c5e75',
+            'grant_type' => 'authorization_code',
+        ];
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://accounts.zoho.com/oauth/v2/token");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+        $response = curl_exec($ch);
+        $response = json_decode($response, true);
+        if (count($response) < 3) {
+            $fianl = $response['error'];
+        } else {
+            $fianl = $response['access_token'];
+            $sql = "UPDATE app_info SET access_token = :access_token WHERE (record_id = 1)";
+            $statement = $pdo->prepare($sql);
+            $statement->bindParam(':access_token', $fianl);
+            $statement->execute();
+        }
+    }
+    return $fianl;
+};
+
+function get_records($Module, $code = 0, $pdo)
+{
+    $Access_Token = 0;
+    if ($code == 0) {
+        $Access_Token = get_access_token(0, $pdo);
+    } else {
+        $Access_Token = get_access_token($code, $pdo);
+    }
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "https://www.zohoapis.com/crm/v2/" . $Module);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Authorization: Zoho-oauthtoken ' . $Access_Token,
+        'Content-Type: application/x-www-form-urlencoded'
+    ));
+    $response = curl_exec($ch);
+    echo ($response);
+};
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $Post_object = file_get_contents('php://input');
     $POST_data = json_decode($Post_object, true);
@@ -14,34 +77,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 if ($api_name == "RefreshAccessToken") {
     $code = htmlspecialchars(@$POST_data["the_code"]);
-    get_access_token($code);
+    get_access_token($code, $pdo);
 }
 
 if ($api_name == "SaveTaskId") {
-    $final = htmlspecialchars(@$POST_data["the_code"]);
-    // $myfile = fopen("taskid.txt", "w") or die("Unable to open file!");
-    // fwrite($myfile, $final);
-    // fclose($myfile);
-    echo $final;
-}
-
-if ($api_name == "GetTaskId") {
-    $myfile = fopen("taskid.txt", "r") or die("Unable to open file!");
-    $fianl = fread($myfile, filesize("taskid.txt"));
-    fclose($myfile);
+    $task_id = htmlspecialchars(@$POST_data["the_code"]);
+    $sql = "UPDATE app_info SET task_id = :task_id WHERE (record_id = 1)";
+    $statement = $pdo->prepare($sql);
+    $statement->bindParam(':task_id', $task_id);
+    $statement->execute();
     $data = array(
-        "task_is_here" => 0,
-        "task_id" => $fianl,
+        "Task_Updated" => 1,
     );
     echo json_encode($data);
 }
+
+if ($api_name == "GetTaskId") {
+    $sql = "SELECT task_id From app_info WHERE (record_id = 1)";
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $result = $statement->fetch(PDO::FETCH_ASSOC);
+    if ($result) {
+        $task_id = $result["task_id"];
+        $data = array(
+            "task_id" => $task_id,
+        );
+        echo json_encode($data);
+    }
+}
+
 if ($api_name == "GetAllProducts") {
-    get_records("Products");
+    get_records("Products", 0, $pdo);
 }
 if ($api_name == "GetRawMaterials") {
-    get_records("Raw_Materials");
+    get_records("Raw_Materials", 0, $pdo);
 }
 
 if ($api_name == "GetPaperCutSize") {
-    get_records("PaperCut_Sizes");
+    get_records("PaperCut_Sizes", 0, $pdo);
 }
