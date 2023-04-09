@@ -1,0 +1,51 @@
+{
+    "Owner": {
+        "name": "Abdelfattah Mahmoud",
+        "id": "5032485000000405001",
+        "email": "abdelfattah.mahmoud@designido.net"
+    },
+    "$currency_symbol": "EGP",
+    "$field_states": null,
+    "$review_process": {
+        "approve": false,
+        "reject": false,
+        "resubmit": false
+    },
+    "Task_Stage": "Not Started",
+    "Name": "Price Main Flyer",
+    "Last_Activity_Time": "2023-04-09T22:11:06+02:00",
+    "$review": null,
+    "$state": "save",
+    "Unsubscribed_Mode": null,
+    "$process_flow": false,
+    "Deal_Name": {
+        "name": "Eid Works",
+        "id": "5032485000000734616"
+    },
+    "$locked_for_me": false,
+    "id": "5032485000000740046",
+    "$approved": true,
+    "What_to_price": {
+        "name": "Main Flyer",
+        "id": "5032485000000734641"
+    },
+    "$approval": {
+        "delegate": false,
+        "approve": false,
+        "reject": false,
+        "resubmit": false
+    },
+    "Modified_Time": "2023-04-09T22:11:06+02:00",
+    "Created_Time": "2023-04-09T21:19:53+02:00",
+    "Unsubscribed_Time": null,
+    "$editable": true,
+    "Deadline_Date": "2023-04-11",
+    "$orchestration": false,
+    "Starting_Date": "2023-04-09",
+    "$in_merge": false,
+    "Locked__s": false,
+    "Tag": [],
+    "$zia_owner_assignment": "owner_recommendation_unavailable",
+    "Final_Price": 1,
+    "$approval_state": "approved"
+}

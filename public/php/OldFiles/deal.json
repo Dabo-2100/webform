@@ -1,0 +1,53 @@
+{
+    "Owner": {
+        "name": "Abdelfattah Mahmoud",
+        "id": "5032485000000405001",
+        "email": "abdelfattah.mahmoud@designido.net"
+    },
+    "$currency_symbol": "EGP",
+    "$field_states": null,
+    "$review_process": {
+        "approve": false,
+        "reject": false,
+        "resubmit": false
+    },
+    "Product": null,
+    "Requirement_Type": null,
+    "Requirement_Details": "Size : A4\nPaper : Coche",
+    "Name": "Print Eid Flyer",
+    "Last_Activity_Time": "2023-04-09T20:09:42+02:00",
+    "$review": null,
+    "$state": "save",
+    "Unsubscribed_Mode": null,
+    "$process_flow": false,
+    "Deal_Name": {
+        "name": "Print New Eid Flyer",
+        "id": "5032485000000683072"
+    },
+    "$locked_for_me": false,
+    "id": "5032485000000734275",
+    "$approved": true,
+    "$approval": {
+        "delegate": false,
+        "approve": false,
+        "reject": false,
+        "resubmit": false
+    },
+    "Modified_Time": "2023-04-09T20:09:42+02:00",
+    "Created_Time": "2023-04-09T20:07:48+02:00",
+    "Unsubscribed_Time": null,
+    "Quantity": 1200,
+    "$editable": true,
+    "$orchestration": false,
+    "Pricing_InCharge": {
+        "name": "Abdelfattah Mahmoud",
+        "id": "5032485000000405001"
+    },
+    "$in_merge": false,
+    "Locked__s": false,
+    "Pricing_Way": "Production",
+    "Tag": [],
+    "$zia_owner_assignment": "owner_recommendation_unavailable",
+    "$approval_state": "approved",
+    "Unit_Price": 900
+}

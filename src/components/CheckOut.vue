@@ -104,6 +104,7 @@
 
 <script>
 import { main } from '@popperjs/core';
+import axios from 'axios';
 
 export default {
   name: 'CheckOut',
@@ -174,7 +175,16 @@ export default {
     },
     SendDataToZoho() {
       let TotalPrice = this.$store.state['TheCalcResult']["PrintPrice"] + this.TheTotalFinish;
-      alert(TotalPrice);
+      let Qty = this.$store.state['TheUserSelection']['Qty'];
+      let UnitPrice = TotalPrice / Qty;
+      const Api_Url = this.$store.state['Api_Url'];
+      axios.post(Api_Url, {
+        api_name: "SendDataToZoho",
+        ThePrice: UnitPrice,
+      }).then(function (res) {
+        alert('Done');
+      });
+
     }
   },
   computed: {
