@@ -5,15 +5,20 @@
                 <img src="@/assets/photos/priceing.png">
                 <h1>{{ this.$store.state['UserLang'] == 1 ? 'Pricing Gate' : 'قائمة تسعير المنتجات' }}</h1>
             </div>
-            <div class="SelectLang">
+            <div class="SelectLang" v-if="this.$store.state['CurrentWidth'] > 767">
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
                         v-model="this.UserLang">
                     <label class="form-check-label" for="flexSwitchCheckDefault">اللغة العربية</label>
                 </div>
             </div>
+            <font-awesome-icon icon="fa-solid fa-bars" class="SideMenuBtn"
+                v-if="this.$store.state['CurrentWidth'] <= 767" />
+            <div class="col-12 SideMenu">
+
+            </div>
         </div>
-        <div class="col-12 PageContent">
+        <div class="col-12 col-md-9 PageContent">
             <!-- RequestType -->
             <div class="col-12 col-sm-6 SelectField">
                 <label class="col-12">
@@ -104,53 +109,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Pieces Size -->
-            <!-- <div class="col-12 col-sm-6 SelectField" v-if="this.TheUserSelection['ProductSize'] != -1">
-                <label class="col-12">
-                    {{ this.$store.state['UserLang'] == 1 ? 'Select Sheet Cutting Size' : 'اختار مقاس قص الورق' }}
-                </label>
-                <div class="col-12" style="display : flex;">
-                    <div class="form-check col-4">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault0"
-                            @click="this.GetStandardCut(0)" checked>
-                        <label class="form-check-label" for="flexRadioDefault0">
-                            {{ this.$store.state['UserLang'] == 1 ? 'All Sizes' : 'كل المقاسات' }}
-                        </label>
-                    </div>
-                    <div class="form-check col-4">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
-                            @click="this.GetStandardCut(1)">
-                        <label class="form-check-label" for="flexRadioDefault1">
-                            {{ this.$store.state['UserLang'] == 1 ? 'Standard' : 'مقاس قياسي' }}
-                        </label>
-                    </div>
-                    <div class="form-check col-4">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
-                            @click="this.GetStandardCut(2)">
-                        <label class="form-check-label" for="flexRadioDefault2">
-                            {{ this.$store.state['UserLang'] == 1 ? 'Gayer' : 'مقاس جاير' }}
-                        </label>
-                    </div>
-                </div>
-                <select class="col-12" v-model="this.TheUserSelection['SheetToPiecesSize']">
-                    <option value="-1" hidden selected>
-                        {{ this.$store.state['UserLang'] == 1 ? 'Cutting Size' : 'مقاس قص الورق' }}
-                    </option>
-                    <option :value="index" v-for="type, index in PiecesSize" :key="type">
-                        {{ type['name'] }}
-                    </option>
-                </select>
-            </div> -->
-
-            <!-- Number Of Copies Per Piece -->
-            <!-- <div class="col-12 col-sm-6 SelectField" v-if="this.TheUserSelection['SheetToPiecesSize'] != -1">
-                <label class="col-12">
-                    {{ this.$store.state['UserLang'] == 1 ? 'Number Of Copies Per Sheet Cut' : 'عدد النسخ في مقاس القص' }}
-                </label>
-                <input class="col-12" v-model="this.TheUserSelection['NumberOfCopiesPerPiece']">
-            </div> -->
-
             <!-- PrintingStyle -->
             <div class="col-12 col-sm-6 SelectField" v-if="this.TheUserSelection['ProductSize'] != -1">
                 <label class="col-12">
@@ -187,7 +145,7 @@
                     {{ this.$store.state['UserLang'] == 1 ? 'Select Product Finshing' : 'اختار محلقات ما بعد الطباعة' }}
                 </label>
                 <div class="Finish col-12">
-                    <div v-for="Finish, index in TheFinish" :key="Finish">
+                    <div class="col-5 col-sm-4 col-md-3" v-for="Finish, index in TheFinish" :key="Finish">
                         <input :id="'Finish_' + index" type="checkbox" v-model="TheFinish[index].Selected">
                         <label :for="'Finish_' + index">{{ this.$store.state['UserLang'] == 1 ? Finish.name :
                             Finish.ArabicName
@@ -203,6 +161,11 @@
                 </label>
                 <input class="col-12" v-model="this.TheUserSelection['Qty']">
             </div>
+        </div>
+        <div class="col-12 col-md-3 TaskDetails">
+            <h1 class="col-12">Request Details</h1>
+            <pre class="col-12">{{ this.$store.state['TheTaskDetails'] }}</pre>
+            <p class="col-12">Qty : {{ this.TheUserSelection['Qty'] }}</p>
         </div>
         <div class="col-12 PageFooter" v-if="this.TheUserSelection['Qty'] != 0">
             <button class="btn btn-success"
@@ -254,6 +217,7 @@ export default {
     components: { PopUpView },
     data() {
         return {
+            RunApi: this.$store.state['RunApi'],
             UserLang: 0,
             ShowCalc: 0,
             ShowPopUp: 0,
@@ -339,39 +303,11 @@ export default {
         };
     },
     created() {
-        let main = this;
-        let ThePureURL = window.location.href;
-        let TheCode = '';
-        let TheTaskID = '';
-        const Api_Url = this.$store.state['Api_Url'];
-        if (ThePureURL.indexOf("taskid") != -1) {
-            TheTaskID = ThePureURL.split('taskid=')[1].split('&')[0];
-            axios.post(Api_Url, {
-                api_name: "SaveTaskId",
-                the_code: TheTaskID
-            }).then(function (res) {
-                console.log(res.data);
-                main.$store.state['TheTaskID'] = TheTaskID;
-            });
+        this.$store.state['LoaderIndex'] = 1;
+        if (this.RunApi == 1) {
+            let main = this;
+            main.ExcuteApis();
         }
-        else {
-            axios.post(Api_Url, {
-                api_name: "GetTaskId",
-            }).then(function (res) {
-                TheTaskID = res.data['task_id'];
-                console.log(TheTaskID);
-                main.$store.state['TheTaskID'] = TheTaskID;
-            });
-        }
-        if (ThePureURL.indexOf("code") != -1) {
-            TheCode = ThePureURL.split('code=')[1].split('&')[0];
-            main.FillAppInfo(TheCode);
-        }
-        else {
-            main.FillAppInfo();
-        }
-
-
     },
     methods: {
         GetStandardCut(Index) {
@@ -406,11 +342,7 @@ export default {
             let PricePerTon = main.TheRawMaterial[main.TheUserSelection['RawMaterial']].Price;
             let PricePerGram = (PricePerTon / 1000000);
             let RequiredQty = main.TheUserSelection['Qty'];
-            // let SheetToPieces = main.PiecesSize[main.TheUserSelection['SheetToPiecesSize']].SheetToPieces;
             let SheetType = main.PiecesSize[main.TheUserSelection['SheetToPiecesSize']].Cat;
-            // console.log(SheetType);
-            // console.log(SheetToPieces);
-            // let CopiesInOnePiece = main.TheUserSelection['NumberOfCopiesPerPiece'];
             let NumberOfPieces = Math.ceil(RequiredQty / CopiesInOnePiece);
             let NumberOfSheets = Math.ceil(NumberOfPieces / SheetToPieces);
             let NumberOfPicesInThousands = Math.ceil(NumberOfPieces / 1000);
@@ -429,13 +361,11 @@ export default {
             let TrajID = main.PiecesSize[main.TheUserSelection['SheetToPiecesSize']].TrajID;
             let RawTraj = main.TheTrajMaterial[main.TheTrajMaterial.findIndex(function (item) { return item.id == TrajID })].Price;
             let faceIndex = main.TheUserSelection['PrintingStyle'] + 1
-            // console.log(NumberOfPicesInThousands + '-' + faceIndex + '-' + ColorIndex + '-' + RawTraj);
             let FinalPrintingPrice = Math.ceil(NumberOfPicesInThousands * faceIndex * ColorIndex * RawTraj);
             let FinalPrice = PaperPrice + FinalCTP + FinalPrintingPrice;
             main.TheCalcResult['PaperPrice'] = PaperPrice;
             main.TheCalcResult['CtpPrice'] = FinalCTP;
             main.TheCalcResult['TrajPrice'] = FinalPrintingPrice;
-            // alert(FinalPrice);
             //After Printing
             let TheFinishPrice = [];
             main.TheFinish.forEach(finish => {
@@ -456,78 +386,50 @@ export default {
                 }
             });
             main.TheFinishPrice = TheFinishPrice;
-            // console.log(TheFinishPrice);
-            //Finishing + Triming
-            // main.ShowCalc = 1;
-
-        },
-
-        FillAppInfo(code = 0) {
-            let main = this;
-            const Api_Url = this.$store.state['Api_Url'];
-            if (code != 0) {
-                axios.post(Api_Url, {
-                    api_name: "RefreshAccessToken",
-                    the_code: code,
-                }).then(function (res) {
-                    main.ExcuteApis();
-                });
-            }
-            else {
-                main.ExcuteApis();
-            }
         },
 
         ExcuteApis() {
-            const Api_Url = this.$store.state['Api_Url'];
             let main = this;
+            let Api_Url = main.$store.state['Api_Url'];
             axios.post(Api_Url, {
                 api_name: "GetAllProducts",
             }).then(function (res) {
+                let TheFinalProducts = [];
                 let TheProducts = res.data['data'];
-                // alert(TheProducts);
-                if (TheProducts === undefined) {
-                    window.location = 'https://accounts.zoho.com/oauth/v2/auth?response_type=code&client_id=1000.R3K41GUMKFVW5K825Z6PZ6JU1HTQ3Q&scope=ZohoCRM.modules.ALL&redirect_uri=https://webform.designido.net&prompt=consent';
-                }
-                else {
-                    let TheFinalProducts = [];
-                    TheProducts.forEach(product => {
-                        let TheParent = "";
-                        if (product['Parent_Product_Name'] != null) {
-                            TheParent = product['Parent_Product_Name']['name'];
-                        }
-                        else {
-                            TheParent = product['Parent_Product_Name'];
-                        }
-                        let Theobject = {
-                            name: product['Product_Name'],
-                            ArabicName: product['Product_Name_Arabic'],
-                            Parent: TheParent
-                        }
-                        TheFinalProducts.push(Theobject);
-                    });
-                    main.TheTypes = TheFinalProducts.filter(GetParentSelect);
-                    main.TheProducts = TheFinalProducts.filter(GetChildrenSelect);
-                    function GetParentSelect(product) {
-                        if (product['Parent'] === null) {
-                            return product;
-                        }
+                TheProducts.forEach(product => {
+                    let TheParent = "";
+                    if (product['Parent_Product_Name'] != null) {
+                        TheParent = product['Parent_Product_Name']['name'];
                     }
-                    function GetChildrenSelect(product) {
-                        if (product['Parent'] !== null) {
-                            return product;
-                        }
+                    else {
+                        TheParent = product['Parent_Product_Name'];
                     }
-                    main.AllProducts = TheFinalProducts;
+                    let Theobject = {
+                        name: product['Product_Name'],
+                        ArabicName: product['Product_Name_Arabic'],
+                        Parent: TheParent
+                    }
+                    TheFinalProducts.push(Theobject);
+                });
+                main.TheTypes = TheFinalProducts.filter(GetParentSelect);
+                main.TheProducts = TheFinalProducts.filter(GetChildrenSelect);
+                function GetParentSelect(product) {
+                    if (product['Parent'] === null) {
+                        return product;
+                    }
                 }
-
+                function GetChildrenSelect(product) {
+                    if (product['Parent'] !== null) {
+                        return product;
+                    }
+                }
+                main.AllProducts = TheFinalProducts;
             });
             // Get The RawMaterials
             axios.post(Api_Url, {
                 api_name: "GetRawMaterials",
             }).then(function (res) {
                 let TheRawMaterials = res.data['data'];
-                // console.log(TheRawMaterials);
                 let TheFinalArray = [];
                 TheRawMaterials.forEach(Material => {
                     let TheObjtct = {
@@ -588,15 +490,14 @@ export default {
                     main.TotalPiecesSize = TheFinalArray;
                 });
             });
-        },
-
-        SaveTheTaskId(TaskID) {
-            const Api_Url = this.$store.state['Api_Url'];
+            // Get Task Details 
             axios.post(Api_Url, {
-                api_name: "SaveTaskId",
-                the_code: TaskID
+                api_name: "GetTaskDetails",
+                task_id: main.$store.state['TheTaskID'],
             }).then(function (res) {
-                console.log(res.data);
+                main.$store.state['TheTaskDetails'] = res.data['Requirement_Details'];
+                main.TheUserSelection['Qty'] = res.data['Quantity'];
+                main.$store.state['LoaderIndex'] = 0;
             });
         },
 
@@ -658,6 +559,12 @@ export default {
   
 <style lang="scss" scoped>
 #FinalView {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
+
     .PageHeader {
         background-color: #103e54;
         display: flex;
@@ -690,10 +597,20 @@ export default {
         .SelectLang {
             color: white;
         }
+
+        .SideMenuBtn {
+            color: white;
+            cursor: pointer;
+        }
+
     }
 
     .PageContent {
-        padding: 1rem 5%;
+        @media screen and (max-width: 767px) {
+            order: 2;
+        }
+
+        padding: 1rem 2%;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
@@ -727,23 +644,20 @@ export default {
         }
 
         .Finish {
-            padding: 1rem;
+            padding: 1rem 0;
             display: flex;
             flex-direction: row;
-            flex-wrap: wrap;
-            align-content: center;
-            align-items: center;
             justify-content: flex-start;
+            flex-wrap: wrap;
+            align-content: flex-start;
 
             div {
                 display: flex;
                 margin: 0 1rem;
                 flex-direction: row;
-                flex-wrap: wrap;
-                align-content: center;
-                justify-content: center;
-                align-items: center;
+                flex-wrap: nowrap;
                 padding: 0.5rem 0;
+                align-items: center;
             }
 
             label {
@@ -771,7 +685,40 @@ export default {
         }
     }
 
+    .TaskDetails {
+        @media screen and (max-width: 767px) {
+            order: 1;
+        }
+
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 1rem;
+        background-color: rgba(255, 255, 255, 0.4);
+        font-size: 1.4rem;
+        box-shadow: 1px 4px 6px rgb(128 128 128 / 68%);
+        align-content: flex-start;
+
+        h1 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            padding-bottom: 0.5rem !important;
+        }
+
+        pre {
+            margin: 0;
+        }
+
+        p {
+            font-size: 1.2rem;
+        }
+    }
+
     .PageFooter {
+        @media screen and (max-width: 767px) {
+            order: 3;
+        }
+
         display: flex;
         padding: 1rem;
         flex-direction: row;

@@ -1,15 +1,19 @@
 import { createStore } from "vuex";
-// const Server_Url = "http://localhost/webform/public/";
-const Server_Url = "";
+const Server_Url = "http://localhost/webform/public/";
+// const Server_Url = "";
 export default createStore({
   state: {
     Api_Url: Server_Url + "php/index.php",
     CurrentWidth: window.innerWidth,
     LoaderIndex: 0,
+    RunApi: 0,
     SideMenuIndex: 0,
+    CurrentComponent: "DashboardView",
+    Price_Tasks: [],
     ShowPopUp: 0,
-    UserLang: 1,
+    UserLang: 2,
     TheTaskID: 0,
+    TheTaskDetails: "",
     AppInfo: {
       AppLogo: "",
       AppName: "Pricing Gate",

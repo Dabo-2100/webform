@@ -30,7 +30,7 @@ export default {
 //   font-family: LogoFont;
 //   src: url("@/assets/bodoni bold condensed bt.ttf");
 // }
-
+@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@100;300;400;600;700;800;900&display=swap');
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Oxygen:wght@300;400;700&family=Roboto:wght@400;700;900&family=Signika:wght@300;400;500;700&display=swap");
 
 :root {
@@ -42,10 +42,11 @@ export default {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "Montserrat", sans-serif;
+  // font-family: "Montserrat", sans-serif;
   // font-family: "Oxygen", sans-serif;
   // font-family: "Roboto", sans-serif;
   // font-family: "Signika", sans-serif;
+  font-family: 'Alexandria', sans-serif;
 }
 
 html {

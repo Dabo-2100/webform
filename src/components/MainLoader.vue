@@ -1,13 +1,11 @@
 <template>
     <transition name="fade">
         <div id="MainLoader" class="col-12" v-if="this.$store.state['LoaderIndex'] == 1">
-            <div class="sk-chase">
-                <div class="sk-chase-dot"></div>
-                <div class="sk-chase-dot"></div>
-                <div class="sk-chase-dot"></div>
-                <div class="sk-chase-dot"></div>
-                <div class="sk-chase-dot"></div>
-                <div class="sk-chase-dot"></div>
+            <div class="sk-folding-cube">
+                <div class="sk-cube1 sk-cube"></div>
+                <div class="sk-cube2 sk-cube"></div>
+                <div class="sk-cube4 sk-cube"></div>
+                <div class="sk-cube3 sk-cube"></div>
             </div>
         </div>
     </transition>
@@ -38,102 +36,115 @@ export default {
     z-index: 100;
 }
 
-.sk-chase {
-    width: 70px;
-    height: 70px;
+.sk-folding-cube {
+    margin: 20px auto;
+    width: 50px;
+    height: 50px;
     position: relative;
-    animation: sk-chase 2s infinite linear both;
+    -webkit-transform: rotateZ(45deg);
+    transform: rotateZ(45deg);
 }
 
-.sk-chase-dot {
+.sk-folding-cube .sk-cube {
+    float: left;
+    width: 50%;
+    height: 50%;
+    position: relative;
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.sk-folding-cube .sk-cube:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    animation: sk-chase-dot 2s infinite ease-in-out both;
+    background-color: #0b345e;
+    -webkit-animation: sk-foldCubeAngle 2.4s infinite linear both;
+    animation: sk-foldCubeAngle 2.4s infinite linear both;
+    -webkit-transform-origin: 100% 100%;
+    -ms-transform-origin: 100% 100%;
+    transform-origin: 100% 100%;
 }
 
-.sk-chase-dot:before {
-    content: "";
-    display: block;
-    width: 25%;
-    height: 25%;
-    background-color: var(--Beig);
-    border-radius: 100%;
-    animation: sk-chase-dot-before 2s infinite ease-in-out both;
+.sk-folding-cube .sk-cube2 {
+    -webkit-transform: scale(1.1) rotateZ(90deg);
+    transform: scale(1.1) rotateZ(90deg);
 }
 
-.sk-chase-dot:nth-child(1) {
-    animation-delay: -1.1s;
+.sk-folding-cube .sk-cube3 {
+    -webkit-transform: scale(1.1) rotateZ(180deg);
+    transform: scale(1.1) rotateZ(180deg);
 }
 
-.sk-chase-dot:nth-child(2) {
-    animation-delay: -1s;
+.sk-folding-cube .sk-cube4 {
+    -webkit-transform: scale(1.1) rotateZ(270deg);
+    transform: scale(1.1) rotateZ(270deg);
 }
 
-.sk-chase-dot:nth-child(3) {
-    animation-delay: -0.9s;
+.sk-folding-cube .sk-cube2:before {
+    -webkit-animation-delay: 0.3s;
+    animation-delay: 0.3s;
 }
 
-.sk-chase-dot:nth-child(4) {
-    animation-delay: -0.8s;
+.sk-folding-cube .sk-cube3:before {
+    -webkit-animation-delay: 0.6s;
+    animation-delay: 0.6s;
 }
 
-.sk-chase-dot:nth-child(5) {
-    animation-delay: -0.7s;
+.sk-folding-cube .sk-cube4:before {
+    -webkit-animation-delay: 0.9s;
+    animation-delay: 0.9s;
 }
 
-.sk-chase-dot:nth-child(6) {
-    animation-delay: -0.6s;
-}
+@-webkit-keyframes sk-foldCubeAngle {
 
-.sk-chase-dot:nth-child(1):before {
-    animation-delay: -1.1s;
-}
+    0%,
+    10% {
+        -webkit-transform: perspective(140px) rotateX(-180deg);
+        transform: perspective(140px) rotateX(-180deg);
+        opacity: 0;
+    }
 
-.sk-chase-dot:nth-child(2):before {
-    animation-delay: -1s;
-}
+    25%,
+    75% {
+        -webkit-transform: perspective(140px) rotateX(0deg);
+        transform: perspective(140px) rotateX(0deg);
+        opacity: 1;
+    }
 
-.sk-chase-dot:nth-child(3):before {
-    animation-delay: -0.9s;
-}
-
-.sk-chase-dot:nth-child(4):before {
-    animation-delay: -0.8s;
-}
-
-.sk-chase-dot:nth-child(5):before {
-    animation-delay: -0.7s;
-}
-
-.sk-chase-dot:nth-child(6):before {
-    animation-delay: -0.6s;
-}
-
-@keyframes sk-chase {
+    90%,
     100% {
-        transform: rotate(360deg);
+        -webkit-transform: perspective(140px) rotateY(180deg);
+        transform: perspective(140px) rotateY(180deg);
+        opacity: 0;
     }
 }
 
-@keyframes sk-chase-dot {
+@keyframes sk-foldCubeAngle {
 
-    80%,
+    0%,
+    10% {
+        -webkit-transform: perspective(140px) rotateX(-180deg);
+        transform: perspective(140px) rotateX(-180deg);
+        opacity: 0;
+    }
+
+    25%,
+    75% {
+        -webkit-transform: perspective(140px) rotateX(0deg);
+        transform: perspective(140px) rotateX(0deg);
+        opacity: 1;
+    }
+
+    90%,
     100% {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes sk-chase-dot-before {
-    50% {
-        transform: scale(0.4);
-    }
-
-    100%,
-    0% {
-        transform: scale(1);
+        -webkit-transform: perspective(140px) rotateY(180deg);
+        transform: perspective(140px) rotateY(180deg);
+        opacity: 0;
     }
 }
 
