@@ -59,7 +59,6 @@ export default {
                 api_name: "GetOpenProjects"
             }).then(function (res) {
                 let Final_array = res.data;
-                console.log(Final_array);
                 main.Selections[1]['Index'] = Final_array.length;
                 main.$store.state['Production_Tasks'] = Final_array;
                 main.$store.state['LoaderIndex'] = 0;
