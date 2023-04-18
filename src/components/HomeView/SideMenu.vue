@@ -27,16 +27,17 @@ export default {
         return {
             Api_Url: this.$store.state['Api_Url'],
             Selections: [
-                { name: "Pricing Tasks", Icon: "fa-solid fa-user", ArabicName: "مهام التسعير", Index: 0, TabView: "TasksView" },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-user", ArabicName: "المشاريع المفتوحة", Index: 40 },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-user", ArabicName: "المشاريع المنتهية", Index: false },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-user", ArabicName: "اسعار الخامات", Index: false, TabView: "MaterialView" },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-money-check-dollar", ArabicName: "مهام التسعير", Index: 0, TabView: "TasksView" },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-box-open", ArabicName: "المشاريع المفتوحة", Index: 0, TabView: "ProductionView" },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "المشاريع المنتهية", Index: false },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-dollar-sign", ArabicName: "اسعار الخامات", Index: false, TabView: "MaterialView" },
             ],
         };
     },
     created() {
         let main = this;
         main.GetPricingTasks();
+        main.GetOpenProjects();
     },
     methods: {
         GetPricingTasks() {
@@ -48,6 +49,19 @@ export default {
                 let Final_array = res.data;
                 main.Selections[0]['Index'] = Final_array.length;
                 main.$store.state['Price_Tasks'] = Final_array;
+                main.$store.state['LoaderIndex'] = 0;
+            });
+        },
+        GetOpenProjects() {
+            let main = this;
+            main.$store.state['LoaderIndex'] = 1;
+            axios.post(main.Api_Url, {
+                api_name: "GetOpenProjects"
+            }).then(function (res) {
+                let Final_array = res.data;
+                console.log(Final_array);
+                main.Selections[1]['Index'] = Final_array.length;
+                main.$store.state['Production_Tasks'] = Final_array;
                 main.$store.state['LoaderIndex'] = 0;
             });
         }

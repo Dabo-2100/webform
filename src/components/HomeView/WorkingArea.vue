@@ -9,12 +9,13 @@
 import axios from 'axios';
 import FinalView from '@/views/FinalView.vue';
 import TasksView from '@/views/TasksView.vue';
+import ProductionView from '@/views/ProductionView.vue';
 import DashboardView from '@/views/DashboardView.vue';
 import MaterialView from '@/views/MaterialView.vue';
 
 export default {
     name: 'WorkingArea',
-    components: { FinalView, TasksView, DashboardView, MaterialView },
+    components: { FinalView, TasksView, DashboardView, MaterialView, ProductionView },
     data() {
         return {
             Api_Url: this.$store.state['Api_Url'],
@@ -56,6 +57,7 @@ export default {
   
 <style lang="scss" scoped>
 #WorkingArea {
+    width: 80%;
     flex-grow: 1;
     display: flex;
     height: 100vh;

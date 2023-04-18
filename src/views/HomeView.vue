@@ -17,10 +17,16 @@ export default {
   components: { SideMenu, WorkingArea },
   data() {
     return {
+      Api_Url: this.$store.state['Api_Url'],
     };
   },
   created() {
     let main = this;
+    axios.post(main.Api_Url, {
+      api_name: "GetServerDate",
+    }).then(function (res) {
+      main.$store.state['Server_Date'] = res.data['Server_Date'];
+    });
   },
   methods: {
   },
@@ -35,8 +41,11 @@ export default {
 
 <style lang="scss" scoped>
 #HomeView {
+  width: 100%;
   display: flex;
   direction: rtl;
+  flex-direction: row;
+  flex-wrap: nowrap;
 }
 </style>
 

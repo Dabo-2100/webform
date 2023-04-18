@@ -147,25 +147,83 @@ if ($api_name == "GetPricingTasks") {
     $Owner_ID = 4432004000007195001;
     $final = [];
     $response2 = json_decode(SearchRecords("Price_Tasks", $code = 0, $pdo, "(Owner.id:equals:" . $Owner_ID . ")"), true);
-    foreach ($response2['data'] as $Task) {
-        $Created_Date = $Task['Starting_Date'];
-        $Task_ID = $Task['id'];
-        $Requirement_ID = $Task['What_to_price']['id'];
-        $response = json_decode(SearchRecords("Deal_Requirements", $code = 0, $pdo, "(id:equals:" . $Requirement_ID . ")"), true);
-        $Requirement_Details = $response['data'][0]['Requirement_Details'];
-        $Quantity = $response['data'][0]['Quantity'];
-        $Name = $response['data'][0]['Name'];
-        $data = array(
-            "Requirement_Details" => $Requirement_Details,
-            "Quantity" => $Quantity,
-            "Name" => $Name,
-            "Created_Date" => $Created_Date,
-            "Task_ID" => $Task_ID,
-        );
-        array_push($final, $data);
+    if ($response2 != null) {
+        foreach ($response2['data'] as $Task) {
+            $Created_Date = $Task['Starting_Date'];
+            $Task_ID = $Task['id'];
+            $Requirement_ID = $Task['What_to_price']['id'];
+            $response = json_decode(SearchRecords("Deal_Requirements", $code = 0, $pdo, "(id:equals:" . $Requirement_ID . ")"), true);
+            $Requirement_Details = $response['data'][0]['Requirement_Details'];
+            $Quantity = $response['data'][0]['Quantity'];
+            $Name = $response['data'][0]['Name'];
+            $data = array(
+                "Requirement_Details" => $Requirement_Details,
+                "Quantity" => $Quantity,
+                "Name" => $Name,
+                "Created_Date" => $Created_Date,
+                "Task_ID" => $Task_ID,
+            );
+            array_push($final, $data);
+        }
     }
     echo json_encode($final);
 }
+
+if ($api_name == "GetOpenProjects") {
+    $Owner_ID = 4432004000007195001;
+    $final = [];
+    $response2 = json_decode(SearchRecords("Work_Tasks", $code = 0, $pdo, "(Owner.id:equals:" . $Owner_ID . ")"), true);
+    if ($response2 != null) {
+        foreach ($response2['data'] as $Task) {
+            $Task_ID = $Task['id'];
+            $Task_Name = $Task['Name'];
+            $Task_Stage_ID = $Task['Task_Stage']['id'];
+            $Task_Stage_Name = $Task['Task_Stage']['name'];
+            $Task_Details = $Task['Task_Details'];
+            $Starting_Date = $Task['Starting_Date'];
+            $Deadline_Date = $Task['Deadline_Date'];
+            $Requirement_ID = $Task['Deal_Requiremenet']['id'];
+            //Get The Task Stages
+            $Task_Type = $Task['Task_Type'];
+            $response2 = json_decode(SearchRecords("Task_Stages", $code = 0, $pdo, "(Project_Type:equals:" . $Task_Type . ")"), true);
+            $All_Stages = [];
+            foreach ($response2['data'] as $Stage) {
+                $Stage_ID = $Stage['id'];
+                $Stage_Name = $Stage['Name'];
+                $Arabic_Name = $Stage['Arabic_Name'];
+                $Stage_Order = $Stage['Stage_Order'];
+                $data = array(
+                    "Stage_ID" => $Stage_ID,
+                    "Stage_Name" => $Stage_Name,
+                    "Arabic_Name" => $Arabic_Name,
+                    "Stage_Order" => $Stage_Order,
+                );
+                array_push($All_Stages, $data);
+            }
+            $data = array(
+                "Task_ID" => $Task_ID,
+                "Task_Name" => $Task_Name,
+                "Task_Stage_ID" => $Task_Stage_ID,
+                "Task_Details" => $Task_Details,
+                "Starting_Date" => $Starting_Date,
+                "Deadline_Date" => $Deadline_Date,
+                "Requirement_ID" => $Requirement_ID,
+                "TaskStages" => $All_Stages,
+            );
+            array_push($final, $data);
+        }
+    }
+    echo json_encode($final);
+}
+
+if ($api_name == "GetServerDate") {
+    $TheDate = date('Y-m-d');
+    $data = array(
+        "Server_Date" => $TheDate,
+    );
+    echo json_encode($data);
+}
+
 
 if ($api_name == "GetTaskDetails") {
     $task_id = htmlspecialchars(@$POST_data["task_id"]);

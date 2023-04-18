@@ -758,6 +758,7 @@ export default {
         height: 100vh;
         background-color: rgba(0, 0, 0, 0.4);
         top: 0;
+        right: 0;
         flex-direction: row;
         flex-wrap: wrap;
         align-content: center;

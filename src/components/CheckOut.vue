@@ -1,5 +1,5 @@
 <template>
-  <div class="col-11 col-sm-10 col-md-6 " id="CheckOut" v-if="this.$store.state['CheckOut']['Index'] == 1">
+  <div class="col-11 col-sm-10 col-md-8 col-lg-6 " id="CheckOut" v-if="this.$store.state['CheckOut']['Index'] == 1">
     <font-awesome-icon class="CloseSign" icon="fa-solid fa-x" id="CloseForm"
       @click="this.$store.state['CheckOut']['Index'] = 0" />
     <h1 class="col-12">Total Selected Price : {{ this.$store.state['TheCalcResult']["PrintPrice"] + this.TheTotalFinish }}
@@ -205,6 +205,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 #CheckOut {
+  direction: ltr;
   display: flex;
   height: 90vh;
   z-index: 100;

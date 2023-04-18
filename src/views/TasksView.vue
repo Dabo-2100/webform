@@ -1,31 +1,38 @@
 <template>
     <div class="col-12" id="TasksView">
-        <h1 class="col-12 TabHeader">مهام التسعير</h1>
-        <table class="col-12 table table-hover table-bordered">
-            <thead>
-                <tr>
-                    <th>-</th>
-                    <th>اسم المهمة</th>
-                    <th>تفاصيل المهمة</th>
-                    <th>تاريخ المهمة</th>
-                    <th>عدد القطع</th>
-                    <th>التسعير</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="PriceTask, index in this.$store.state['Price_Tasks']" :key="PriceTask">
-                    <td>{{ index + 1 }}</td>
-                    <td>{{ PriceTask['Name'] }}</td>
-                    <td>
-                        <pre>{{
-                            PriceTask['Requirement_Details'] }}</pre>
-                    </td>
-                    <td>{{ PriceTask['Created_Date'] }}</td>
-                    <td>{{ PriceTask['Quantity'] }}</td>
-                    <td><button class="btn btn-success" @click="this.OpenTask(PriceTask['Task_ID'])">التسعير</button></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="col-12" v-if="this.$store.state['Price_Tasks'].length <= 0" id="NoTasks">
+            <img src="@/assets/NoTasks.png">
+            <h1>لا يوجد مهمات تسعير جديدة مطلوبة منك</h1>
+        </div>
+        <div class="col-12" v-else>
+            <h1 class="col-12 TabHeader">مهام التسعير</h1>
+            <table class="col-12 table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>-</th>
+                        <th>اسم المهمة</th>
+                        <th>تفاصيل المهمة</th>
+                        <th>تاريخ المهمة</th>
+                        <th>عدد القطع</th>
+                        <th>التسعير</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="PriceTask, index in this.$store.state['Price_Tasks']" :key="PriceTask">
+                        <td>{{ index + 1 }}</td>
+                        <td>{{ PriceTask['Name'] }}</td>
+                        <td>
+                            <pre>{{
+                                PriceTask['Requirement_Details'] }}</pre>
+                        </td>
+                        <td>{{ PriceTask['Created_Date'] }}</td>
+                        <td>{{ PriceTask['Quantity'] }}</td>
+                        <td><button class="btn btn-success" @click="this.OpenTask(PriceTask['Task_ID'])">التسعير</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
   
@@ -74,6 +81,24 @@ export default {
     justify-content: center;
     align-items: center;
 
+    #NoTasks {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: center;
+        height: 100vh;
+        justify-content: center;
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        img {
+            width: 10rem;
+            margin-bottom: 1rem;
+        }
+    }
+
     .TabHeader {
         font-size: 1.4rem;
         padding: 1rem;
@@ -90,6 +115,3 @@ export default {
     }
 }
 </style>
-  
-  
-  

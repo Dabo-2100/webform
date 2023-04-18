@@ -7,6 +7,8 @@ import "bootstrap/dist/js/bootstrap";
 import "animate.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 import {
   faAppStore,
   faBlogger,
@@ -22,6 +24,9 @@ import {
   faYoutube,
 } from "@fortawesome/free-brands-svg-icons";
 import {
+  faDollarSign,
+  faBoxOpen,
+  faMoneyCheckDollar,
   faUserSecret,
   faComment,
   faCircleLeft,
@@ -77,6 +82,10 @@ import {
   faDesktop,
 } from "@fortawesome/free-solid-svg-icons";
 library.add(
+  faDollarSign,
+  faListCheck,
+  faBoxOpen,
+  faMoneyCheckDollar,
   faDesktop,
   faCalendar,
   faPaperPlane,
@@ -154,6 +163,7 @@ library.add(
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)
   .use(store)
+  .use(VueSweetalert2)
   .use(router)
   .mount("#app");
 

@@ -449,6 +449,7 @@ export default {
 
 <style lang="scss" scoped>
 #PopUpView {
+  direction: ltr;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
