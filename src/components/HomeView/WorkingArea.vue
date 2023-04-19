@@ -12,10 +12,11 @@ import TasksView from '@/views/TasksView.vue';
 import ProductionView from '@/views/ProductionView.vue';
 import DashboardView from '@/views/DashboardView.vue';
 import MaterialView from '@/views/MaterialView.vue';
+import DoneView from '@/views/DoneView.vue';
 
 export default {
     name: 'WorkingArea',
-    components: { FinalView, TasksView, DashboardView, MaterialView, ProductionView },
+    components: { FinalView, TasksView, DashboardView, MaterialView, ProductionView, DoneView },
     data() {
         return {
             Api_Url: this.$store.state['Api_Url'],
@@ -41,8 +42,6 @@ export default {
                 }
             });
         }
-
-        ``
     },
     methods: {
     },

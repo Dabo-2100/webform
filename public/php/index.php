@@ -100,6 +100,56 @@ if ($api_name == "RefreshAccessToken") {
     echo get_access_token($code, $pdo);
 }
 
+if ($api_name == "AddNewExpense") {
+    $Due_Task_ID = htmlspecialchars(@$POST_data["Due_Task_ID"]);
+    $Expense_Name = htmlspecialchars(@$POST_data["Expense_Name"]);
+    $Expense_Value = htmlspecialchars(@$POST_data["Expense_Value"]);
+    $curl_pointer = curl_init();
+    $curl_options = array();
+    $url = "https://www.zohoapis.com/crm/v2/Task_Expenses";
+    $curl_options[CURLOPT_URL] = $url;
+    $curl_options[CURLOPT_RETURNTRANSFER] = true;
+    $curl_options[CURLOPT_HEADER] = 1;
+    $curl_options[CURLOPT_CUSTOMREQUEST] = "POST";
+    $requestBody = array();
+    $recordArray = array();
+    $recordObject = array();
+    $recordObject['Due_Task']['id'] = $Due_Task_ID;
+    $recordObject["Name"] = $Expense_Name;
+    $recordObject["Expense_Value"] = $Expense_Value;
+    $recordArray[] = $recordObject;
+    $requestBody["data"] = $recordArray;
+    $curl_options[CURLOPT_POSTFIELDS] = json_encode($requestBody);
+    $headersArray = array();
+    $headersArray[] = "Authorization" . ":" . "Zoho-oauthtoken " .  get_access_token(0, $pdo);
+    $curl_options[CURLOPT_HTTPHEADER] = $headersArray;
+    curl_setopt_array($curl_pointer, $curl_options);
+    $result = curl_exec($curl_pointer);
+    $responseInfo = curl_getinfo($curl_pointer);
+    curl_close($curl_pointer);
+    list($headers, $content) = explode("\r\n\r\n", $result, 2);
+    if (strpos($headers, " 100 Continue") !== false) {
+        list($headers, $content) = explode("\r\n\r\n", $content, 2);
+    }
+    $headerArray = (explode("\r\n", $headers, 50));
+    $headerMap = array();
+    foreach ($headerArray as $key) {
+        if (strpos($key, ":") != false) {
+            $firstHalf = substr($key, 0, strpos($key, ":"));
+            $secondHalf = substr($key, strpos($key, ":") + 1);
+            $headerMap[$firstHalf] = trim($secondHalf);
+        }
+    }
+    $jsonResponse = json_decode($content, true);
+    if ($jsonResponse == null && $responseInfo['http_code'] != 204) {
+        list($headers, $content) = explode("\r\n\r\n", $content, 2);
+        $jsonResponse = json_decode($content, true);
+    }
+    var_dump($headerMap);
+    var_dump($jsonResponse);
+    var_dump($responseInfo['http_code']);
+}
+
 if ($api_name == "SaveTaskId") {
     $task_id = htmlspecialchars(@$POST_data["the_code"]);
     $sql = "UPDATE app_info SET task_id = :task_id WHERE (record_id = 1)";
@@ -177,6 +227,7 @@ if ($api_name == "GetOpenProjects") {
         foreach ($response2['data'] as $Task) {
             $Task_ID = $Task['id'];
             $Task_Name = $Task['Name'];
+            $Task_Done = $Task['Task_Done'];
             $Task_Stage_ID = $Task['Task_Stage']['id'];
             $Task_Stage_Name = $Task['Task_Stage']['name'];
             $Task_Details = $Task['Task_Details'];
@@ -187,18 +238,20 @@ if ($api_name == "GetOpenProjects") {
             $Task_Type = $Task['Task_Type'];
             $response2 = json_decode(SearchRecords("Task_Stages", $code = 0, $pdo, "(Project_Type:equals:" . $Task_Type . ")"), true);
             $All_Stages = [];
-            foreach ($response2['data'] as $Stage) {
-                $Stage_ID = $Stage['id'];
-                $Stage_Name = $Stage['Name'];
-                $Arabic_Name = $Stage['Arabic_Name'];
-                $Stage_Order = $Stage['Stage_Order'];
-                $data = array(
-                    "Stage_ID" => $Stage_ID,
-                    "Stage_Name" => $Stage_Name,
-                    "Arabic_Name" => $Arabic_Name,
-                    "Stage_Order" => $Stage_Order,
-                );
-                array_push($All_Stages, $data);
+            if ($response2 != null) {
+                foreach ($response2['data'] as $Stage) {
+                    $Stage_ID = $Stage['id'];
+                    $Stage_Name = $Stage['Name'];
+                    $Arabic_Name = $Stage['Arabic_Name'];
+                    $Stage_Order = $Stage['Stage_Order'];
+                    $data = array(
+                        "Stage_ID" => $Stage_ID,
+                        "Stage_Name" => $Stage_Name,
+                        "Arabic_Name" => $Arabic_Name,
+                        "Stage_Order" => $Stage_Order,
+                    );
+                    array_push($All_Stages, $data);
+                }
             }
             $data = array(
                 "Task_ID" => $Task_ID,
@@ -209,6 +262,7 @@ if ($api_name == "GetOpenProjects") {
                 "Deadline_Date" => $Deadline_Date,
                 "Requirement_ID" => $Requirement_ID,
                 "TaskStages" => $All_Stages,
+                "Task_Done" => $Task_Done
             );
             array_push($final, $data);
         }
@@ -220,20 +274,22 @@ if ($api_name == "GetTaskExpenses") {
     $Task_ID = htmlspecialchars(@$POST_data["Task_ID"]);
     $res = json_decode(SearchRecords("Task_Expenses", $code = 0, $pdo, "(Due_Task.id:equals:" . $Task_ID . ")"), true);
     $AllExpenses = [];
-    foreach ($res['data'] as $Expense) {
-        $Expense_ID = $Expense['id'];
-        $Expense_Name = $Expense['Name'];
-        $Expense_Value = $Expense['Expense_Value'];
-        $Due_Task_ID = $Expense['Due_Task']['id'];
-        $Last_Update = $Expense['Modified_Time'];
-        $data = array(
-            "Expense_ID" => $Expense_ID,
-            "Expense_Name" => $Expense_Name,
-            "Expense_Value" => $Expense_Value,
-            "Due_Task_ID" => $Due_Task_ID,
-            "Last_Update" => $Last_Update,
-        );
-        array_push($AllExpenses, $data);
+    if ($res != null) {
+        foreach ($res['data'] as $Expense) {
+            $Expense_ID = $Expense['id'];
+            $Expense_Name = $Expense['Name'];
+            $Expense_Value = $Expense['Expense_Value'];
+            $Due_Task_ID = $Expense['Due_Task']['id'];
+            $Last_Update = $Expense['Modified_Time'];
+            $data = array(
+                "Expense_ID" => $Expense_ID,
+                "Expense_Name" => $Expense_Name,
+                "Expense_Value" => $Expense_Value,
+                "Due_Task_ID" => $Due_Task_ID,
+                "Last_Update" => $Last_Update,
+            );
+            array_push($AllExpenses, $data);
+        }
     }
     echo json_encode($AllExpenses);
 }
@@ -294,6 +350,8 @@ if ($api_name == "UpdateTaskStage") {
 }
 
 
+
+
 if ($api_name == "GetTaskDetails") {
     $task_id = htmlspecialchars(@$POST_data["task_id"]);
     if ($task_id == 0) {
@@ -319,15 +377,7 @@ if ($api_name == "GetTaskDetails") {
 
 if ($api_name == "SendDataToZoho") {
     $ThePrice = htmlspecialchars(@$POST_data["ThePrice"]);
-    $sql = "SELECT task_id,access_token From app_info WHERE (record_id = 1)";
-    $statement = $pdo->prepare($sql);
-    $statement->execute();
-    $result = $statement->fetch(PDO::FETCH_ASSOC);
-    if ($result) {
-        $task_id = $result["task_id"];
-        $access_token = $result["access_token"];
-    }
-    echo $task_id . "<br>";
+    $task_id = htmlspecialchars(@$POST_data["Task_ID"]);
     $curl_pointer = curl_init();
     $curl_options = array();
     $url = "https://www.zohoapis.com/crm/v2/Price_Tasks";
@@ -347,8 +397,112 @@ if ($api_name == "SendDataToZoho") {
     $curl_options[CURLOPT_POSTFIELDS] = json_encode($requestBody);
     $headersArray = array();
 
-    $headersArray[] = "Authorization" . ":" . "Zoho-oauthtoken " . $access_token;
+    $headersArray[] = "Authorization" . ":" . "Zoho-oauthtoken " . get_access_token(0, $pdo);
 
+    $curl_options[CURLOPT_HTTPHEADER] = $headersArray;
+
+    curl_setopt_array($curl_pointer, $curl_options);
+
+    $result = curl_exec($curl_pointer);
+    $responseInfo = curl_getinfo($curl_pointer);
+    curl_close($curl_pointer);
+    list($headers, $content) = explode("\r\n\r\n", $result, 2);
+    if (strpos($headers, " 100 Continue") !== false) {
+        list($headers, $content) = explode("\r\n\r\n", $content, 2);
+    }
+    $headerArray = (explode("\r\n", $headers, 50));
+    $headerMap = array();
+    foreach ($headerArray as $key) {
+        if (strpos($key, ":") != false) {
+            $firstHalf = substr($key, 0, strpos($key, ":"));
+            $secondHalf = substr($key, strpos($key, ":") + 1);
+            $headerMap[$firstHalf] = trim($secondHalf);
+        }
+    }
+    $jsonResponse = json_decode($content, true);
+    if ($jsonResponse == null && $responseInfo['http_code'] != 204) {
+        list($headers, $content) = explode("\r\n\r\n", $content, 2);
+        $jsonResponse = json_decode($content, true);
+    }
+    var_dump($headerMap);
+    var_dump($jsonResponse);
+    var_dump($responseInfo['http_code']);
+}
+
+
+
+if ($api_name == "UpdateTaskDone") {
+    $Task_ID = htmlspecialchars(@$POST_data["Task_ID"]);
+    $NewVal = htmlspecialchars(@$POST_data["NewVal"]);
+    $curl_pointer = curl_init();
+    $curl_options = array();
+    $url = "https://www.zohoapis.com/crm/v2/Work_Tasks";
+    $curl_options[CURLOPT_URL] = $url;
+    $curl_options[CURLOPT_RETURNTRANSFER] = true;
+    $curl_options[CURLOPT_HEADER] = 1;
+    $curl_options[CURLOPT_CUSTOMREQUEST] = "PUT";
+    $requestBody = array();
+    $recordArray = array();
+    $recordObject = array();
+    $recordObject["id"] = $Task_ID;
+    $recordObject["Task_Done"] = $NewVal;
+    $recordArray[] = $recordObject;
+    $requestBody["data"] = $recordArray;
+    $curl_options[CURLOPT_POSTFIELDS] = json_encode($requestBody);
+    $headersArray = array();
+    $headersArray[] = "Authorization" . ":" . "Zoho-oauthtoken " . get_access_token(0, $pdo);
+    $curl_options[CURLOPT_HTTPHEADER] = $headersArray;
+    curl_setopt_array($curl_pointer, $curl_options);
+    $result = curl_exec($curl_pointer);
+    $responseInfo = curl_getinfo($curl_pointer);
+    curl_close($curl_pointer);
+    list($headers, $content) = explode("\r\n\r\n", $result, 2);
+    if (strpos($headers, " 100 Continue") !== false) {
+        list($headers, $content) = explode("\r\n\r\n", $content, 2);
+    }
+    $headerArray = (explode("\r\n", $headers, 50));
+    $headerMap = array();
+    foreach ($headerArray as $key) {
+        if (strpos($key, ":") != false) {
+            $firstHalf = substr($key, 0, strpos($key, ":"));
+            $secondHalf = substr($key, strpos($key, ":") + 1);
+            $headerMap[$firstHalf] = trim($secondHalf);
+        }
+    }
+    $jsonResponse = json_decode($content, true);
+    if ($jsonResponse == null && $responseInfo['http_code'] != 204) {
+        list($headers, $content) = explode("\r\n\r\n", $content, 2);
+        $jsonResponse = json_decode($content, true);
+    }
+    var_dump($headerMap);
+    var_dump($jsonResponse);
+    var_dump($responseInfo['http_code']);
+}
+
+
+
+
+
+
+
+
+if ($api_name == "RemoveExpense") {
+    $Expense_ID = htmlspecialchars(@$POST_data["Expense_ID"]);
+    $curl_pointer = curl_init();
+
+    $curl_options = array();
+    $url = "https://www.zohoapis.com/crm/v2/Task_Expenses?";
+    $parameters = array();
+    $parameters["ids"] = $Expense_ID;
+    foreach ($parameters as $key => $value) {
+        $url = $url . $key . "=" . $value . "&";
+    }
+    $curl_options[CURLOPT_URL] = $url;
+    $curl_options[CURLOPT_RETURNTRANSFER] = true;
+    $curl_options[CURLOPT_HEADER] = 1;
+    $curl_options[CURLOPT_CUSTOMREQUEST] = "DELETE";
+    $headersArray = array();
+    $headersArray[] = "Authorization" . ":" . "Zoho-oauthtoken " . get_access_token(0, $pdo);
     $curl_options[CURLOPT_HTTPHEADER] = $headersArray;
 
     curl_setopt_array($curl_pointer, $curl_options);

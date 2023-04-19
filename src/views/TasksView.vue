@@ -14,7 +14,9 @@
                         <th>تفاصيل المهمة</th>
                         <th>تاريخ المهمة</th>
                         <th>عدد القطع</th>
-                        <th>التسعير</th>
+                        <th>طريقة التسعير</th>
+                        <th v-if="this.PricingWay == 1">(ادخل سعر القطعة) يدوي</th>
+                        <th v-if="this.PricingWay == 2">اوتوماتيكي</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,7 +29,20 @@
                         </td>
                         <td>{{ PriceTask['Created_Date'] }}</td>
                         <td>{{ PriceTask['Quantity'] }}</td>
-                        <td><button class="btn btn-success" @click="this.OpenTask(PriceTask['Task_ID'])">التسعير</button>
+                        <td>
+                            <select class="form-select" v-model="this.PricingWay">
+                                <option value="0" hidden disabled>اختار طريقة التسعير</option>
+                                <option value="1">يدوي</option>
+                                <option value="2">اوتوماتيك</option>
+                            </select>
+                        </td>
+                        <td v-if="this.PricingWay == 1">
+                            <input type="number" v-model="this.FinalManualPrice" placeholder="ادخل سعر القطعة">
+                            <button class="btn btn-success" @click="UpdatePriceManual(PriceTask['Task_ID'])">سجل
+                                السعر</button>
+                        </td>
+                        <td v-if="this.PricingWay == 2"><button class="btn btn-success"
+                                @click="this.OpenTask(PriceTask['Task_ID'])">اوتوماتيك</button>
                         </td>
                     </tr>
                 </tbody>
@@ -45,6 +60,8 @@ export default {
     data() {
         return {
             Api_Url: this.$store.state['Api_Url'],
+            PricingWay: 0,
+            FinalManualPrice: null,
         };
     },
     created() {
@@ -61,6 +78,36 @@ export default {
                 main.$store.state['CurrentComponent'] = 'FinalView';
                 main.$store.state['RunApi'] = 1;
             });
+        },
+        UpdatePriceManual(Price_Task_ID) {
+            let main = this;
+            this.$swal.fire({
+                title: 'هل تريد ارسال السعر للقطعة الواحدة = ' + this.FinalManualPrice + " جنيه مصري",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'نعم لنقم بذلك',
+                cancelButtonText: 'ليس الأن'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    main.$store.state['LoaderIndex'] = 1;
+                    axios.post(main.Api_Url, {
+                        api_name: "SendDataToZoho",
+                        Task_ID: Price_Task_ID,
+                        ThePrice: main.FinalManualPrice,
+                    }).then(function (res) {
+                        console.log(res.data);
+                        main.$store.state['LoaderIndex'] = 0;
+                        main.$swal.fire(
+                            'تم انهاء المهمة بنجاح',
+                        )
+                    });
+                }
+                else {
+                    main.$store.state['LoaderIndex'] = 0;
+                }
+            })
         }
     },
     watch: {

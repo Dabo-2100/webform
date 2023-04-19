@@ -12,6 +12,7 @@ export default createStore({
     CurrentComponent: "DashboardView",
     Price_Tasks: [],
     Production_Tasks: [],
+    DoneTasks: [],
     ShowPopUp: 0,
     UserLang: 2,
     TheTaskID: 0,

@@ -1,11 +1,11 @@
 <template>
-    <div class="col-12" id="ProductionView">
-        <div class="col-12" v-if="this.$store.state['Production_Tasks'].length <= 0" id="NoTasks">
+    <div class="col-12" id="DoneView">
+        <div class="col-12" v-if="this.$store.state['DoneTasks'].length <= 0" id="NoTasks">
             <img src="@/assets/NoTasks.png">
-            <h1>لا توجد مشاريع مطلوب العمل عليها</h1>
+            <h1>لا توجد مشاريع منتهية حتي الأن</h1>
         </div>
         <div class="col-12" v-else>
-            <h1 class="col-12 TabHeader">المشاريع المفتوحة</h1>
+            <h1 class="col-12 TabHeader">المشاريع المنتهية</h1>
             <table class="col-12 table table-hover table-bordered">
                 <thead>
                     <tr>
@@ -15,12 +15,11 @@
                         <th>تاريخ بداية المهمة</th>
                         <th>تاريخ التسليم</th>
                         <th>المرحلة الحالية</th>
-                        <th>انهاء</th>
                         <th>أضافة مصروف</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="Task, index in this.$store.state['Production_Tasks']" :key="Task">
+                    <tr v-for="Task, index in this.$store.state['DoneTasks']" :key="Task">
                         <td>{{ index + 1 }}</td>
                         <td>{{ Task['Task_Name'] }}</td>
                         <td>
@@ -30,15 +29,15 @@
                         <td>{{ Task['Starting_Date'] }}</td>
                         <td>{{ Task['Deadline_Date'] }}</td>
                         <td>
-                            <select :value="Task['Task_Stage_ID']"
+                            <select :value="Task['Task_Stage_ID']" disabled
                                 @change="this.UpdateTaskStage($event, Task['Task_ID'], index)">
                                 <option :value="Stage['Stage_ID']" v-for="Stage in Task['TaskStages']" :key="Stage">{{
                                     Stage['Arabic_Name'] }}</option>
                             </select>
                         </td>
-                        <td>
+                        <!-- <td>
                             <button class="btn btn-danger" @click="this.EndTask(Task['Task_ID'])">انهاء المهمة</button>
-                        </td>
+                        </td> -->
                         <td>
                             <button class="btn btn-info"
                                 @click="this.AddExpenseIndex = 1; this.GetTaskExpenses(Task['Task_ID'])">اضافة</button>
@@ -73,9 +72,9 @@
                         @click="this.AddNewExpense()">اضف المصروف</button>
                 </div>
                 <hr class="col-12">
-                <div class="col-12" id="LastExpenses" v-if="this.TaskExpenses.length > 0">``
+                <div class="col-12" id="LastExpenses" v-if="this.TaskExpenses.length > 0">
                     <h1 class="col-12 Header">المصروفات المسجلة</h1>
-                    <table class="col-12 table table-bordered table-hover">
+                    <table class="col-12 table table-bordered table-hover" v-if="this.TaskExpenses.length > 0">
                         <thead>
                             <tr>
                                 <th>اسم المصروف</th>
@@ -105,7 +104,7 @@
 // @ is an alias to /src
 import axios from 'axios';
 export default {
-    name: 'ProductionView',
+    name: 'DoneView',
     components: {},
     data() {
         return {
@@ -120,6 +119,7 @@ export default {
         };
     },
     created() {
+        console.log(this.TaskExpenses.length);
     },
     methods: {
         EndTask(Task_ID) {
@@ -252,7 +252,7 @@ export default {
 </script>
   
 <style lang="scss" scoped>
-#ProductionView {
+#DoneView {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

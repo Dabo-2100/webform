@@ -181,8 +181,9 @@ export default {
       axios.post(Api_Url, {
         api_name: "SendDataToZoho",
         ThePrice: UnitPrice,
+        Task_ID: main.$store.state['TheTaskID'],
       }).then(function (res) {
-        alert('Done');
+        location.reload();
       });
 
     }

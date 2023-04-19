@@ -28,8 +28,8 @@ export default {
             Api_Url: this.$store.state['Api_Url'],
             Selections: [
                 { name: "Pricing Tasks", Icon: "fa-solid fa-money-check-dollar", ArabicName: "مهام التسعير", Index: 0, TabView: "TasksView" },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-box-open", ArabicName: "المشاريع المفتوحة", Index: 0, TabView: "ProductionView" },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "المشاريع المنتهية", Index: false },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-box-open", ArabicName: "المشاريع المفتوحة", Index: this.$store.state['Production_Tasks'], TabView: "ProductionView" },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "المشاريع المنتهية", Index: this.$store.state['DoneTasks'], TabView: "DoneView" },
                 { name: "Pricing Tasks", Icon: "fa-solid fa-dollar-sign", ArabicName: "اسعار الخامات", Index: false, TabView: "MaterialView" },
             ],
         };
@@ -59,8 +59,21 @@ export default {
                 api_name: "GetOpenProjects"
             }).then(function (res) {
                 let Final_array = res.data;
-                main.Selections[1]['Index'] = Final_array.length;
-                main.$store.state['Production_Tasks'] = Final_array;
+                function GetDoneTasks(Task) {
+                    if (Task['Task_Done'] == 1) {
+                        return Task;
+                    }
+                }
+                function GetOpenTasks(Task) {
+                    if (Task['Task_Done'] == 0) {
+                        return Task;
+                    }
+                }
+                main.$store.state['Production_Tasks'] = Final_array.filter(GetOpenTasks);
+                main.$store.state['DoneTasks'] = Final_array.filter(GetDoneTasks);
+
+                main.Selections[1]['Index'] = Final_array.filter(GetOpenTasks).length;
+                main.Selections[2]['Index'] = Final_array.filter(GetDoneTasks).length;
                 main.$store.state['LoaderIndex'] = 0;
             });
         }
