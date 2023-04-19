@@ -174,6 +174,7 @@ export default {
       main.TheRemainFinish = FinalFinish;
     },
     SendDataToZoho() {
+      let main = this;
       let TotalPrice = this.$store.state['TheCalcResult']["PrintPrice"] + this.TheTotalFinish;
       let Qty = this.$store.state['TheUserSelection']['Qty'];
       let UnitPrice = TotalPrice / Qty;

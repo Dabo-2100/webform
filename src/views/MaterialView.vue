@@ -61,7 +61,6 @@ export default {
                     return RawMaterial;
                 }
             }
-            console.log(TheFinalArray.filter(GetRawMaterials));
             main.RawMaterial = TheFinalArray.filter(GetRawMaterials);
             main.$store.state['LoaderIndex'] = 0;
         });

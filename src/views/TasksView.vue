@@ -30,18 +30,19 @@
                         <td>{{ PriceTask['Created_Date'] }}</td>
                         <td>{{ PriceTask['Quantity'] }}</td>
                         <td>
-                            <select class="form-select" v-model="this.PricingWay">
+                            <select class="form-select" v-model="PriceTask['Pricing_Way']">
                                 <option value="0" hidden disabled>اختار طريقة التسعير</option>
                                 <option value="1">يدوي</option>
                                 <option value="2">اوتوماتيك</option>
                             </select>
                         </td>
-                        <td v-if="this.PricingWay == 1">
-                            <input type="number" v-model="this.FinalManualPrice" placeholder="ادخل سعر القطعة">
-                            <button class="btn btn-success" @click="UpdatePriceManual(PriceTask['Task_ID'])">سجل
+                        <td v-if="PriceTask['Pricing_Way'] == 1">
+                            <input type="number" v-model="PriceTask['Final_Unit_Price']" placeholder="ادخل سعر القطعة">
+                            <button class="btn btn-success"
+                                @click="UpdatePriceManual(PriceTask['Task_ID'], PriceTask['Final_Unit_Price'])">سجل
                                 السعر</button>
                         </td>
-                        <td v-if="this.PricingWay == 2"><button class="btn btn-success"
+                        <td v-if="PriceTask['Pricing_Way'] == 2"><button class="btn btn-success"
                                 @click="this.OpenTask(PriceTask['Task_ID'])">اوتوماتيك</button>
                         </td>
                     </tr>
@@ -79,10 +80,10 @@ export default {
                 main.$store.state['RunApi'] = 1;
             });
         },
-        UpdatePriceManual(Price_Task_ID) {
+        UpdatePriceManual(Price_Task_ID, Final_Unit_Price) {
             let main = this;
             this.$swal.fire({
-                title: 'هل تريد ارسال السعر للقطعة الواحدة = ' + this.FinalManualPrice + " جنيه مصري",
+                title: 'هل تريد ارسال السعر للقطعة الواحدة = ' + Final_Unit_Price + " جنيه مصري",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -95,13 +96,13 @@ export default {
                     axios.post(main.Api_Url, {
                         api_name: "SendDataToZoho",
                         Task_ID: Price_Task_ID,
-                        ThePrice: main.FinalManualPrice,
+                        ThePrice: Final_Unit_Price,
                     }).then(function (res) {
-                        console.log(res.data);
                         main.$store.state['LoaderIndex'] = 0;
                         main.$swal.fire(
                             'تم انهاء المهمة بنجاح',
                         )
+                        location.reload();
                     });
                 }
                 else {

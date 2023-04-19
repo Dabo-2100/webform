@@ -212,6 +212,8 @@ if ($api_name == "GetPricingTasks") {
                 "Name" => $Name,
                 "Created_Date" => $Created_Date,
                 "Task_ID" => $Task_ID,
+                "Pricing_Way" => 0,
+                "Final_Unit_Price" => 0,
             );
             array_push($final, $data);
         }

@@ -119,7 +119,6 @@ export default {
         };
     },
     created() {
-        console.log(this.TaskExpenses.length);
     },
     methods: {
         EndTask(Task_ID) {
@@ -176,7 +175,6 @@ export default {
                 api_name: "GetTaskExpenses",
                 Task_ID: Task_ID
             }).then(function (res) {
-                console.log(res.data);
                 main.OpenTask = Task_ID;
                 if (res.data.length > 0) {
                     main.TaskExpenses = res.data;
@@ -201,7 +199,6 @@ export default {
                 Expense_Value: this.NewExpense['Value'],
                 Due_Task_ID: this.OpenTask,
             }).then(function (res) {
-                console.log(res.data);
                 main.$store.state['LoaderIndex'] = 0;
                 main.$swal.fire({
                     title: 'تم اضافة المصروف بنجاح',
