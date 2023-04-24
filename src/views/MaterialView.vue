@@ -15,7 +15,7 @@
                 <tr v-for="Material, index in this.RawMaterial" :key="Material" :id="Material['id']">
                     <td>{{ index + 1 }}</td>
                     <td>{{ Material['ArabicName'] }}</td>
-                    <td>{{ Material['Price'] }}</td>
+                    <td><input v-model="Material['Price']" @change="this.ChangePrice(index)"></td>
                     <td>{{ Material['Unit'] }}</td>
                     <!-- <td>{{ Material['Cat'] }}</td> -->
                 </tr>
@@ -69,7 +69,36 @@ export default {
 
     },
     watch: {
+        ChangePrice(index) {
+            let main = this;
+            this.$swal.fire({
+                title: 'هل تريد انهاء المهمة',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'نعم لنقم بذلك',
+                cancelButtonText: 'ليس الأن'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                                        //     main.$swal.fire(
+                    //         'تم انهاء المهمة بنجاح',
+                    //     )
+                    main.$store.state['LoaderIndex'] = 1;
+                    // axios.post(main.Api_Url, {
+                    //     api_name: "UpdateTaskDone",
+                    //     Task_ID: Task_ID,
+                    //     NewVal: 1,
+                    // }).then(function (res) {
+                    //     main.$store.state['LoaderIndex'] = 0;
 
+                    // });
+                }
+                else {
+                    main.$store.state['LoaderIndex'] = 0;
+                }
+            })
+        }
     },
     computed: {
 

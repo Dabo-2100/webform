@@ -1,115 +1,112 @@
 {
-    "data": [
-        {
-            "Owner": {
-                "name": "Abdelfattah Mahmoud",
-                "id": "4432004000007195001",
-                "email": "abdelfattah.mahmoud@designido.net"
-            },
-            "$currency_symbol": "EGP",
-            "$field_states": null,
-            "$review_process": {
-                "approve": false,
-                "reject": false,
-                "resubmit": false
-            },
-            "Product": null,
-            "Requirement_Type": null,
-            "Requirement_Details": "Size : A4\nPaperType : coche\nWeight : 170 gsm\nColorIndex : 3 Color",
-            "Name": "Request 1",
-            "Last_Activity_Time": "2023-04-13T20:31:46+02:00",
-            "$review": null,
-            "$state": "save",
-            "Unsubscribed_Mode": null,
-            "$process_flow": false,
-            "Deal_Name": {
-                "name": "Deal Test 1",
-                "id": "4432004000007885269"
-            },
-            "$locked_for_me": false,
-            "id": "4432004000007885292",
-            "$approved": true,
-            "The_Final_Price": 1282,
-            "$approval": {
-                "delegate": false,
-                "approve": false,
-                "reject": false,
-                "resubmit": false
-            },
-            "Unsubscribed_Time": null,
-            "Quantity": 1000,
-            "$editable": true,
-            "$orchestration": false,
-            "Pricing_InCharge": {
-                "name": "Abdelfattah Mahmoud",
-                "id": "4432004000007195001"
-            },
-            "$in_merge": false,
-            "Locked__s": false,
-            "Pricing_Way": "Production",
-            "Tag": [],
-            "$zia_owner_assignment": "owner_recommendation_unavailable",
-            "Profit_Margin": 20,
-            "$approval_state": "approved",
-            "Unit_Price": 1.0683333333333
-        },
-        {
-            "Owner": {
-                "name": "Ahmed Shalaby",
-                "id": "4432004000000257001",
-                "email": "ahmed.shalaby@designido.net"
-            },
-            "$currency_symbol": "EGP",
-            "$field_states": null,
-            "$review_process": {
-                "approve": false,
-                "reject": false,
-                "resubmit": false
-            },
-            "Product": null,
-            "Requirement_Type": null,
-            "Requirement_Details": null,
-            "Name": "Wood stand maintenance",
-            "Last_Activity_Time": null,
-            "$review": null,
-            "$state": "save",
-            "Unsubscribed_Mode": null,
-            "$process_flow": false,
-            "Deal_Name": {
-                "name": "Wood stand maintenance",
-                "id": "4432004000007802004"
-            },
-            "$locked_for_me": false,
-            "id": "4432004000007802027",
-            "$approved": true,
-            "The_Final_Price": 6500,
-            "$approval": {
-                "delegate": false,
-                "approve": false,
-                "reject": false,
-                "resubmit": false
-            },
-            "Unsubscribed_Time": null,
-            "Quantity": 1,
-            "$editable": true,
-            "$orchestration": false,
-            "Pricing_InCharge": null,
-            "$in_merge": false,
-            "Locked__s": false,
-            "Pricing_Way": "Manual",
-            "Tag": [],
-            "$zia_owner_assignment": "owner_recommendation_unavailable",
-            "Profit_Margin": 0,
-            "$approval_state": "approved",
-            "Unit_Price": 6500
-        }
-    ],
-    "info": {
-        "per_page": 200,
-        "count": 2,
-        "page": 1,
-        "sort_by": "id",
-        "sort_order": "desc",
-        "more_records": false
-    }
+    "Owner": {
+        "name": "Abdelfattah Mahmoud",
+        "id": "4432004000007195001",
+        "email": "abdelfattah.mahmoud@designido.net"
+    },
+    "$currency_symbol": "EGP",
+    "$field_states": null,
+    "$review_process": {
+        "approve": false,
+        "reject": false,
+        "resubmit": false
+    },
+    "Task_Stage": {
+        "name": "Finishing",
+        "id": "4432004000007971657"
+    },
+    "Deal_Requiremenet": {
+        "name": "Request 1",
+        "id": "4432004000008114077"
+    },
+    "Name": "Print Flyer",
+    "Last_Activity_Time": "2023-04-22T20:18:25+02:00",
+    "Record_Image": null,
+    "$review": null,
+    "$state": "save",
+    "Unsubscribed_Mode": null,
+    "$process_flow": false,
+    "Deal_Name": {
+        "name": "Test Deal",
+        "id": "4432004000008114054"
+    },
+    "Task_Done": "1",
+    "Task_Type": "printing",
+    "$locked_for_me": false,
+    "id": "4432004000008114223",
+    "$approved": true,
+    "$approval": {
+        "delegate": false,
+        "approve": false,
+        "reject": false,
+        "resubmit": false
+    },
+    "Task_Details": "Size : A4\nColor_Index : 2 Colors",
+    "Unsubscribed_Time": null,
+    "$editable": true,
+    "Total_Expenses": 220,
+    "Deadline_Date": "2023-04-25",
+    "$orchestration": false,
+    "Starting_Date": "2023-04-22",
+    "$in_merge": false,
+    "Locked__s": false,
+    "Tag": [],
+    "$zia_owner_assignment": "owner_recommendation_unavailable",
+    "$approval_state": "approved"
+},
+{
+    "Owner": {
+        "name": "Abdelfattah Mahmoud",
+        "id": "4432004000007195001",
+        "email": "abdelfattah.mahmoud@designido.net"
+    },
+    "$currency_symbol": "EGP",
+    "$field_states": null,
+    "$review_process": {
+        "approve": false,
+        "reject": false,
+        "resubmit": false
+    },
+    "Task_Stage": {
+        "name": "Design",
+        "id": "4432004000008044121"
+    },
+    "Deal_Requiremenet": {
+        "name": "Request 1",
+        "id": "4432004000008114077"
+    },
+    "Name": "Buy Gifts",
+    "Last_Activity_Time": "2023-04-22T19:49:59+02:00",
+    "Record_Image": null,
+    "$review": null,
+    "$state": "save",
+    "Unsubscribed_Mode": null,
+    "$process_flow": false,
+    "Deal_Name": {
+        "name": "Test Deal",
+        "id": "4432004000008114054"
+    },
+    "Task_Done": "1",
+    "Task_Type": "manufacturing",
+    "$locked_for_me": false,
+    "id": "4432004000008114146",
+    "$approved": true,
+    "$approval": {
+        "delegate": false,
+        "approve": false,
+        "reject": false,
+        "resubmit": false
+    },
+    "Task_Details": "Buy 50 Gift for The Deal",
+    "Unsubscribed_Time": null,
+    "$editable": true,
+    "Total_Expenses": 250,
+    "Deadline_Date": "2023-04-25",
+    "$orchestration": false,
+    "Starting_Date": "2023-04-22",
+    "$in_merge": false,
+    "Locked__s": false,
+    "Tag": [],
+    "$zia_owner_assignment": "owner_recommendation_unavailable",
+    "$approval_state": "approved"
 }
