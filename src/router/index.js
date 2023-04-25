@@ -3,13 +3,13 @@ import { createRouter, createWebHashHistory } from "vue-router";
 const routes = [
   {
     path: "/",
-    name: "home",
-    component: () => import("@/views/HomeView.vue"),
+    name: "login",
+    component: () => import("@/views/LoginView.vue"),
   },
   {
-    path: "/test",
-    name: "test",
-    component: () => import("@/views/PopUpView.vue"),
+    path: "/home",
+    name: "home",
+    component: () => import("@/views/HomeView.vue"),
   },
   {
     path: "/:pathMatch(.*)*",

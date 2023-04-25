@@ -40,7 +40,7 @@ export default {
                 TheUserID: TheUserID,
             }).then(function (res) {
                 if (res.data['code'] !== undefined && res.data['code'] == 'INVALID_TOKEN') {
-                    window.location = 'https://accounts.zoho.com/oauth/v2/auth?response_type=code&client_id=1000.R3K41GUMKFVW5K825Z6PZ6JU1HTQ3Q&scope=ZohoCRM.modules.ALL&redirect_uri=https://webform.designido.net&prompt=consent';
+                    window.location = 'https://accounts.zoho.com/oauth/v2/auth?response_type=code&client_id=1000.R3K41GUMKFVW5K825Z6PZ6JU1HTQ3Q&scope=ZohoCRM.modules.ALL,ZohoCRM.users.ALL&redirect_uri=https://webform.designido.net&prompt=consent';
                 }
             });
         }

@@ -7,6 +7,16 @@ $statements = [
         created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
         last_update         TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     )',
+    'CREATE TABLE IF NOT EXISTS app_users( 
+        user_id           INT(20) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        user_type         INT(20) NOT NULL,
+        email             VARCHAR(255) NOT NULL,
+        username          VARCHAR(255) NOT NULL,
+        password          VARCHAR(255) NOT NULL,
+        token             VARCHAR(255) NOT NULL,
+        created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+        last_update       TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    )',
 ];
 
 // connect to the database
