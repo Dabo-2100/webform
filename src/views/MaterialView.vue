@@ -66,13 +66,10 @@ export default {
         });
     },
     methods: {
-
-    },
-    watch: {
         ChangePrice(index) {
             let main = this;
             this.$swal.fire({
-                title: 'هل تريد انهاء المهمة',
+                title: 'هل تريد تعديل سعر المادة الخام الجديدة الي :' + main.RawMaterial[index]['Price'] + '  جنيهاً ',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -81,24 +78,28 @@ export default {
                 cancelButtonText: 'ليس الأن'
             }).then((result) => {
                 if (result.isConfirmed) {
-                                        //     main.$swal.fire(
-                    //         'تم انهاء المهمة بنجاح',
-                    //     )
                     main.$store.state['LoaderIndex'] = 1;
-                    // axios.post(main.Api_Url, {
-                    //     api_name: "UpdateTaskDone",
-                    //     Task_ID: Task_ID,
-                    //     NewVal: 1,
-                    // }).then(function (res) {
-                    //     main.$store.state['LoaderIndex'] = 0;
-
-                    // });
+                    axios.post(main.Api_Url, {
+                        api_name: "UpdateRawMaterialPrice",
+                        raw_material_price: main.RawMaterial[index]['Price'],
+                        raw_material_id: main.RawMaterial[index]['id'],
+                    }).then(function (res) {
+                        console.log()
+                        console.log(res.data);
+                        main.$store.state['LoaderIndex'] = 0;
+                        main.$swal.fire(
+                            'تم تعديل سعر الخامة بنجاح',
+                        )
+                    });
                 }
                 else {
                     main.$store.state['LoaderIndex'] = 0;
                 }
             })
         }
+    },
+    watch: {
+
     },
     computed: {
 

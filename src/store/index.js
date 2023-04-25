@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-const Server_Url = "http://localhost/webform/public/";
+const Server_Url = "http://192.168.1.16/webform/public/";
 // const Server_Url = "";
 export default createStore({
   state: {

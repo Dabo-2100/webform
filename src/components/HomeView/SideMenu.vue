@@ -31,6 +31,7 @@ export default {
                 { name: "Pricing Tasks", Icon: "fa-solid fa-box-open", ArabicName: "المهام المفتوحة", Index: this.$store.state['Production_Tasks'], TabView: "ProductionView" },
                 { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "المهام المنتهية", Index: this.$store.state['DoneTasks'], TabView: "DoneView" },
                 { name: "Pricing Tasks", Icon: "fa-solid fa-dollar-sign", ArabicName: "اسعار الخامات", Index: false, TabView: "MaterialView" },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-dollar-sign", ArabicName: "مهام التوصيل", Index: false, TabView: "DeliveryView" },
             ],
         };
     },
@@ -71,7 +72,6 @@ export default {
                 }
                 main.$store.state['Production_Tasks'] = Final_array.filter(GetOpenTasks);
                 main.$store.state['DoneTasks'] = Final_array.filter(GetDoneTasks);
-
                 main.Selections[1]['Index'] = Final_array.filter(GetOpenTasks).length;
                 main.Selections[2]['Index'] = Final_array.filter(GetDoneTasks).length;
                 main.$store.state['LoaderIndex'] = 0;

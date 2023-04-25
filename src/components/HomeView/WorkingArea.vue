@@ -13,10 +13,12 @@ import ProductionView from '@/views/ProductionView.vue';
 import DashboardView from '@/views/DashboardView.vue';
 import MaterialView from '@/views/MaterialView.vue';
 import DoneView from '@/views/DoneView.vue';
+import DeliveryView from '@/views/DeliveryView.vue';
+
 
 export default {
     name: 'WorkingArea',
-    components: { FinalView, TasksView, DashboardView, MaterialView, ProductionView, DoneView },
+    components: { FinalView, TasksView, DashboardView, MaterialView, ProductionView, DoneView, DeliveryView },
     data() {
         return {
             Api_Url: this.$store.state['Api_Url'],
