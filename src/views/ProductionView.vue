@@ -20,7 +20,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="Task, index in this.$store.state['Production_Tasks']" :key="Task">
+                    <tr v-for="Task, index in  this.$store.state['Production_Tasks'] " :key="Task">
                         <td>{{ index + 1 }}</td>
                         <td>{{ Task['Task_Name'] }}</td>
                         <td>
@@ -48,10 +48,10 @@
             </table>
         </div>
 
-        <div class="col-12" id="PopupPage" v-if="this.AddExpenseIndex == 1" @click="this.AddExpenseIndex = 0">
-            <div class="col-12 col-sm-10 col-md-8 col-lg-6" id="ExpenseBox" @click="$event.stopPropagation();">
+        <div class="col-12" id="PopupPage" v-if=" this.AddExpenseIndex == 1 " @click=" this.AddExpenseIndex = 0 ">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6" id="ExpenseBox" @click=" $event.stopPropagation(); ">
                 <font-awesome-icon class="CloseSign" icon="fa-solid fa-x" id="CloseForm"
-                    @click="this.AddExpenseIndex = 0" />
+                    @click=" this.AddExpenseIndex = 0 " />
                 <div class="col-12" id="AddNewExpense">
                     <h1 class="col-12 Header">اضافة مصروف جديد</h1>
                     <table class="col-12 table table-bordered">
@@ -63,17 +63,17 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td><input class="col-12" v-model="this.NewExpense['Name']" type="text"></td>
-                                <td><input class="col-12" v-model="this.NewExpense['Value']" type="number"></td>
+                                <td><input class="col-12" v-model=" this.NewExpense['Name'] " type="text"></td>
+                                <td><input class="col-12" v-model=" this.NewExpense['Value'] " type="number"></td>
                             </tr>
                         </tbody>
                     </table>
                     <button class="btn btn-success"
-                        v-if="(this.NewExpense['Name'] != '') && (this.NewExpense['Value'] != 0)"
-                        @click="this.AddNewExpense()">اضف المصروف</button>
+                        v-if=" (this.NewExpense['Name'] != '') && (this.NewExpense['Value'] != 0) "
+                        @click=" this.AddNewExpense() ">اضف المصروف</button>
                 </div>
                 <hr class="col-12">
-                <div class="col-12" id="LastExpenses" v-if="this.TaskExpenses.length > 0">``
+                <div class="col-12" id="LastExpenses" v-if=" this.TaskExpenses.length > 0 ">``
                     <h1 class="col-12 Header">المصروفات المسجلة</h1>
                     <table class="col-12 table table-bordered table-hover">
                         <thead>
@@ -85,13 +85,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="Expense, index in this.TaskExpenses" :key="Expense">
+                            <tr v-for=" Expense, index  in  this.TaskExpenses " :key=" Expense ">
                                 <td>{{ Expense['Expense_Name'] }}</td>
                                 <td><b>{{ Expense['Expense_Value'] }}</b></td>
                                 <td>{{ Expense['Last_Update'].indexOf('T') != -1 ? Expense['Last_Update'].split('T')[0] :
                                     'اليوم' }}
                                 </td>
-                                <td><button class="btn btn-danger" @click="this.DeleteExpense(index)">حذف</button></td>
+                                <td><button class="btn btn-danger" @click=" this.DeleteExpense(index) ">حذف</button></td>
                             </tr>
                         </tbody>
                     </table>

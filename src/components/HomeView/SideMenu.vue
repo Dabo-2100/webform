@@ -3,8 +3,8 @@
         <div id="SideMenu"
             v-if="(this.$store.state['CurrentWidth'] < 767 && this.$store.state['SideMenuIndex'] == 1) || this.$store.state['CurrentWidth'] >= 767">
             <ul id="MenuSelections">
-                <li v-for="Selection in this.Selections" :key="Selection"
-                    @click="this.$store.state['CurrentComponent'] = Selection['TabView']">
+                <li v-for="Selection, index in this.Selections.filter(this.AvialbleTabs)" :key="Selection"
+                    @click="Selection['TabView'] != false ? this.$store.state['CurrentComponent'] = Selection['TabView'] : this.LogOut()">
                     <font-awesome-icon :icon="Selection['Icon']" />
                     <p>{{ this.$store.state['UserLang'] == 1 ? Selection['ArabicName'] :
                         Selection['ArabicName'] }}
@@ -27,25 +27,71 @@ export default {
         return {
             Api_Url: this.$store.state['Api_Url'],
             Selections: [
-                { name: "Pricing Tasks", Icon: "fa-solid fa-money-check-dollar", ArabicName: "مهام التسعير", Index: 0, TabView: "TasksView" },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-box-open", ArabicName: "المهام المفتوحة", Index: this.$store.state['Production_Tasks'], TabView: "ProductionView" },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "المهام المنتهية", Index: this.$store.state['DoneTasks'], TabView: "DoneView" },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-dollar-sign", ArabicName: "اسعار الخامات", Index: false, TabView: "MaterialView" },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-dollar-sign", ArabicName: "مهام التوصيل", Index: false, TabView: "DeliveryView" },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-money-check-dollar", ArabicName: "مهام التسعير", Index: 0, TabView: "TasksView", User_Type: [0, 1] },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-box-open", ArabicName: "مهام التصنيع", Index: this.$store.state['Production_Tasks'], TabView: "ProductionView", User_Type: [0, 1] },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "المهام المنتهية", Index: this.$store.state['DoneTasks'], TabView: "DoneView", User_Type: [0, 1] },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-dollar-sign", ArabicName: "اسعار الخامات", Index: false, TabView: "MaterialView", User_Type: [0, 1] },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "مهام التوصيل", Index: false, TabView: "DeliveryView", User_Type: [0, 2] },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "مهام التوصيل المنتهية", Index: false, TabView: "DeliveryView", User_Type: [0, 2] },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-power-off", ArabicName: "تسجيل الخروج", Index: false, TabView: false, User_Type: [0, 1, 2] },
             ],
         };
     },
     created() {
         let main = this;
-        main.GetPricingTasks();
-        main.GetOpenProjects();
+        let token = localStorage.getItem("token");
+        let email = localStorage.getItem("email");
+        if (token != null && token != undefined) {
+            axios.post(main.Api_Url, {
+                api_name: "CheckToken",
+                token: token,
+                email: email
+            }).then(function (res) {
+                if (res.data['user_id'] !== undefined) {
+                    main.$store.state['User_Type'] = res.data['user_type'];
+                    if (res.data['user_type'] == 1) {
+                        main.GetPricingTasks();
+                        main.GetOpenProjects();
+                    }
+                    else if (res.data['user_type'] == 0) {
+                        main.GetPricingTasks();
+                        main.GetOpenProjects();
+                        main.GetDeliveryTasks();
+                    }
+                    else {
+                        main.GetDeliveryTasks();
+                    }
+                }
+                else {
+                    localStorage.clear();
+                    this.$router.push({ name: 'login' });
+                }
+            });
+        }
+        else {
+            localStorage.clear();
+            this.$router.push({ name: 'login' });
+        }
+
+
     },
     methods: {
+        AvialbleTabs(Tab) {
+            let main = this;
+            if (Tab['User_Type'].indexOf(main.$store.state['User_Type']) != -1) {
+                return Tab;
+            }
+        },
         GetPricingTasks() {
             let main = this;
             main.$store.state['LoaderIndex'] = 1;
+            let Zoho_ID = localStorage.getItem('Zoho_ID');
+            if (localStorage.getItem('user_type') == 0) {
+                Zoho_ID = 0;
+            }
             axios.post(main.Api_Url, {
-                api_name: "GetPricingTasks"
+                api_name: "GetPricingTasks",
+                Zoho_ID: Zoho_ID,
             }).then(function (res) {
                 let Final_array = res.data;
                 main.Selections[0]['Index'] = Final_array.length;
@@ -56,8 +102,15 @@ export default {
         GetOpenProjects() {
             let main = this;
             main.$store.state['LoaderIndex'] = 1;
+            let Zoho_ID = localStorage.getItem('Zoho_ID');
+            if (localStorage.getItem('user_type') == 0) {
+                Zoho_ID = 0;
+            }
+            main.$store.state['LoaderIndex'] = 1;
             axios.post(main.Api_Url, {
-                api_name: "GetOpenProjects"
+                api_name: "GetOpenProjects",
+                Zoho_ID: Zoho_ID,
+
             }).then(function (res) {
                 let Final_array = res.data;
                 function GetDoneTasks(Task) {
@@ -76,6 +129,35 @@ export default {
                 main.Selections[2]['Index'] = Final_array.filter(GetDoneTasks).length;
                 main.$store.state['LoaderIndex'] = 0;
             });
+        },
+        GetDeliveryTasks() {
+            let main = this;
+            main.$store.state['LoaderIndex'] = 1;
+            axios.post(main.Api_Url, {
+                api_name: "GetDeliveryTasks"
+            }).then(function (res) {
+                let Final_array = res.data['data'];
+                function GetOpenTasks(Task) {
+                    if (Task['Task_Done'] == 0) {
+                        return Task;
+                    }
+                }
+                function GetDoneTasks(Task) {
+                    if (Task['Task_Done'] == 1) {
+                        return Task;
+                    }
+                }
+                main.$store.state['LoaderIndex'] = 0;
+                console.log(Final_array.filter(GetOpenTasks));
+                main.$store.state['OpenDelivery'] = Final_array.filter(GetOpenTasks);
+                main.$store.state['DoneDelivery'] = Final_array.filter(GetDoneTasks);
+                main.Selections[4]['Index'] = Final_array.filter(GetOpenTasks).length;
+                main.Selections[5]['Index'] = Final_array.filter(GetDoneTasks).length;
+            });
+        },
+        LogOut() {
+            localStorage.clear();
+            this.$router.push({ name: 'login' });
         }
     },
     watch: {

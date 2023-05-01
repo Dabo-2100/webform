@@ -1,47 +1,42 @@
 <template>
     <div class="col-12" id="DeliveryView">
-        <div class="col-12" v-if="this.$store.state['Production_Tasks'].length <= 0" id="NoTasks">
+        <div class="col-12" v-if="this.$store.state['OpenDelivery'].length <= 0" id="NoTasks">
             <img src="@/assets/NoTasks.png">
-            <h1>لا توجد مشاريع مطلوب العمل عليها</h1>
+            <h1>لا توجد مشاوير توصيل مطلوب العمل عليها</h1>
         </div>
         <div class="col-12" v-else>
-            <h1 class="col-12 TabHeader">المشاريع المفتوحة</h1>
+            <h1 class="col-12 TabHeader">مشاوير التوصيل المطلوبة</h1>
             <table class="col-12 table table-hover table-bordered">
                 <thead>
                     <tr>
                         <th>-</th>
                         <th>اسم المهمة</th>
-                        <th>تفاصيل المهمة</th>
+                        <th>عنوان التوصيل</th>
+                        <th>رقم الهاتف</th>
                         <th>تاريخ بداية المهمة</th>
                         <th>تاريخ التسليم</th>
-                        <th>المرحلة الحالية</th>
                         <th>انهاء</th>
                         <th>أضافة مصروف</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="Task, index in    this.$store.state['Production_Tasks']   " :key="Task">
+                    <tr v-for="(Task, index) in         this.$store.state['OpenDelivery']        " :key="Task">
                         <td>{{ index + 1 }}</td>
-                        <td>{{ Task['Task_Name'] }}</td>
+                        <td>{{ Task['Name'] }}</td>
                         <td>
-                            <pre>{{
-                                Task['Task_Details'] }}</pre>
+                            {{ Task['Shipping_Details'] == null ? 'لم يتم تسجيل العنوان' : Task['Shipping_Details'] }}
+                        </td>
+                        <td>
+                            {{ Task['Shipping_Phone_No'] == null ? 'لم يتم رقهم الهاتف' : Task['Shipping_Phone_No'] }}
                         </td>
                         <td>{{ Task['Starting_Date'] }}</td>
-                        <td>{{ Task['Deadline_Date'] }}</td>
+                        <td>{{ Task['DeadLine_Date'] }}</td>
                         <td>
-                            <select :value="Task['Task_Stage_ID']"
-                                @change="this.UpdateTaskStage($event, Task['Task_ID'], index)">
-                                <option :value="Stage['Stage_ID']" v-for="Stage in Task['TaskStages']" :key="Stage">{{
-                                    Stage['Arabic_Name'] }}</option>
-                            </select>
-                        </td>
-                        <td>
-                            <button class="btn btn-danger" @click="this.EndTask(Task['Task_ID'])">انهاء المهمة</button>
+                            <button class="btn btn-danger" @click="this.EndTask(Task['id'])">انهاء المهمة</button>
                         </td>
                         <td>
                             <button class="btn btn-info"
-                                @click="this.AddExpenseIndex = 1; this.GetTaskExpenses(Task['Task_ID'])">اضافة</button>
+                                @click="this.AddExpenseIndex = 1; this.GetTaskExpenses(Task['id'])">اضافة</button>
                         </td>
                     </tr>
                 </tbody>
@@ -85,7 +80,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="   Expense, index    in    this.TaskExpenses   " :key=" Expense ">
+                            <tr v-for="                  Expense, index                   in                   this.TaskExpenses                  "
+                                :key=" Expense ">
                                 <td>{{ Expense['Expense_Name'] }}</td>
                                 <td><b>{{ Expense['Expense_Value'] }}</b></td>
                                 <td>{{ Expense['Last_Update'].indexOf('T') != -1 ? Expense['Last_Update'].split('T')[0] :
@@ -175,7 +171,8 @@ export default {
             main.$store.state['LoaderIndex'] = 1;
             axios.post(this.Api_Url, {
                 api_name: "GetTaskExpenses",
-                Task_ID: Task_ID
+                Task_ID: Task_ID,
+                Task_Type: "Operation"
             }).then(function (res) {
                 main.OpenTask = Task_ID;
                 if (res.data.length > 0) {
@@ -200,7 +197,9 @@ export default {
                 Expense_Name: this.NewExpense['Name'],
                 Expense_Value: this.NewExpense['Value'],
                 Due_Task_ID: this.OpenTask,
+                Task_Type: "Operation",
             }).then(function (res) {
+                console.log(res.data);
                 main.$store.state['LoaderIndex'] = 0;
                 main.$swal.fire({
                     title: 'تم اضافة المصروف بنجاح',

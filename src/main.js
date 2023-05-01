@@ -80,8 +80,12 @@ import {
   faChevronDown,
   faPaperPlane,
   faDesktop,
+  faLock,
+  faPowerOff,
 } from "@fortawesome/free-solid-svg-icons";
 library.add(
+  faPowerOff,
+  faLock,
   faDollarSign,
   faListCheck,
   faBoxOpen,

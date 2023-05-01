@@ -1,11 +1,22 @@
 <template>
     <div class="col-12" id="LoginView">
-        <div class="col-12 col-md-4 col-lg-3" id="LoginForm">
-            <h1>Login</h1>
-            <input type="text" placeholder="Username" v-model="this.UserData['username']">
-            <input type="password" placeholder="Password" v-model="this.UserData['password']">
-            <button class="btn btn-success" @click="this.Login()">Login</button>
-
+        <div class="col-12 Filter">
+            <div id="LoginForm">
+                <div class="ImgContainer">
+                    <img src="@/assets/TheLogo.png" id="TheLogo">
+                </div>
+                <div class="InputField">
+                    <font-awesome-icon icon="fa-solid fa-user" class="InputIcon" />
+                    <input @keypress.enter="this.Login()" type="text" placeholder="Username"
+                        v-model="this.UserData['username']">
+                </div>
+                <div class="InputField">
+                    <font-awesome-icon icon="fa-solid fa-lock" class="InputIcon" />
+                    <input @keypress.enter="this.Login()" type="password" placeholder="Password"
+                        v-model="this.UserData['password']">
+                </div>
+                <button class="btn btn-success" @click="this.Login()">Get Started</button>
+            </div>
         </div>
     </div>
 </template>
@@ -23,10 +34,12 @@ export default {
                 username: "",
                 password: "",
             },
+            LoginIndex: 0,
         };
     },
     created() {
         let main = this;
+        main.$store.state['LoaderIndex'] = 1;
         axios.post(this.Api_Url, {
             api_name: "CheckTheConnection",
             TheUserID: 123456789,
@@ -45,12 +58,17 @@ export default {
                     }).then(function (res) {
                         if (res.data['user_id'] !== undefined) {
                             main.$store.state['User_Type'] = res.data['user_type'];
+                            console.log("User_Type Updated to : " + res.data['user_type']);
                             main.$router.push({ name: 'home' });
                         }
                         else {
                             localStorage.clear();
                         }
+                        main.$store.state['LoaderIndex'] = 0;
                     });
+                }
+                else {
+                    main.$store.state['LoaderIndex'] = 0;
                 }
             }
         });
@@ -58,25 +76,41 @@ export default {
     methods: {
         Login() {
             let main = this;
-            if (main.UserData['username'] != '' && main.UserData['password'] != '') {
-                axios.post(main.Api_Url, {
-                    api_name: "Login",
-                    username: main.UserData['username'],
-                    password: main.UserData['password'],
-                }).then(function (res) {
-                    if (res.data['Zoho_ID'] !== undefined) {
-                        localStorage.setItem("Zoho_ID", res.data['Zoho_ID']);
-                        localStorage.setItem("email", res.data['email']);
-                        localStorage.setItem("token", res.data['token']);
-                        main.$router.push({ name: 'home' });
-                    }
-                    else {
-                        alert("Worng Username or Password");
-                    }
-                });
-            }
-            else {
-                alert('Please Enter Username and password');
+            main.$store.state['LoaderIndex'] = 1;
+            if (this.LoginIndex == 0) {
+                this.LoginIndex = 1;
+                if (main.UserData['username'] != '' && main.UserData['password'] != '') {
+                    axios.post(main.Api_Url, {
+                        api_name: "Login",
+                        username: main.UserData['username'],
+                        password: main.UserData['password'],
+                    }).then(function (res) {
+                        main.LoginIndex = 0;
+                        main.$store.state['LoaderIndex'] = 0;
+                        if (res.data['Zoho_ID'] !== undefined) {
+                            main.$store.state['User_Type'] = res.data['user_type'];
+                            localStorage.setItem("Zoho_ID", res.data['Zoho_ID']);
+                            localStorage.setItem("email", res.data['email']);
+                            localStorage.setItem("token", res.data['token']);
+                            localStorage.setItem("user_type", res.data['user_type']);
+                            main.$router.push({ name: 'home' });
+                        }
+                        else {
+                            main.$swal.fire({
+                                title: 'Worng Username or Password',
+                                icon: 'error',
+                            });
+                        }
+                    });
+                }
+                else {
+                    main.LoginIndex = 0;
+                    main.$store.state['LoaderIndex'] = 0;
+                    main.$swal.fire({
+                        title: 'Please Enter Username and password',
+                        icon: 'info',
+                    });
+                }
             }
         }
     },
@@ -97,27 +131,101 @@ export default {
     direction: ltr;
     flex-direction: row;
     flex-wrap: nowrap;
-    background-color: antiquewhite;
+    background-image: url('@/assets/login_bg.jpg');
     align-content: center;
     justify-content: center;
     align-items: center;
+    background-size: cover;
+    background-position: 50%;
 
-    #LoginForm {
-        background-color: grey;
-        padding: 1rem 5%;
+    .Filter {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.60);
         display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
+        flex-direction: row;
         align-content: center;
         justify-content: center;
         align-items: center;
+        flex-wrap: nowrap;
 
-        h1 {
-            font-size: 2.2rem;
-            text-align: center;
+        #LoginForm {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            justify-content: center;
+
+            .ImgContainer {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-content: center;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: 1rem;
+
+                #TheLogo {
+                    height: 8rem;
+                }
+            }
+
+            .InputField {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+
+                .InputIcon {
+                    position: absolute;
+                    left: 1rem;
+                    top: 0.6rem;
+                    height: 1.3rem;
+                    color: #6d7575;
+                }
+
+                input {
+                    border-radius: 5rem;
+                    background-color: rgba(202, 202, 202, 0.205);
+                    border: 0;
+                    outline: 0;
+                    padding: 0.4rem 1rem;
+                    color: white;
+                    font-size: 1.2rem;
+                    margin-bottom: 1rem;
+                    padding-left: 3rem;
+                    // cursor: pointer;
+                    transition: all ease 500ms;
+                }
+
+                input:hover {
+                    background-color: rgba(138, 129, 129, 0.205);
+                }
+
+            }
+
+            button {
+                font-size: 1.2rem;
+                background-color: #fb646a;
+                border: 0;
+                outline: 0;
+                border-radius: 5rem;
+                transition: all ease 500ms;
+            }
+
+            button:hover {
+                background-color: #fb6469c5;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+                text-align: center;
+            }
         }
-
     }
+
 }
 </style>
   

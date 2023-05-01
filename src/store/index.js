@@ -5,7 +5,7 @@ export default createStore({
   state: {
     Api_Url: Server_Url + "php/index.php",
     CurrentWidth: window.innerWidth,
-    User_Type : -1,
+    User_Type: -1,
     LoaderIndex: 0,
     Server_Date: 0,
     RunApi: 0,
@@ -14,6 +14,8 @@ export default createStore({
     Price_Tasks: [],
     Production_Tasks: [],
     DoneTasks: [],
+    OpenDelivery: [],
+    DoneDelivery: [],
     ShowPopUp: 0,
     UserLang: 2,
     TheTaskID: 0,

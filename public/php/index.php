@@ -63,7 +63,7 @@ function get_records($Module, $code = 0, $pdo)
         'Content-Type: application/x-www-form-urlencoded'
     ));
     $response = curl_exec($ch);
-    echo ($response);
+    return $response;
 };
 
 function SearchRecords($Module, $code = 0, $pdo, $SearchCritera)
@@ -104,6 +104,7 @@ if ($api_name == "AddNewExpense") {
     $Due_Task_ID = htmlspecialchars(@$POST_data["Due_Task_ID"]);
     $Expense_Name = htmlspecialchars(@$POST_data["Expense_Name"]);
     $Expense_Value = htmlspecialchars(@$POST_data["Expense_Value"]);
+    $Task_Type = htmlspecialchars(@$POST_data["Task_Type"]);
     $curl_pointer = curl_init();
     $curl_options = array();
     $url = "https://www.zohoapis.com/crm/v2/Task_Expenses";
@@ -114,7 +115,12 @@ if ($api_name == "AddNewExpense") {
     $requestBody = array();
     $recordArray = array();
     $recordObject = array();
-    $recordObject['Due_Task']['id'] = $Due_Task_ID;
+    if ($Task_Type == null) {
+        $recordObject['Due_Task']['id'] = $Due_Task_ID;
+    } else {
+
+        $recordObject['Operation_Task']['id'] = $Due_Task_ID;
+    }
     $recordObject["Name"] = $Expense_Name;
     $recordObject["Expense_Value"] = $Expense_Value;
     $recordArray[] = $recordObject;
@@ -178,25 +184,31 @@ if ($api_name == "GetTaskId") {
 
 if ($api_name == "CheckTheConnection") {
     $TheUserID = htmlspecialchars(@$POST_data["TheUserID"]);
-    get_records("users", 0, $pdo);
+    echo get_records("users", 0, $pdo);
     // $res = json_decode(SearchRecords("users", $code = 0, $pdo, "(id:equals:" . $TheUserID . ")"), true);
 }
 
 if ($api_name == "GetAllProducts") {
-    get_records("Products", 0, $pdo);
+    echo get_records("Products", 0, $pdo);
 }
 if ($api_name == "GetRawMaterials") {
-    get_records("Raw_Materials", 0, $pdo);
+    echo get_records("Raw_Materials", 0, $pdo);
 }
 
 if ($api_name == "GetPaperCutSize") {
-    get_records("PaperCut_Sizes", 0, $pdo);
+    echo get_records("PaperCut_Sizes", 0, $pdo);
 }
 
 if ($api_name == "GetPricingTasks") {
-    $Owner_ID = 4432004000007195001;
+    $Owner_ID = htmlspecialchars(@$POST_data["Zoho_ID"]);
     $final = [];
-    $response2 = json_decode(SearchRecords("Price_Tasks", $code = 0, $pdo, "(Owner.id:equals:" . $Owner_ID . ")"), true);
+
+    if ($Owner_ID == 0) {;
+        $response2 = json_decode(get_records("Price_Tasks", 0, $pdo), true);
+    } else {
+        $response2 = json_decode(SearchRecords("Price_Tasks", $code = 0, $pdo, "(Owner.id:equals:" . $Owner_ID . ")"), true);
+    }
+
     if ($response2 != null) {
         foreach ($response2['data'] as $Task) {
             $Created_Date = $Task['Starting_Date'];
@@ -222,9 +234,14 @@ if ($api_name == "GetPricingTasks") {
 }
 
 if ($api_name == "GetOpenProjects") {
-    $Owner_ID = 4432004000007195001;
+    $Owner_ID = htmlspecialchars(@$POST_data["Zoho_ID"]);
     $final = [];
-    $response2 = json_decode(SearchRecords("Work_Tasks", $code = 0, $pdo, "(Owner.id:equals:" . $Owner_ID . ")"), true);
+    if ($Owner_ID == 0) {;
+        $response2 = json_decode(get_records("Work_Tasks", 0, $pdo), true);
+    } else {
+        $response2 = json_decode(SearchRecords("Work_Tasks", $code = 0, $pdo, "(Owner.id:equals:" . $Owner_ID . ")"), true);
+    }
+
     if ($response2 != null) {
         foreach ($response2['data'] as $Task) {
             $Task_ID = $Task['id'];
@@ -271,17 +288,29 @@ if ($api_name == "GetOpenProjects") {
     }
     echo json_encode($final);
 }
+if ($api_name == "GetDeliveryTasks") {
+    echo SearchRecords("Operation_Tasks", $code = 0, $pdo, "(Task_Type.id:equals:Delivery)");
+}
 
 if ($api_name == "GetTaskExpenses") {
     $Task_ID = htmlspecialchars(@$POST_data["Task_ID"]);
-    $res = json_decode(SearchRecords("Task_Expenses", $code = 0, $pdo, "(Due_Task.id:equals:" . $Task_ID . ")"), true);
+    $Task_Type = htmlspecialchars(@$POST_data["Task_Type"]);
+    if ($Task_Type == null) {
+        $res = json_decode(SearchRecords("Task_Expenses", $code = 0, $pdo, "(Due_Task.id:equals:" . $Task_ID . ")"), true);
+    } else {
+        $res = json_decode(SearchRecords("Task_Expenses", $code = 0, $pdo, "(Operation_Task.id:equals:" . $Task_ID . ")"), true);
+    }
     $AllExpenses = [];
     if ($res != null) {
         foreach ($res['data'] as $Expense) {
             $Expense_ID = $Expense['id'];
             $Expense_Name = $Expense['Name'];
             $Expense_Value = $Expense['Expense_Value'];
-            $Due_Task_ID = $Expense['Due_Task']['id'];
+            if ($Task_Type == null) {
+                $Due_Task_ID = $Expense['Due_Task']['id'];
+            } else {
+                $Due_Task_ID = $Expense['Operation_Task']['id'];
+            }
             $Last_Update = $Expense['Modified_Time'];
             $data = array(
                 "Expense_ID" => $Expense_ID,
@@ -623,7 +652,7 @@ if ($api_name == "GetAllUsers") {
 if ($api_name == "Login") {
     $username = htmlspecialchars(@$POST_data["username"]);
     $password = htmlspecialchars(@$POST_data["password"]);
-    $sql = "SELECT email,token From app_users WHERE (username = :username) and (password = :password)";
+    $sql = "SELECT email,token,user_type From app_users WHERE (username = :username) and (password = :password)";
     $statement = $pdo->prepare($sql);
     $statement->bindParam(':username', $username);
     $statement->bindParam(':password', $password);
@@ -632,12 +661,14 @@ if ($api_name == "Login") {
     if ($result) {
         $email = $result["email"];
         $token = $result["token"];
+        $user_type = $result["user_type"];
     }
     $res = json_decode(SearchRecords("users", $code = 0, $pdo, "(email:equals:" . $email . ")"), true);
     $Zoho_ID = $res['users'][0]['id'];
     $data = array(
         "email" => $email,
         "token" => $token,
+        "user_type" => $user_type,
         "Zoho_ID" => $Zoho_ID,
     );
     echo json_encode($data);
@@ -658,6 +689,7 @@ if ($api_name == "CheckToken") {
     }
     $data = array(
         "user_id" => $user_id,
+        "user_type" => $user_type,
     );
     echo json_encode($data);
 }
