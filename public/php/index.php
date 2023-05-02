@@ -185,7 +185,6 @@ if ($api_name == "GetTaskId") {
 if ($api_name == "CheckTheConnection") {
     $TheUserID = htmlspecialchars(@$POST_data["TheUserID"]);
     echo get_records("users", 0, $pdo);
-    // $res = json_decode(SearchRecords("users", $code = 0, $pdo, "(id:equals:" . $TheUserID . ")"), true);
 }
 
 if ($api_name == "GetAllProducts") {
@@ -658,14 +657,25 @@ if ($api_name == "Login") {
     $statement->bindParam(':password', $password);
     $statement->execute();
     $result = $statement->fetch(PDO::FETCH_ASSOC);
+    $error = "No Error";
+    $Zoho_ID = $email = $token = $user_type = $Login_Error = $Zoho_Error = false;
     if ($result) {
         $email = $result["email"];
         $token = $result["token"];
         $user_type = $result["user_type"];
+    } else {
+        $Login_Error = true;
     }
+
     $res = json_decode(SearchRecords("users", $code = 0, $pdo, "(email:equals:" . $email . ")"), true);
-    $Zoho_ID = $res['users'][0]['id'];
+    if (array_search('users', $res) != null) {
+        $Zoho_ID = $res['users'][0]['id'];
+    } else {
+        $Zoho_Error = true;
+    }
     $data = array(
+        "Login_Error" => $Login_Error,
+        "Zoho_Error" => $Zoho_Error,
         "email" => $email,
         "token" => $token,
         "user_type" => $user_type,

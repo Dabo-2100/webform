@@ -41,37 +41,48 @@ export default {
         let main = this;
         let token = localStorage.getItem("token");
         let email = localStorage.getItem("email");
-        if (token != null && token != undefined) {
-            axios.post(main.Api_Url, {
-                api_name: "CheckToken",
-                token: token,
-                email: email
-            }).then(function (res) {
-                if (res.data['user_id'] !== undefined) {
-                    main.$store.state['User_Type'] = res.data['user_type'];
-                    if (res.data['user_type'] == 1) {
-                        main.GetPricingTasks();
-                        main.GetOpenProjects();
-                    }
-                    else if (res.data['user_type'] == 0) {
-                        main.GetPricingTasks();
-                        main.GetOpenProjects();
-                        main.GetDeliveryTasks();
-                    }
-                    else {
-                        main.GetDeliveryTasks();
-                    }
+        axios.post(this.Api_Url, {
+            api_name: "CheckTheConnection",
+            TheUserID: localStorage.getItem("Zoho_ID"),
+        }).then(function (res) {
+            if (res.data['code'] !== undefined && res.data['code'] == 'INVALID_TOKEN') {
+                window.location = 'https://accounts.zoho.com/oauth/v2/auth?response_type=code&client_id=1000.R3K41GUMKFVW5K825Z6PZ6JU1HTQ3Q&scope=ZohoCRM.modules.ALL,ZohoCRM.users.ALL&redirect_uri=https://webform.designido.net&prompt=consent';
+            }
+            else {
+                if (token != null && token != undefined) {
+                    axios.post(main.Api_Url, {
+                        api_name: "CheckToken",
+                        token: token,
+                        email: email
+                    }).then(function (res) {
+                        if (res.data['user_id'] !== undefined) {
+                            main.$store.state['User_Type'] = res.data['user_type'];
+                            if (res.data['user_type'] == 1) {
+                                main.GetPricingTasks();
+                                main.GetOpenProjects();
+                            }
+                            else if (res.data['user_type'] == 0) {
+                                main.GetPricingTasks();
+                                main.GetOpenProjects();
+                                main.GetDeliveryTasks();
+                            }
+                            else {
+                                main.GetDeliveryTasks();
+                            }
+                        }
+                        else {
+                            localStorage.clear();
+                            main.$router.push({ name: 'login' });
+                        }
+                    });
                 }
                 else {
                     localStorage.clear();
-                    this.$router.push({ name: 'login' });
+                    main.$router.push({ name: 'login' });
                 }
-            });
-        }
-        else {
-            localStorage.clear();
-            this.$router.push({ name: 'login' });
-        }
+            }
+        });
+
 
 
     },

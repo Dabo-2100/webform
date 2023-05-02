@@ -39,39 +39,56 @@ export default {
     },
     created() {
         let main = this;
+        let ThePureURL = window.location.href;
+        if (ThePureURL.indexOf("code") != -1) {
+            let TheCode = ThePureURL.split('code=')[1].split('&')[0];
+            axios.post(this.Api_Url, {
+                api_name: "RefreshAccessToken",
+                the_code: TheCode,
+            }).then(function (res) { });
+        }
         main.$store.state['LoaderIndex'] = 1;
-        axios.post(this.Api_Url, {
-            api_name: "CheckTheConnection",
-            TheUserID: 123456789,
-        }).then(function (res) {
-            if (res.data['code'] !== undefined && res.data['code'] == 'INVALID_TOKEN') {
-                window.location = 'https://accounts.zoho.com/oauth/v2/auth?response_type=code&client_id=1000.R3K41GUMKFVW5K825Z6PZ6JU1HTQ3Q&scope=ZohoCRM.modules.ALL,ZohoCRM.users.ALL&redirect_uri=https://webform.designido.net&prompt=consent';
+        let token = localStorage.getItem("token");
+        let email = localStorage.getItem("email");
+        let Zoho_ID = localStorage.getItem("Zoho_ID");
+        if (Zoho_ID != 'false') {
+            if (token != null && token != undefined) {
+                axios.post(main.Api_Url, {
+                    api_name: "CheckToken",
+                    token: token,
+                    email: email
+                }).then(function (res) {
+                    if (res.data['user_id'] !== undefined) {
+                        main.$router.push({ name: 'home' });
+                    }
+                    else {
+                        localStorage.clear();
+                    }
+                    main.$store.state['LoaderIndex'] = 0;
+                });
             }
             else {
-                let token = localStorage.getItem("token");
-                let email = localStorage.getItem("email");
-                if (token != null && token != undefined) {
-                    axios.post(main.Api_Url, {
-                        api_name: "CheckToken",
-                        token: token,
-                        email: email
-                    }).then(function (res) {
-                        if (res.data['user_id'] !== undefined) {
-                            main.$store.state['User_Type'] = res.data['user_type'];
-                            console.log("User_Type Updated to : " + res.data['user_type']);
-                            main.$router.push({ name: 'home' });
-                        }
-                        else {
-                            localStorage.clear();
-                        }
-                        main.$store.state['LoaderIndex'] = 0;
-                    });
-                }
-                else {
-                    main.$store.state['LoaderIndex'] = 0;
-                }
+                localStorage.clear();
+                main.$store.state['LoaderIndex'] = 0;
             }
-        });
+        }
+        else {
+            if (token != null && token != undefined) {
+                axios.post(main.Api_Url, {
+                    api_name: "CheckToken",
+                    token: token,
+                    email: email
+                }).then(function (res) {
+                    if (res.data['user_id'] !== undefined) {
+                        // window.location = 'https://accounts.zoho.com/oauth/v2/auth?response_type=code&client_id=1000.R3K41GUMKFVW5K825Z6PZ6JU1HTQ3Q&scope=ZohoCRM.modules.ALL,ZohoCRM.users.ALL&redirect_uri=https://webform.designido.net&prompt=consent';
+                    }
+                    else {
+                        localStorage.clear();
+                    }
+                    main.$store.state['LoaderIndex'] = 0;
+                });
+            }
+        }
     },
     methods: {
         Login() {
@@ -85,21 +102,39 @@ export default {
                         username: main.UserData['username'],
                         password: main.UserData['password'],
                     }).then(function (res) {
+                        console.log(res.data);
                         main.LoginIndex = 0;
                         main.$store.state['LoaderIndex'] = 0;
-                        if (res.data['Zoho_ID'] !== undefined) {
-                            main.$store.state['User_Type'] = res.data['user_type'];
-                            localStorage.setItem("Zoho_ID", res.data['Zoho_ID']);
-                            localStorage.setItem("email", res.data['email']);
-                            localStorage.setItem("token", res.data['token']);
-                            localStorage.setItem("user_type", res.data['user_type']);
-                            main.$router.push({ name: 'home' });
+                        if (res.data['Zoho_Error'] == true) {
+                            if (res.data['Login_Error'] == false) {
+                                localStorage.setItem("Zoho_ID", res.data['Zoho_ID']);
+                                localStorage.setItem("email", res.data['email']);
+                                localStorage.setItem("token", res.data['token']);
+                                localStorage.setItem("user_type", res.data['user_type']);
+                                window.location = 'https://accounts.zoho.com/oauth/v2/auth?response_type=code&client_id=1000.R3K41GUMKFVW5K825Z6PZ6JU1HTQ3Q&scope=ZohoCRM.modules.ALL,ZohoCRM.users.ALL&redirect_uri=https://webform.designido.net&prompt=consent';
+                            }
+                            else {
+                                main.$swal.fire({
+                                    title: 'Worng Username or Password',
+                                    icon: 'error',
+                                });
+                            }
                         }
                         else {
-                            main.$swal.fire({
-                                title: 'Worng Username or Password',
-                                icon: 'error',
-                            });
+                            if (res.data['Zoho_Error'] == true) {
+                                main.$swal.fire({
+                                    title: 'Worng Username or Password',
+                                    icon: 'error',
+                                });
+                            }
+                            else {
+                                localStorage.setItem("Zoho_ID", res.data['Zoho_ID']);
+                                localStorage.setItem("email", res.data['email']);
+                                localStorage.setItem("token", res.data['token']);
+                                localStorage.setItem("user_type", res.data['user_type']);
+                                main.$store.state['User_Type'] = res.data['user_type'];
+                                main.$router.push({ name: 'home' });
+                            }
                         }
                     });
                 }
