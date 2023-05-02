@@ -39,6 +39,7 @@ export default {
     },
     created() {
         let main = this;
+        main.$store.state['LoaderIndex'] = 1;
         let ThePureURL = window.location.href;
         if (ThePureURL.indexOf("code") != -1) {
             let TheCode = ThePureURL.split('code=')[1].split('&')[0];
@@ -47,11 +48,10 @@ export default {
                 the_code: TheCode,
             }).then(function (res) { });
         }
-        main.$store.state['LoaderIndex'] = 1;
         let token = localStorage.getItem("token");
         let email = localStorage.getItem("email");
         let Zoho_ID = localStorage.getItem("Zoho_ID");
-        if (Zoho_ID != 'false') {
+        if (Zoho_ID != null) {
             if (token != null && token != undefined) {
                 axios.post(main.Api_Url, {
                     api_name: "CheckToken",
@@ -73,21 +73,8 @@ export default {
             }
         }
         else {
-            if (token != null && token != undefined) {
-                axios.post(main.Api_Url, {
-                    api_name: "CheckToken",
-                    token: token,
-                    email: email
-                }).then(function (res) {
-                    if (res.data['user_id'] !== undefined) {
-                        // window.location = 'https://accounts.zoho.com/oauth/v2/auth?response_type=code&client_id=1000.R3K41GUMKFVW5K825Z6PZ6JU1HTQ3Q&scope=ZohoCRM.modules.ALL,ZohoCRM.users.ALL&redirect_uri=https://webform.designido.net&prompt=consent';
-                    }
-                    else {
-                        localStorage.clear();
-                    }
-                    main.$store.state['LoaderIndex'] = 0;
-                });
-            }
+            localStorage.clear();
+            main.$store.state['LoaderIndex'] = 0;
         }
     },
     methods: {
@@ -107,7 +94,7 @@ export default {
                         main.$store.state['LoaderIndex'] = 0;
                         if (res.data['Zoho_Error'] == true) {
                             if (res.data['Login_Error'] == false) {
-                                localStorage.setItem("Zoho_ID", res.data['Zoho_ID']);
+                                alert('Good Login No Zoho Connection');
                                 localStorage.setItem("email", res.data['email']);
                                 localStorage.setItem("token", res.data['token']);
                                 localStorage.setItem("user_type", res.data['user_type']);
@@ -121,7 +108,7 @@ export default {
                             }
                         }
                         else {
-                            if (res.data['Zoho_Error'] == true) {
+                            if (res.data['Login_Error'] == true) {
                                 main.$swal.fire({
                                     title: 'Worng Username or Password',
                                     icon: 'error',

@@ -4,50 +4,78 @@
             <img src="@/assets/NoTasks.png">
             <h1>لا يوجد مهمات تسعير جديدة مطلوبة منك</h1>
         </div>
-        <div class="col-12" v-else>
+        <div class="col-12 TasksDiv" v-else>
             <h1 class="col-12 TabHeader">مهام التسعير</h1>
             <table class="col-12 table table-hover table-bordered">
                 <thead>
                     <tr>
                         <th>-</th>
-                        <th>اسم المهمة</th>
-                        <th>تفاصيل المهمة</th>
-                        <th>تاريخ المهمة</th>
-                        <th>عدد القطع</th>
+                        <th class="col-3">اسم المهمة</th>
+                        <th v-if="this.$store.state['CurrentWidth'] > 767">تفاصيل المهمة</th>
+                        <th>التسليم في</th>
+                        <th v-if="this.$store.state['CurrentWidth'] > 767">عدد القطع</th>
                         <th>طريقة التسعير</th>
-                        <th v-if="this.PricingWay == 1">(ادخل سعر القطعة) يدوي</th>
-                        <th v-if="this.PricingWay == 2">اوتوماتيكي</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="PriceTask, index in this.$store.state['Price_Tasks']" :key="PriceTask">
                         <td>{{ index + 1 }}</td>
                         <td>{{ PriceTask['Name'] }}</td>
-                        <td>
+                        <td v-if="this.$store.state['CurrentWidth'] > 767">
                             <pre>{{
                                 PriceTask['Requirement_Details'] }}</pre>
                         </td>
                         <td>{{ PriceTask['Created_Date'] }}</td>
-                        <td>{{ PriceTask['Quantity'] }}</td>
+                        <td v-if="this.$store.state['CurrentWidth'] > 767">{{ PriceTask['Quantity'] }}</td>
                         <td>
-                            <select class="form-select" v-model="PriceTask['Pricing_Way']">
-                                <option value="0" hidden disabled>اختار طريقة التسعير</option>
+                            <select class="form-select" v-model="this.PricingWay"
+                                @change="this.SelectPricingWay(PriceTask['Task_ID'], index)">
+                                <option value="0" hidden disabled>اختار الطريقة</option>
                                 <option value="1">يدوي</option>
                                 <option value="2">اوتوماتيك</option>
                             </select>
                         </td>
-                        <td v-if="PriceTask['Pricing_Way'] == 1">
-                            <input type="number" v-model="PriceTask['Final_Unit_Price']" placeholder="ادخل سعر القطعة">
-                            <button class="btn btn-success"
-                                @click="UpdatePriceManual(PriceTask['Task_ID'], PriceTask['Final_Unit_Price'])">سجل
-                                السعر</button>
-                        </td>
-                        <td v-if="PriceTask['Pricing_Way'] == 2"><button class="btn btn-success"
-                                @click="this.OpenTask(PriceTask['Task_ID'])">اوتوماتيك</button>
-                        </td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div id="ManualPrice" v-if="this.Manual_Price_PopUp == 1"
+            @click="this.Manual_Price_PopUp = 0; this.PricingWay = 0;">
+            <div class="col-11 col-md-9 col-lg-6" @click=" $event.stopPropagation() " id="TheBox">
+                <h1 class="col-12">تسعير المنتج يدوياً</h1>
+
+                <table class="col-12 table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th>اسم المهمة</th>
+                            <td>{{ this.$store.state['Price_Tasks'][Open_Task_Index]['Name']}}</td>
+                        </tr>
+                        <tr>
+                            <th>تفاصيل المهمة</th>
+                            <td>
+                                <pre>{{ this.$store.state['Price_Tasks'][Open_Task_Index]['Requirement_Details']}}</pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>عدد القطع</th>
+                            <td>{{ this.$store.state['Price_Tasks'][Open_Task_Index]['Quantity']}}</td>
+                        </tr>
+                        <tr>
+                            <th>ميعاد طلب التسعير </th>
+                            <td>{{ this.$store.state['Price_Tasks'][Open_Task_Index]['Created_Date']}}</td>
+                        </tr>
+                        <tr>
+                            <th>السعر للقطعة الواحدة</th>
+                            <td><input type="number" v-model=" this.FinalManualPrice " placeholder="ادخل سعر القطعة"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <button class="btn btn-success" @click=" UpdatePriceManual(this.Open_Task, this.FinalManualPrice) ">سجل
+                    السعر</button>
+            </div>
+
+
         </div>
     </div>
 </template>
@@ -62,13 +90,27 @@ export default {
         return {
             Api_Url: this.$store.state['Api_Url'],
             PricingWay: 0,
-            FinalManualPrice: null,
+            Open_Task: 0,
+            Open_Task_Index: -1,
+            FinalManualPrice: 0,
+            Manual_Price_PopUp: 0,
         };
     },
     created() {
         let main = this;
     },
     methods: {
+        SelectPricingWay(Task_ID, Task_Index) {
+            if (this.PricingWay == 2) {
+                this.OpenTask(Task_ID);
+            }
+            else {
+                this.Open_Task = Task_ID;
+                this.Manual_Price_PopUp = 1;
+                this.Open_Task_Index = Task_Index;
+                console.log(this.$store.state['Price_Tasks'][this.Open_Task_Index]);
+            }
+        },
         OpenTask(Task_ID) {
             let main = this;
             main.$store.state['TheTaskID'] = Task_ID;
@@ -112,7 +154,6 @@ export default {
         }
     },
     watch: {
-
     },
     computed: {
 
@@ -128,17 +169,19 @@ export default {
     align-content: flex-start;
     justify-content: center;
     align-items: center;
+    padding: 1rem;
 
     #NoTasks {
         display: flex;
         flex-direction: column;
         flex-wrap: nowrap;
         align-items: center;
-        height: 100vh;
+        height: 100%;
         justify-content: center;
 
         h1 {
             font-size: 2rem;
+            text-align: center;
         }
 
         img {
@@ -147,19 +190,57 @@ export default {
         }
     }
 
+    .TasksDiv {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        align-items: center;
+    }
+
     .TabHeader {
         font-size: 1.4rem;
-        padding: 1rem;
+        padding: 1rem 0;
     }
 
     table {
+        font-size: 1rem;
         text-align: center;
         vertical-align: middle;
 
         pre {
             margin: 0;
             padding: 0;
+            font-size: 1rem;
         }
+    }
+
+    #ManualPrice {
+        height: 100vh;
+        width: 100%;
+        left: 0;
+        top: 0;
+        background: rgba(0, 0, 0, 0.568627451);
+        position: fixed;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-content: center;
+        justify-content: center;
+        align-items: center;
+        overflow: auto;
+    }
+}
+
+#TheBox {
+    background-color: white;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    h1 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem !important;
     }
 }
 </style>

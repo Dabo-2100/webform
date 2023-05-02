@@ -15,23 +15,22 @@
         <tr v-for="(SheetSize, index) in this.Portrait_Copies" :key="SheetSize">
           <td>{{ SheetSize["height"] }} x {{ SheetSize["width"] }}</td>
           <td>
-            <div class="TheSheet" @click="
-              SelectOpti(
+            <div class="TheSheet" @click="SelectOpti(
                 $event,
                 index,
                 0,
                 Landscape_Copies[index]['TotalCopies'],
                 this.TotalPiecesSize[index]['SheetToPieces']
               )
-            " :style="'height : ' + SheetSize['width'] / 10 + 'rem;' + 'width : ' + SheetSize['height'] / 10 + 'rem;'">
-              <div class="TheCopy" v-for="Copy in Landscape_Copies[index]['TotalCopies']" :key="Copy" :style="
-                'height : ' +
+              "
+              :style="'height : ' + SheetSize['width'] / 10 + 'rem;' + 'width : ' + SheetSize['height'] / 10 + 'rem;'">
+              <div class="TheCopy" v-for="Copy in Landscape_Copies[index]['TotalCopies']" :key="Copy" :style="'height : ' +
                 UserInputs['height'] / 10 +
                 'rem;' +
                 'width : ' +
                 UserInputs['width'] / 10 +
                 'rem;'
-              "></div>
+                "></div>
             </div>
             No.Of Copies :
             {{
@@ -46,30 +45,27 @@
           </td>
 
           <td>
-            <div v-if="this.Landscape_Copies[index]" class="TheSheet" @click="
-              SelectOpti(
+            <div v-if="this.Landscape_Copies[index]" class="TheSheet" @click="SelectOpti(
                 $event,
                 index,
                 0,
                 SheetSize['TotalCopies'],
                 this.TotalPiecesSize[index]['SheetToPieces']
               )
-            " :style="
-  'height : ' +
-  SheetSize['width'] / 10 +
-  'rem;' +
-  'width : ' +
-  SheetSize['height'] / 10 +
-  'rem;'
-">
-              <div class="TheCopy" v-for="Copy in SheetSize['TotalCopies']" :key="Copy" :style="
-                'height : ' +
+              " :style="'height : ' +
+    SheetSize['width'] / 10 +
+    'rem;' +
+    'width : ' +
+    SheetSize['height'] / 10 +
+    'rem;'
+    ">
+              <div class="TheCopy" v-for="Copy in SheetSize['TotalCopies']" :key="Copy" :style="'height : ' +
                 UserInputs['width'] / 10 +
                 'rem;' +
                 'width : ' +
                 UserInputs['height'] / 10 +
                 'rem;'
-              "></div>
+                "></div>
             </div>
             No.Of Copies : {{ SheetSize["TotalCopies"] }}
           </td>
@@ -452,12 +448,11 @@ export default {
   direction: ltr;
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
+  flex-wrap: nowrap;
   padding: 1rem;
   background-color: #f2f2f2;
+  overflow-x: auto;
+  overflow-y: auto;
 
   table {
     vertical-align: middle;

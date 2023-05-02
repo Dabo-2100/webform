@@ -6,46 +6,58 @@
         </div>
         <div class="col-12" v-else>
             <h1 class="col-12 TabHeader">المشاريع المفتوحة</h1>
-            <table class="col-12 table table-hover table-bordered">
-                <thead>
-                    <tr>
-                        <th>-</th>
-                        <th>اسم المهمة</th>
-                        <th>تفاصيل المهمة</th>
-                        <th>تاريخ بداية المهمة</th>
-                        <th>تاريخ التسليم</th>
-                        <th>المرحلة الحالية</th>
-                        <th>انهاء</th>
-                        <th>أضافة مصروف</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="Task, index in  this.$store.state['Production_Tasks'] " :key="Task">
-                        <td>{{ index + 1 }}</td>
-                        <td>{{ Task['Task_Name'] }}</td>
-                        <td>
-                            <pre>{{
-                                Task['Task_Details'] }}</pre>
-                        </td>
-                        <td>{{ Task['Starting_Date'] }}</td>
-                        <td>{{ Task['Deadline_Date'] }}</td>
-                        <td>
-                            <select :value="Task['Task_Stage_ID']"
-                                @change="this.UpdateTaskStage($event, Task['Task_ID'], index)">
-                                <option :value="Stage['Stage_ID']" v-for="Stage in Task['TaskStages']" :key="Stage">{{
-                                    Stage['Arabic_Name'] }}</option>
-                            </select>
-                        </td>
-                        <td>
-                            <button class="btn btn-danger" @click="this.EndTask(Task['Task_ID'])">انهاء المهمة</button>
-                        </td>
-                        <td>
-                            <button class="btn btn-info"
-                                @click="this.AddExpenseIndex = 1; this.GetTaskExpenses(Task['Task_ID'])">اضافة</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="col-12 Task_Card" v-for="Task, index in       this.$store.state['Production_Tasks']      "
+                :key="Task">
+                <table class="col-12 table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th>اسم المهمة</th>
+                            <td>{{ Task['Task_Name'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>تفاصيل المهمة</th>
+                            <td>
+                                <pre>{{
+                                    Task['Task_Details'] }}
+                                </pre>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>تاريخ الطلب</th>
+                            <td>{{ Task['Starting_Date'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>تاريخ التسليم</th>
+                            <td>{{ Task['Deadline_Date'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>المرحلة الحالية</th>
+                            <td>
+                                <select :value="Task['Task_Stage_ID']"
+                                    @change="this.UpdateTaskStage($event, Task['Task_ID'], index)">
+                                    <option :value="Stage['Stage_ID']" v-for="Stage in Task['TaskStages']" :key="Stage">{{
+                                        Stage['Arabic_Name'] }}
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>انهاء المهمة </th>
+                            <td>
+                                <button class="btn btn-danger" @click="this.EndTask(Task['Task_ID'])">انهاء المهمة</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>اضافة مصروف</th>
+                            <td>
+                                <button class="btn btn-info"
+                                    @click="this.AddExpenseIndex = 1; this.GetTaskExpenses(Task['Task_ID'])">اضافة</button>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div class="col-12" id="PopupPage" v-if=" this.AddExpenseIndex == 1 " @click=" this.AddExpenseIndex = 0 ">
@@ -85,7 +97,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for=" Expense, index  in  this.TaskExpenses " :key=" Expense ">
+                            <tr v-for="                                                  Expense, index                                                   in                                                   this.TaskExpenses                                                  "
+                                :key=" Expense ">
                                 <td>{{ Expense['Expense_Name'] }}</td>
                                 <td><b>{{ Expense['Expense_Value'] }}</b></td>
                                 <td>{{ Expense['Last_Update'].indexOf('T') != -1 ? Expense['Last_Update'].split('T')[0] :
@@ -258,6 +271,7 @@ export default {
     align-content: flex-start;
     justify-content: center;
     align-items: center;
+    padding: 1rem;
 
     #PopupPage {
         display: flex;
@@ -310,11 +324,12 @@ export default {
         flex-direction: column;
         flex-wrap: nowrap;
         align-items: center;
-        height: 100vh;
+        height: auto;
         justify-content: center;
 
         h1 {
             font-size: 2rem;
+            text-align: center;
         }
 
         img {
@@ -331,11 +346,33 @@ export default {
     table {
         text-align: center;
         vertical-align: middle;
+        margin: 0;
 
         pre {
             margin: 0;
             padding: 0;
         }
+
+        select {
+            width: 80%;
+            padding: 0.4rem;
+        }
+
+        button {
+            width: 80%;
+        }
+    }
+
+
+    .Task_Card {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-content: center;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+        margin-bottom: 1rem;
     }
 }
 </style>

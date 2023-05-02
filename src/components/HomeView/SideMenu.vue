@@ -1,9 +1,8 @@
 <template>
     <transition name="fade" mode="out-in">
-        <div id="SideMenu"
-            v-if="(this.$store.state['CurrentWidth'] < 767 && this.$store.state['SideMenuIndex'] == 1) || this.$store.state['CurrentWidth'] >= 767">
+        <div id="SideMenu" :class="this.$store.state['CurrentWidth'] <= 767 ? 'Vertical' : ''">
             <ul id="MenuSelections">
-                <li v-for="Selection, index in this.Selections.filter(this.AvialbleTabs)" :key="Selection"
+                <li v-for="Selection, index in this.Selections" :key="Selection"
                     @click="Selection['TabView'] != false ? this.$store.state['CurrentComponent'] = Selection['TabView'] : this.LogOut()">
                     <font-awesome-icon :icon="Selection['Icon']" />
                     <p>{{ this.$store.state['UserLang'] == 1 ? Selection['ArabicName'] :
@@ -28,8 +27,8 @@ export default {
             Api_Url: this.$store.state['Api_Url'],
             Selections: [
                 { name: "Pricing Tasks", Icon: "fa-solid fa-money-check-dollar", ArabicName: "مهام التسعير", Index: 0, TabView: "TasksView", User_Type: [0, 1] },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-box-open", ArabicName: "مهام التصنيع", Index: this.$store.state['Production_Tasks'], TabView: "ProductionView", User_Type: [0, 1] },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "المهام المنتهية", Index: this.$store.state['DoneTasks'], TabView: "DoneView", User_Type: [0, 1] },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-box-open", ArabicName: "مهام التصنيع", Index: 0, TabView: "ProductionView", User_Type: [0, 1] },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "المهام المنتهية", Index: 0, TabView: "DoneView", User_Type: [0, 1] },
                 { name: "Pricing Tasks", Icon: "fa-solid fa-dollar-sign", ArabicName: "اسعار الخامات", Index: false, TabView: "MaterialView", User_Type: [0, 1] },
                 { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "مهام التوصيل", Index: false, TabView: "DeliveryView", User_Type: [0, 2] },
                 { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "مهام التوصيل المنتهية", Index: false, TabView: "DeliveryView", User_Type: [0, 2] },
@@ -41,9 +40,10 @@ export default {
         let main = this;
         let token = localStorage.getItem("token");
         let email = localStorage.getItem("email");
+        let Zoho_ID = localStorage.getItem("Zoho_ID");
         axios.post(this.Api_Url, {
             api_name: "CheckTheConnection",
-            TheUserID: localStorage.getItem("Zoho_ID"),
+            TheUserID: Zoho_ID,
         }).then(function (res) {
             if (res.data['code'] !== undefined && res.data['code'] == 'INVALID_TOKEN') {
                 window.location = 'https://accounts.zoho.com/oauth/v2/auth?response_type=code&client_id=1000.R3K41GUMKFVW5K825Z6PZ6JU1HTQ3Q&scope=ZohoCRM.modules.ALL,ZohoCRM.users.ALL&redirect_uri=https://webform.designido.net&prompt=consent';
@@ -56,6 +56,7 @@ export default {
                         email: email
                     }).then(function (res) {
                         if (res.data['user_id'] !== undefined) {
+                            console.log('User_Type is : ' + res.data['user_type']);
                             main.$store.state['User_Type'] = res.data['user_type'];
                             if (res.data['user_type'] == 1) {
                                 main.GetPricingTasks();
@@ -90,6 +91,7 @@ export default {
         AvialbleTabs(Tab) {
             let main = this;
             if (Tab['User_Type'].indexOf(main.$store.state['User_Type']) != -1) {
+                console.log(Tab);
                 return Tab;
             }
         },
@@ -159,7 +161,6 @@ export default {
                     }
                 }
                 main.$store.state['LoaderIndex'] = 0;
-                console.log(Final_array.filter(GetOpenTasks));
                 main.$store.state['OpenDelivery'] = Final_array.filter(GetOpenTasks);
                 main.$store.state['DoneDelivery'] = Final_array.filter(GetDoneTasks);
                 main.Selections[4]['Index'] = Final_array.filter(GetOpenTasks).length;
@@ -175,7 +176,9 @@ export default {
 
     },
     computed: {
-
+        TheTabs() {
+            return this.Selections.filter(this.AvialbleTabs);
+        }
     },
 }
 </script>
@@ -185,15 +188,27 @@ export default {
     display: flex;
     background: #131d26;
     height: 100vh;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: auto;
+
+    @media screen and (max-width: 767px) {
+        width: 100%;
+        height: auto !important;
+    }
 
     #MenuSelections {
         display: flex;
-        flex-direction: column;
         flex-wrap: nowrap;
+        flex-direction: column;
         padding: 1rem 2rem;
         align-items: flex-start;
+
+        @media screen and (max-width: 767px) {
+            flex-wrap: wrap;
+            flex-direction: row;
+            align-content: flex-start;
+            justify-content: space-between;
+            padding: 0rem 1rem;
+        }
 
         li {
             font-size: 1.4rem;
@@ -207,12 +222,20 @@ export default {
             cursor: pointer;
             align-items: center;
 
+            @media screen and (max-width: 767px) {
+                width: 50%;
+                justify-content: flex-start;
+            }
+
             svg {
                 color: grey;
             }
 
             p {
                 font-size: 1rem;
+                // @media screen and (max-width: 767px){
+                //     font-size: 1.1rem;
+                // }
                 font-family: 'Alexandria', sans-serif;
                 margin: 0 0.5rem !important;
                 transition: all ease 300ms;

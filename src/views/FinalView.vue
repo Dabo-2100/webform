@@ -1,23 +1,5 @@
 <template>
     <div class="col-12" id="FinalView" :dir="this.$store.state['UserLang'] == 1 ? 'ltr' : 'rtl'">
-        <div class="col-12 PageHeader">
-            <div class="AppInfo">
-                <img src="@/assets/photos/priceing.png">
-                <h1>{{ this.$store.state['UserLang'] == 1 ? 'Pricing Gate' : 'قائمة تسعير المنتجات' }}</h1>
-            </div>
-            <div class="SelectLang" v-if="this.$store.state['CurrentWidth'] > 767">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
-                        v-model="this.UserLang">
-                    <label class="form-check-label" for="flexSwitchCheckDefault">اللغة العربية</label>
-                </div>
-            </div>
-            <font-awesome-icon icon="fa-solid fa-bars" class="SideMenuBtn"
-                v-if="this.$store.state['CurrentWidth'] <= 767" />
-            <div class="col-12 SideMenu">
-
-            </div>
-        </div>
         <div class="col-12 col-md-9 PageContent">
             <!-- RequestType -->
             <div class="col-12 col-sm-6 SelectField">

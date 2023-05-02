@@ -6,7 +6,77 @@
         </div>
         <div class="col-12" v-else>
             <h1 class="col-12 TabHeader">مشاوير التوصيل المطلوبة</h1>
-            <table class="col-12 table table-hover table-bordered">
+
+            <div class="col-12 Task_Card"
+                v-for="Task, index in                                   this.$store.state['OpenDelivery']                                  "
+                :key="Task">
+                <h1 class="col-12">معلومات الأستلام</h1>
+                <table class="col-12 table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th>مكان الاستلام</th>
+                            <td>{{ Task['PickUp_Location'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>موعد الأستلام</th>
+                            <td>
+                                {{ Task['PickUp_Time'].split('T')[0] }}<br>
+                                الساعة : {{ Task['PickUp_Time'].split('T')[1].split('+')[0] }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>طريقة الأستلام</th>
+                            <td>{{ Task['PickUp_Option'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>دليفري نوت</th>
+                            <td>{{ Task['Delivery_Note'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h1 class="col-12">معلومات التسليم</h1>
+                <table class="col-12 table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th class="col-6">اسم الشركة</th>
+                            <td class="col-6">{{ Task['Delivery_Place']['name'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>لوكيشن التسليم</th>
+                            <td>
+                                <a :href="Task['Delivery_Location']">عرض الخريطة</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>عنوان التسلم</th>
+                            <td>{{ Task['Shipping_Details'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>رقم الهاتف</th>
+                            <td>{{ Task['Shipping_Phone_No'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>تحصيل اموال</th>
+                            <td>{{ Task['Collecting_Value'] != null ? Task['Collecting_Value'] : 'بدون تحصيل' }}</td>
+                        </tr>
+                        <tr>
+                            <td><button class="btn btn-info"
+                                    @click="this.AddExpenseIndex = 1; this.GetTaskExpenses(Task['Task_ID']) "> اضافة
+                                    مصروف</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger" @click=" this.EndTask(Task['Task_ID']) ">تم
+                                    التوصيل</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+
+            <!-- <table class="col-12 table table-hover table-bordered">
                 <thead>
                     <tr>
                         <th>-</th>
@@ -20,7 +90,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(Task, index) in         this.$store.state['OpenDelivery']        " :key="Task">
+                    <tr v-for="(Task, index) in          this.$store.state['OpenDelivery']         " :key="Task">
                         <td>{{ index + 1 }}</td>
                         <td>{{ Task['Name'] }}</td>
                         <td>
@@ -40,7 +110,7 @@
                         </td>
                     </tr>
                 </tbody>
-            </table>
+            </table> -->
         </div>
 
         <div class="col-12" id="PopupPage" v-if=" this.AddExpenseIndex == 1 " @click=" this.AddExpenseIndex = 0 ">
@@ -80,7 +150,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="                  Expense, index                   in                   this.TaskExpenses                  "
+                            <tr v-for="                                                       Expense, index                                                        in                                                        this.TaskExpenses                                                       "
                                 :key=" Expense ">
                                 <td>{{ Expense['Expense_Name'] }}</td>
                                 <td><b>{{ Expense['Expense_Value'] }}</b></td>
@@ -116,6 +186,7 @@ export default {
         };
     },
     created() {
+        // console.log(this.$store.state['OpenDelivery'][0]);
     },
     methods: {
         EndTask(Task_ID) {
@@ -335,6 +406,25 @@ export default {
             margin: 0;
             padding: 0;
         }
+    }
+
+    .Task_Card {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-content: center;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        background-color: white;
+        margin-bottom: 1rem;
+
+        h1 {
+            font-size: 1.1rem;
+            margin: 1rem !important;
+            font-weight: 800;
+        }
+
     }
 }
 </style>

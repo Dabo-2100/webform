@@ -42,10 +42,17 @@ export default {
 <style lang="scss" scoped>
 #HomeView {
   width: 100%;
+  height: 100vh;
   display: flex;
   direction: rtl;
   flex-direction: row;
   flex-wrap: nowrap;
+  overflow: auto;
+  align-content: flex-start;
+
+  @media screen and (max-width: 767px) {
+    flex-wrap: wrap;
+  }
 }
 </style>
 

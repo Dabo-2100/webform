@@ -666,11 +666,9 @@ if ($api_name == "Login") {
     } else {
         $Login_Error = true;
     }
-
     $res = json_decode(SearchRecords("users", $code = 0, $pdo, "(email:equals:" . $email . ")"), true);
-    if (array_search('users', $res) != null) {
-        $Zoho_ID = $res['users'][0]['id'];
-    } else {
+    @$Zoho_ID = $res['users'][0]['id'];
+    if ($Zoho_ID == null) {
         $Zoho_Error = true;
     }
     $data = array(

@@ -41,11 +41,16 @@ export default {
 <style lang="scss" scoped>
 #WorkingArea {
     width: 80%;
+    height: auto;
     flex-grow: 1;
     display: flex;
-    height: 100vh;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
+
+    @media screen and (max-width: 767px) {
+        width: 100%;
+        flex-grow: none;
+    }
 }
 </style>
   
