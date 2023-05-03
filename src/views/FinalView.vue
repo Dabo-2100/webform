@@ -141,7 +141,7 @@
                 <label class="col-12">
                     {{ this.$store.state['UserLang'] == 1 ? 'Required Quantatiy' : 'الكمية المطلوبة' }}
                 </label>
-                <input class="col-12" v-model="this.TheUserSelection['Qty']">
+                <input disabled sclass="col-12" v-model="this.TheUserSelection['Qty']">
             </div>
         </div>
         <div class="col-12 col-md-3 TaskDetails">

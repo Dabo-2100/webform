@@ -60,6 +60,7 @@ export default {
                 }).then(function (res) {
                     if (res.data['user_id'] !== undefined) {
                         main.$router.push({ name: 'home' });
+                        main.$store.state['CurrentComponent'] = "DashboardView";
                     }
                     else {
                         localStorage.clear();
@@ -121,6 +122,7 @@ export default {
                                 localStorage.setItem("user_type", res.data['user_type']);
                                 main.$store.state['User_Type'] = res.data['user_type'];
                                 main.$router.push({ name: 'home' });
+                                main.$store.state['CurrentComponent'] = "DashboardView";
                             }
                         }
                     });

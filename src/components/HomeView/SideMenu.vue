@@ -2,7 +2,7 @@
     <transition name="fade" mode="out-in">
         <div id="SideMenu" :class="this.$store.state['CurrentWidth'] <= 767 ? 'Vertical' : ''">
             <ul id="MenuSelections">
-                <li v-for="Selection, index in this.Selections" :key="Selection"
+                <li v-for="Selection, index in this.TheTabs" :key="Selection"
                     @click="Selection['TabView'] != false ? this.$store.state['CurrentComponent'] = Selection['TabView'] : this.LogOut()">
                     <font-awesome-icon :icon="Selection['Icon']" />
                     <p>{{ this.$store.state['UserLang'] == 1 ? Selection['ArabicName'] :
@@ -31,7 +31,7 @@ export default {
                 { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "المهام المنتهية", Index: 0, TabView: "DoneView", User_Type: [0, 1] },
                 { name: "Pricing Tasks", Icon: "fa-solid fa-dollar-sign", ArabicName: "اسعار الخامات", Index: false, TabView: "MaterialView", User_Type: [0, 1] },
                 { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "مهام التوصيل", Index: false, TabView: "DeliveryView", User_Type: [0, 2] },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "مهام التوصيل المنتهية", Index: false, TabView: "DeliveryView", User_Type: [0, 2] },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "المشاوير المنتهية", Index: false, TabView: "DoneDeliveryView", User_Type: [0, 2] },
                 { name: "Pricing Tasks", Icon: "fa-solid fa-power-off", ArabicName: "تسجيل الخروج", Index: false, TabView: false, User_Type: [0, 1, 2] },
             ],
         };
@@ -206,8 +206,10 @@ export default {
             flex-wrap: wrap;
             flex-direction: row;
             align-content: flex-start;
-            justify-content: space-between;
-            padding: 0rem 1rem;
+            justify-content: space-evenly;
+            padding: 0.5rem;
+            padding-bottom: 1.4rem;
+            padding-top: 0;
         }
 
         li {
@@ -221,10 +223,13 @@ export default {
             justify-content: center;
             cursor: pointer;
             align-items: center;
+            position: relative;
 
             @media screen and (max-width: 767px) {
-                width: 50%;
                 justify-content: flex-start;
+                flex-direction: column;
+                padding: 0;
+                padding-top: 1.4rem;
             }
 
             svg {
@@ -239,6 +244,11 @@ export default {
                 font-family: 'Alexandria', sans-serif;
                 margin: 0 0.5rem !important;
                 transition: all ease 300ms;
+
+                @media screen and (max-width: 767px) {
+                    font-size: 1.165rem;
+                    padding-top: 0.25rem;
+                }
             }
 
             span {
@@ -246,6 +256,11 @@ export default {
                 background-color: #389aed;
                 border-radius: 7px;
                 font-size: 0.8rem;
+
+                @media screen and (max-width: 767px) {
+                    position: absolute;
+                    left: 1rem;
+                }
             }
         }
 

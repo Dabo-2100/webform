@@ -460,9 +460,14 @@ if ($api_name == "SendDataToZoho") {
 if ($api_name == "UpdateTaskDone") {
     $Task_ID = htmlspecialchars(@$POST_data["Task_ID"]);
     $NewVal = htmlspecialchars(@$POST_data["NewVal"]);
+    $Task_Type = htmlspecialchars(@$POST_data["Task_Type"]);
     $curl_pointer = curl_init();
     $curl_options = array();
-    $url = "https://www.zohoapis.com/crm/v2/Work_Tasks";
+    if ($Task_Type == null) {
+        $url = "https://www.zohoapis.com/crm/v2/Work_Tasks";
+    } else {
+        $url = "https://www.zohoapis.com/crm/v2/Operation_Tasks";
+    }
     $curl_options[CURLOPT_URL] = $url;
     $curl_options[CURLOPT_RETURNTRANSFER] = true;
     $curl_options[CURLOPT_HEADER] = 1;

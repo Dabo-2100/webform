@@ -33,8 +33,8 @@ export default {
 <style lang="scss" scoped>
 #DashboardView {
     display: flex;
-    height: 80vh;
     width: 100%;
+    background-position: 50%;
     background-size: cover;
     background-image: url('@/assets/Dashboard.jpg');
 
