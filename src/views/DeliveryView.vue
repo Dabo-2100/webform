@@ -8,7 +8,7 @@
             <h1 class="col-12 TabHeader">مشاوير التوصيل المطلوبة</h1>
 
             <div class="col-12 Task_Card"
-                v-for="Task, index in                                          this.$store.state['OpenDelivery']                                         "
+                v-for="Task, index in                                           this.$store.state['OpenDelivery']                                          "
                 :key="Task">
                 <h1 class="col-12">معلومات الأستلام</h1>
                 <table class="col-12 table table-bordered">
@@ -123,7 +123,7 @@
                         <thead>
                             <tr>
                                 <th>اسم المصروف</th>
-                                <th>قيمة المصروف</th>
+                                <th>المبلغ</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -139,18 +139,18 @@
                 </div>
                 <hr class="col-12">
                 <div class="col-12" id="LastExpenses" v-if=" this.TaskExpenses.length > 0 ">``
-                    <h1 class="col-12 Header">المصروفات المسجلة</h1>
+                    <h1 class="col-12 Header">المصروفات السابقة</h1>
                     <table class="col-12 table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>اسم المصروف</th>
-                                <th>قيمة المصروف</th>
-                                <th>تاريخ اخر تعديل</th>
-                                <th>حذف المصروف</th>
+                                <th>المصروف</th>
+                                <th>المبلغ</th>
+                                <th>التاريخ</th>
+                                <th>حذف</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="     Expense, index      in      this.TaskExpenses     " :key=" Expense ">
+                            <tr v-for="      Expense, index       in       this.TaskExpenses      " :key=" Expense ">
                                 <td>{{ Expense['Expense_Name'] }}</td>
                                 <td><b>{{ Expense['Expense_Value'] }}</b></td>
                                 <td>{{ Expense['Last_Update'].indexOf('T') != -1 ? Expense['Last_Update'].split('T')[0] :

@@ -4,11 +4,10 @@
         <table class="col-12 table table-hover table-bordered">
             <thead>
                 <tr>
-                    <th>-</th>
-                    <th>اسم المادة</th>
-                    <th>السعر</th>
-                    <th>وحدة القياس</th>
-                    <!-- <th>نوع المادة</th> -->
+                    <th class="col-2">-</th>
+                    <th class="col-4">اسم المادة</th>
+                    <th class="col-3">السعر</th>
+                    <th class="col-2">وحدة القياس</th>
                 </tr>
             </thead>
             <tbody>
@@ -16,8 +15,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ Material['ArabicName'] }}</td>
                     <td><input v-model="Material['Price']" @change="this.ChangePrice(index)"></td>
-                    <td>{{ Material['Unit'] }}</td>
-                    <!-- <td>{{ Material['Cat'] }}</td> -->
+                    <td>{{ Material['Unit'] == 'TON' ? 'الطن' : 'للزنكة' }}</td>
                 </tr>
             </tbody>
         </table>

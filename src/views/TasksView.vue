@@ -2,7 +2,7 @@
     <div class="col-12" id="TasksView">
         <div class="col-12" v-if="this.$store.state['Price_Tasks'].length <= 0" id="NoTasks">
             <img src="@/assets/NoTasks.png">
-            <h1>لا يوجد مهمات تسعير جديدة مطلوبة منك</h1>
+            <h1>لا يوجد مهمات تسعير جديدة</h1>
         </div>
         <div class="col-12 TasksDiv" v-else>
             <h1 class="col-12 TabHeader">مهام التسعير</h1>

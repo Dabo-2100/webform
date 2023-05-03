@@ -16,7 +16,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="Task, index in this.$store.state['DoneDelivery'] " :key="Task">
+                    <tr v-for="Task, index in  this.$store.state['DoneDelivery']  " :key="Task">
                         <td>{{ index + 1 }}</td>
                         <td>{{ Task['Name'] }}</td>
                         <td>{{ Task['Starting_Date'] }}</td>
@@ -30,7 +30,7 @@
         </div>
 
         <div class="col-12" id="PopupPage" v-if=" this.AddExpenseIndex == 1 " @click=" this.AddExpenseIndex = 0 ">
-            <div class="col-12 col-sm-10 col-md-8 col-lg-6" id="ExpenseBox" @click=" $event.stopPropagation(); ">
+            <div class="col-11 col-sm-10 col-md-8 col-lg-6" id="ExpenseBox" @click=" $event.stopPropagation(); ">
                 <font-awesome-icon class="CloseSign" icon="fa-solid fa-x" id="CloseForm"
                     @click=" this.AddExpenseIndex = 0 " />
                 <div class="col-12" id="AddNewExpense">
@@ -39,7 +39,7 @@
                         <thead>
                             <tr>
                                 <th>اسم المصروف</th>
-                                <th>قيمة المصروف</th>
+                                <th>المبلغ</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,19 +55,18 @@
                 </div>
                 <hr class="col-12">
                 <div class="col-12" id="LastExpenses" v-if=" this.TaskExpenses.length > 0 ">
-                    <h1 class="col-12 Header">المصروفات المسجلة</h1>
+                    <h1 class="col-12 Header">المصروفات السابقة</h1>
                     <table class="col-12 table table-bordered table-hover" v-if=" this.TaskExpenses.length > 0 ">
                         <thead>
                             <tr>
-                                <th>اسم المصروف</th>
-                                <th>قيمة المصروف</th>
-                                <th>تاريخ اخر تعديل</th>
-                                <th>حذف المصروف</th>
+                                <th>المصروف</th>
+                                <th>المبلغ</th>
+                                <th>التاريخ</th>
+                                <th>حذف</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="Expense, index in this.TaskExpenses"
-                                :key=" Expense ">
+                            <tr v-for=" Expense, index  in  this.TaskExpenses " :key=" Expense ">
                                 <td>{{ Expense['Expense_Name'] }}</td>
                                 <td><b>{{ Expense['Expense_Value'] }}</b></td>
                                 <td>{{ Expense['Last_Update'].indexOf('T') != -1 ? Expense['Last_Update'].split('T')[0] :
@@ -152,7 +151,6 @@ export default {
 
         },
         GetTaskExpenses(Task_ID) {
-            alert(Task_ID);
             let main = this;
             main.$store.state['LoaderIndex'] = 1;
             axios.post(this.Api_Url, {

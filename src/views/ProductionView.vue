@@ -17,9 +17,9 @@
                         <tr>
                             <th>تفاصيل المهمة</th>
                             <td>
-                                <pre>{{
+                                <p>{{
                                     Task['Task_Details'] }}
-                                </pre>
+                                </p>
                             </td>
                         </tr>
                         <tr>
@@ -61,7 +61,7 @@
         </div>
 
         <div class="col-12" id="PopupPage" v-if=" this.AddExpenseIndex == 1 " @click=" this.AddExpenseIndex = 0 ">
-            <div class="col-12 col-sm-10 col-md-8 col-lg-6" id="ExpenseBox" @click=" $event.stopPropagation(); ">
+            <div class="col-11 col-sm-10 col-md-8 col-lg-6" id="ExpenseBox" @click=" $event.stopPropagation(); ">
                 <font-awesome-icon class="CloseSign" icon="fa-solid fa-x" id="CloseForm"
                     @click=" this.AddExpenseIndex = 0 " />
                 <div class="col-12" id="AddNewExpense">
@@ -70,7 +70,7 @@
                         <thead>
                             <tr>
                                 <th>اسم المصروف</th>
-                                <th>قيمة المصروف</th>
+                                <th>المبلغ</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -86,14 +86,14 @@
                 </div>
                 <hr class="col-12">
                 <div class="col-12" id="LastExpenses" v-if=" this.TaskExpenses.length > 0 ">``
-                    <h1 class="col-12 Header">المصروفات المسجلة</h1>
+                    <h1 class="col-12 Header">المصروفات السابقة</h1>
                     <table class="col-12 table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>اسم المصروف</th>
-                                <th>قيمة المصروف</th>
-                                <th>تاريخ اخر تعديل</th>
-                                <th>حذف المصروف</th>
+                                <th>المصروف</th>
+                                <th>المبلغ</th>
+                                <th>التاريخ</th>
+                                <th>حذف</th>
                             </tr>
                         </thead>
                         <tbody>

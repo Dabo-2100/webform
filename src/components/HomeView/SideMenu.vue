@@ -2,13 +2,63 @@
     <transition name="fade" mode="out-in">
         <div id="SideMenu" :class="this.$store.state['CurrentWidth'] <= 767 ? 'Vertical' : ''">
             <ul id="MenuSelections">
-                <li v-for="Selection, index in this.TheTabs" :key="Selection"
+                <!-- <li v-for="Selection, index in this.TheTabs" :key="Selection"
                     @click="Selection['TabView'] != false ? this.$store.state['CurrentComponent'] = Selection['TabView'] : this.LogOut()">
                     <font-awesome-icon :icon="Selection['Icon']" />
                     <p>{{ this.$store.state['UserLang'] == 1 ? Selection['ArabicName'] :
                         Selection['ArabicName'] }}
                     </p>
                     <span v-if="Selection['Index'] != false">{{ Selection['Index'] }}</span>
+                </li> -->
+                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1"
+                    @click="this.$store.state['CurrentComponent'] = this.Selections[0]['TabView']">
+                    <font-awesome-icon :icon="this.Selections[0]['Icon']" />
+                    <p>{{ this.Selections[0]['ArabicName'] }}
+                    </p>
+                    <span v-if="this.Selections[0]['Index'] != false">{{ this.Selections[0]['Index'] }}</span>
+                </li>
+
+                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1"
+                    @click="this.$store.state['CurrentComponent'] = this.Selections[1]['TabView']">
+                    <font-awesome-icon :icon="this.Selections[1]['Icon']" />
+                    <p>{{ this.Selections[1]['ArabicName'] }}
+                    </p>
+                    <span v-if="this.Selections[1]['Index'] != false">{{ this.Selections[1]['Index'] }}</span>
+                </li>
+                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1"
+                    @click="this.$store.state['CurrentComponent'] = this.Selections[2]['TabView']">
+                    <font-awesome-icon :icon="this.Selections[2]['Icon']" />
+                    <p>{{ this.Selections[2]['ArabicName'] }}
+                    </p>
+                    <span v-if="this.Selections[2]['Index'] != false">{{ this.Selections[2]['Index'] }}</span>
+                </li>
+                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1"
+                    @click="this.$store.state['CurrentComponent'] = this.Selections[3]['TabView']">
+                    <font-awesome-icon :icon="this.Selections[3]['Icon']" />
+                    <p>{{ this.Selections[3]['ArabicName'] }}
+                    </p>
+                    <span v-if="this.Selections[3]['Index'] != false">{{ this.Selections[3]['Index'] }}</span>
+                </li>
+                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 2"
+                    @click="this.$store.state['CurrentComponent'] = this.Selections[4]['TabView']">
+                    <font-awesome-icon :icon="this.Selections[4]['Icon']" />
+                    <p>{{ this.Selections[4]['ArabicName'] }}
+                    </p>
+                    <span v-if="this.Selections[4]['Index'] != false">{{ this.Selections[4]['Index'] }}</span>
+                </li>
+                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 2"
+                    @click="this.$store.state['CurrentComponent'] = this.Selections[5]['TabView']">
+                    <font-awesome-icon :icon="this.Selections[5]['Icon']" />
+                    <p>{{ this.Selections[5]['ArabicName'] }}
+                    </p>
+                    <span v-if="this.Selections[5]['Index'] != false">{{ this.Selections[5]['Index'] }}</span>
+                </li>
+                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1 || this.$store.state['User_Type'] == 2"
+                    @click="this.LogOut()">
+                    <font-awesome-icon :icon="this.Selections[6]['Icon']" />
+                    <p>{{ this.Selections[6]['ArabicName'] }}
+                    </p>
+                    <span v-if="this.Selections[6]['Index'] != false">{{ this.Selections[6]['Index'] }}</span>
                 </li>
             </ul>
 
