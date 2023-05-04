@@ -56,7 +56,7 @@
                     <span v-if="this.Selections[5]['Index'] != false">{{ this.Selections[5]['Index'] }}</span>
                 </li>
                 <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1 || this.$store.state['User_Type'] == 2"
-                    @click=" this.LogOut(); this.$store.state['SideMenuIndex'] = 0">
+                    @click=" this.LogOut(); this.$store.state['SideMenuIndex'] = 0" style="padding-top: 10rem;">
                     <font-awesome-icon :icon="this.Selections[6]['Icon']" />
                     <p>{{ this.Selections[6]['ArabicName'] }}
                     </p>

@@ -33,7 +33,7 @@
                                     @change="this.SelectPricingWay(PriceTask['Task_ID'], index)">
                                     <option value="0" hidden disabled>اختار الطريقة</option>
                                     <option value="1">يدوي</option>
-                                    <option value="2">اوتوماتيك</option>
+                                    <!-- <option value="2">اوتوماتيك</option> -->
                                 </select>
                             </td>
                         </tr>
@@ -74,38 +74,38 @@
             </table> -->
         </div>
         <div id="ManualPrice" v-if="this.Manual_Price_PopUp == 1"
-            @click="this.Manual_Price_PopUp = 0; this.PricingWay = 0; ">
-            <div class="col-11 col-md-9 col-lg-6" @click=" $event.stopPropagation() " id="TheBox">
+            @click="this.Manual_Price_PopUp = 0; this.PricingWay = 0;">
+            <div class="col-11 col-md-9 col-lg-6" @click=" $event.stopPropagation()" id="TheBox">
                 <h1 class="col-12">تسعير المنتج يدوياً</h1>
 
                 <table class="col-12 table table-bordered">
                     <tbody>
                         <tr>
                             <th>اسم المهمة</th>
-                            <td>{{ this.$store.state['Price_Tasks'][Open_Task_Index]['Name']}}</td>
+                            <td>{{ this.$store.state['Price_Tasks'][Open_Task_Index]['Name'] }}</td>
                         </tr>
                         <tr>
                             <th>تفاصيل المهمة</th>
                             <td>
-                                <pre>{{ this.$store.state['Price_Tasks'][Open_Task_Index]['Requirement_Details']}}</pre>
+                                <pre>{{ this.$store.state['Price_Tasks'][Open_Task_Index]['Requirement_Details'] }}</pre>
                             </td>
                         </tr>
                         <tr>
                             <th>عدد القطع</th>
-                            <td>{{ this.$store.state['Price_Tasks'][Open_Task_Index]['Quantity']}}</td>
+                            <td>{{ this.$store.state['Price_Tasks'][Open_Task_Index]['Quantity'] }}</td>
                         </tr>
                         <tr>
                             <th>ميعاد طلب التسعير </th>
-                            <td>{{ this.$store.state['Price_Tasks'][Open_Task_Index]['Created_Date']}}</td>
+                            <td>{{ this.$store.state['Price_Tasks'][Open_Task_Index]['Created_Date'] }}</td>
                         </tr>
                         <tr>
                             <th>السعر للقطعة الواحدة</th>
-                            <td><input type="number" v-model=" this.FinalManualPrice " placeholder="ادخل سعر القطعة"></td>
+                            <td><input type="number" v-model="this.FinalManualPrice" placeholder="ادخل سعر القطعة"></td>
                         </tr>
                     </tbody>
                 </table>
 
-                <button class="btn btn-success" @click=" UpdatePriceManual(this.Open_Task, this.FinalManualPrice) ">سجل
+                <button class="btn btn-success" @click=" UpdatePriceManual(this.Open_Task, this.FinalManualPrice)">سجل
                     السعر</button>
             </div>
 
@@ -238,14 +238,23 @@ export default {
     }
 
     table {
-        font-size: 1rem;
+        font-size: 1.2rem;
         text-align: center;
         vertical-align: middle;
 
         pre {
             margin: 0;
             padding: 0;
-            font-size: 1rem;
+            font-size: 1.2rem;
+        }
+
+        th,
+        td {
+            padding: 0 1.5rem;
+        }
+
+        select {
+            font-size: 1.2rem;
         }
     }
 
@@ -287,5 +296,4 @@ export default {
     align-items: center;
     background-color: white;
     margin-bottom: 1rem;
-}
-</style>
+}</style>
