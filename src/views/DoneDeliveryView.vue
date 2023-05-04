@@ -111,7 +111,7 @@ export default {
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'نعم لنقم بذلك',
+                confirmButtonText: 'انهاء',
                 cancelButtonText: 'ليس الأن'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -204,7 +204,7 @@ export default {
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'نعم لنقم بذلك',
+                confirmButtonText: 'انهاء',
                 cancelButtonText: 'ليس الأن'
             }).then((result) => {
                 if (result.isConfirmed) {

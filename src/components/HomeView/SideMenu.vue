@@ -13,64 +13,63 @@
                 </li> -->
                 <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1"
                     @click="this.GetPricingTasks(); this.$store.state['CurrentComponent'] = this.Selections[0]['TabView']; this.$store.state['SideMenuIndex'] = 0">
-                    <font-awesome-icon :icon=" this.Selections[0]['Icon'] " />
+                    <font-awesome-icon :icon="this.Selections[0]['Icon']" />
                     <p>{{ this.Selections[0]['ArabicName'] }}
                     </p>
-                    <span v-if=" this.Selections[0]['Index'] != false ">{{ this.Selections[0]['Index'] }}</span>
+                    <span v-if="this.Selections[0]['Index'] != false">{{ this.Selections[0]['Index'] }}</span>
                 </li>
 
-                <li v-if=" this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1 "
-                    @click=" this.GetOpenProjects(); this.$store.state['CurrentComponent'] = this.Selections[1]['TabView']; this.$store.state['SideMenuIndex'] = 0 ">
-                    <font-awesome-icon :icon=" this.Selections[1]['Icon'] " />
+                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1"
+                    @click=" this.GetOpenProjects(); this.$store.state['CurrentComponent'] = this.Selections[1]['TabView']; this.$store.state['SideMenuIndex'] = 0">
+                    <font-awesome-icon :icon="this.Selections[1]['Icon']" />
                     <p>{{ this.Selections[1]['ArabicName'] }}
                     </p>
-                    <span v-if=" this.Selections[1]['Index'] != false ">{{ this.Selections[1]['Index'] }}</span>
+                    <span v-if="this.Selections[1]['Index'] != false">{{ this.Selections[1]['Index'] }}</span>
                 </li>
-                <li v-if=" this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1 "
-                    @click=" this.GetOpenProjects(); this.$store.state['CurrentComponent'] = this.Selections[2]['TabView']; this.$store.state['SideMenuIndex'] = 0 ">
-                    <font-awesome-icon :icon=" this.Selections[2]['Icon'] " />
+                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1"
+                    @click=" this.GetOpenProjects(); this.$store.state['CurrentComponent'] = this.Selections[2]['TabView']; this.$store.state['SideMenuIndex'] = 0">
+                    <font-awesome-icon :icon="this.Selections[2]['Icon']" />
                     <p>{{ this.Selections[2]['ArabicName'] }}
                     </p>
-                    <span v-if=" this.Selections[2]['Index'] != false ">{{ this.Selections[2]['Index'] }}</span>
+                    <span v-if="this.Selections[2]['Index'] != false">{{ this.Selections[2]['Index'] }}</span>
                 </li>
-                <li v-if=" this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1 "
-                    @click=" this.$store.state['CurrentComponent'] = this.Selections[3]['TabView']; this.$store.state['SideMenuIndex'] = 0 ">
-                    <font-awesome-icon :icon=" this.Selections[3]['Icon'] " />
+                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1"
+                    @click=" this.$store.state['CurrentComponent'] = this.Selections[3]['TabView']; this.$store.state['SideMenuIndex'] = 0">
+                    <font-awesome-icon :icon="this.Selections[3]['Icon']" />
                     <p>{{ this.Selections[3]['ArabicName'] }}
                     </p>
-                    <span v-if=" this.Selections[3]['Index'] != false ">{{ this.Selections[3]['Index'] }}</span>
+                    <span v-if="this.Selections[3]['Index'] != false">{{ this.Selections[3]['Index'] }}</span>
                 </li>
-                <li v-if=" this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 2 "
-                    @click=" this.GetDeliveryTasks(); this.$store.state['CurrentComponent'] = this.Selections[4]['TabView']; this.$store.state['SideMenuIndex'] = 0 ">
-                    <font-awesome-icon :icon=" this.Selections[4]['Icon'] " />
+                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 2"
+                    @click=" this.GetDeliveryTasks(); this.$store.state['CurrentComponent'] = this.Selections[4]['TabView']; this.$store.state['SideMenuIndex'] = 0">
+                    <font-awesome-icon :icon="this.Selections[4]['Icon']" />
                     <p>{{ this.Selections[4]['ArabicName'] }}
                     </p>
-                    <span v-if=" this.Selections[4]['Index'] != false ">{{ this.Selections[4]['Index'] }}</span>
+                    <span v-if="this.Selections[4]['Index'] != false">{{ this.Selections[4]['Index'] }}</span>
                 </li>
 
-                <li v-if=" this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 2 "
-                    @click=" this.GetDeliveryTasks(); this.$store.state['CurrentComponent'] = this.Selections[5]['TabView']; this.$store.state['SideMenuIndex'] = 0 ">
-                    <font-awesome-icon :icon=" this.Selections[5]['Icon'] " />
+                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 2"
+                    @click=" this.GetDeliveryTasks(); this.$store.state['CurrentComponent'] = this.Selections[5]['TabView']; this.$store.state['SideMenuIndex'] = 0">
+                    <font-awesome-icon :icon="this.Selections[5]['Icon']" />
                     <p>{{ this.Selections[5]['ArabicName'] }}
                     </p>
-                    <span v-if=" this.Selections[5]['Index'] != false ">{{ this.Selections[5]['Index'] }}</span>
+                    <span v-if="this.Selections[5]['Index'] != false">{{ this.Selections[5]['Index'] }}</span>
                 </li>
-                <li v-if=" this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1 || this.$store.state['User_Type'] == 2 "
-                    @click=" this.LogOut(); this.$store.state['SideMenuIndex'] = 0 ">
-                    <font-awesome-icon :icon=" this.Selections[6]['Icon'] " />
+                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1 || this.$store.state['User_Type'] == 2"
+                    @click=" this.LogOut(); this.$store.state['SideMenuIndex'] = 0">
+                    <font-awesome-icon :icon="this.Selections[6]['Icon']" />
                     <p>{{ this.Selections[6]['ArabicName'] }}
                     </p>
-                    <span v-if=" this.Selections[6]['Index'] != false ">{{ this.Selections[6]['Index'] }}</span>
+                    <span v-if="this.Selections[6]['Index'] != false">{{ this.Selections[6]['Index'] }}</span>
                 </li>
             </ul>
 
         </div>
     </transition>
-    <div class="col-12" id="Upper_Bar" v-if=" this.$store.state['CurrentWidth'] <= 767 ">
+    <div class="col-12" id="Upper_Bar" v-if="this.$store.state['CurrentWidth'] <= 767">
         <div class="col-6" id="TheSliderIcon">
-            <font-awesome-icon icon="fa-solid fa-bars" @click=" this.$store.state['SideMenuIndex'] = 1 " />
+            <font-awesome-icon icon="fa-solid fa-bars" @click=" this.$store.state['SideMenuIndex'] = 1" />
             <p>القائمة</p>
-
         </div>
     </div>
 </template>
@@ -178,6 +177,7 @@ export default {
             }).then(function (res) {
                 let Final_array = res.data;
                 main.Selections[0]['Index'] = Final_array.length;
+                main.$store.state['Price_Tasks'] = Final_array;
                 // console.log(Final_array);
                 // main.$store.state['Price_Tasks'] = Final_array;
                 // main.$store.state['LoaderIndex'] = 0;
@@ -210,7 +210,8 @@ export default {
                 let Final_array = res.data;
                 let OpenTasks = [];
                 let DoneTasks = [];
-                if (Final_array.length > 0) {
+                // console.log(Final_array);
+                if (Final_array != null) {
                     OpenTasks = Final_array.filter(GetOpenTasks);
                     DoneTasks = Final_array.filter(GetDoneTasks);
                 }
@@ -246,12 +247,14 @@ export default {
                 let Final_array = res.data;
                 let OpenTasks = [];
                 let DoneTasks = [];
-                if (Final_array.length > 0) {
+                if (Final_array != null) {
                     OpenTasks = Final_array.filter(GetOpenTasks);
                     DoneTasks = Final_array.filter(GetDoneTasks);
                 }
                 main.Selections[1]['Index'] = OpenTasks.length;
                 main.Selections[2]['Index'] = DoneTasks.length;
+                main.$store.state['Production_Tasks'] = OpenTasks;
+                main.$store.state['DoneTasks'] = DoneTasks;
             });
         },
 
@@ -275,7 +278,7 @@ export default {
                 let Final_array = res.data['data'];
                 let OpenTasks = [];
                 let DoneTasks = [];
-                if (Final_array.length > 0) {
+                if (Final_array != null) {
                     OpenTasks = Final_array.filter(GetOpenTasks);
                     DoneTasks = Final_array.filter(GetDoneTasks);
                 }
@@ -305,12 +308,14 @@ export default {
                 let Final_array = res.data['data'];
                 let OpenTasks = [];
                 let DoneTasks = [];
-                if (Final_array.length > 0) {
+                if (Final_array != null) {
                     OpenTasks = Final_array.filter(GetOpenTasks);
                     DoneTasks = Final_array.filter(GetDoneTasks);
                 }
                 main.Selections[4]['Index'] = OpenTasks.length;
                 main.Selections[5]['Index'] = DoneTasks.length;
+                main.$store.state['OpenDelivery'] = OpenTasks;
+                main.$store.state['DoneDelivery'] = DoneTasks;
             });
         },
 
@@ -410,10 +415,11 @@ export default {
             }
 
             span {
-                padding: 0 0.5rem;
+                padding: 0 0.6rem;
                 background-color: #389aed;
                 border-radius: 7px;
-                font-size: 0.8rem;
+                font-size: 1.5rem;
+                top: 3rem;
 
                 @media screen and (max-width: 767px) {
                     position: absolute;

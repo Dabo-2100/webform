@@ -246,6 +246,7 @@ if ($api_name == "GetOpenProjects") {
             $Task_ID = $Task['id'];
             $Task_Name = $Task['Name'];
             $Task_Done = $Task['Task_Done'];
+            // $Photo = $Task['Photo'];
             $Task_Stage_ID = $Task['Task_Stage']['id'];
             $Task_Stage_Name = $Task['Task_Stage']['name'];
             $Task_Details = $Task['Task_Details'];
@@ -280,7 +281,8 @@ if ($api_name == "GetOpenProjects") {
                 "Deadline_Date" => $Deadline_Date,
                 "Requirement_ID" => $Requirement_ID,
                 "TaskStages" => $All_Stages,
-                "Task_Done" => $Task_Done
+                "Task_Done" => $Task_Done,
+                // "Photo" => $Photo
             );
             array_push($final, $data);
         }

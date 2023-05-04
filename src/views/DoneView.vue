@@ -45,7 +45,7 @@
         </div>
 
         <div class="col-12" id="PopupPage" v-if=" this.AddExpenseIndex == 1 " @click=" this.AddExpenseIndex = 0 ">
-            <div class="col-12 col-sm-10 col-md-8 col-lg-6" id="ExpenseBox" @click=" $event.stopPropagation(); ">
+            <div class="col-11 col-sm-10 col-md-8 col-lg-6" id="ExpenseBox" @click=" $event.stopPropagation(); ">
                 <font-awesome-icon class="CloseSign" icon="fa-solid fa-x" id="CloseForm"
                     @click=" this.AddExpenseIndex = 0 " />
                 <div class="col-12" id="AddNewExpense">
@@ -126,7 +126,7 @@ export default {
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'نعم لنقم بذلك',
+                confirmButtonText: 'انهاء',
                 cancelButtonText: 'ليس الأن'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -217,7 +217,7 @@ export default {
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'نعم لنقم بذلك',
+                confirmButtonText: 'انهاء',
                 cancelButtonText: 'ليس الأن'
             }).then((result) => {
                 if (result.isConfirmed) {
