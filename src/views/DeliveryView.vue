@@ -6,31 +6,32 @@
         </div>
         <div class="col-12" v-else>
             <h1 class="col-12 TabHeader">مشاوير التوصيل المطلوبة</h1>
-
             <div class="col-12 Task_Card"
-                v-for="Task, index in                                           this.$store.state['OpenDelivery']                                          "
+                v-for="Task in                                   this.$store.state['OpenDelivery']                                  "
                 :key="Task">
                 <h1 class="col-12">معلومات الأستلام</h1>
                 <table class="col-12 table table-bordered">
                     <tbody>
                         <tr>
-                            <th>مكان الاستلام</th>
-                            <td>{{ Task['PickUp_Location'] }}</td>
+                            <th class="col-6">مكان الاستلام</th>
+                            <td class="col-6">{{ Task['PickUp_Location'] == null ? '----' : Task['PickUp_Location'] }}</td>
                         </tr>
                         <tr>
                             <th>موعد الأستلام</th>
                             <td>
-                                {{ Task['PickUp_Time'].split('T')[0] }}<br>
-                                الساعة : {{ Task['PickUp_Time'].split('T')[1].split('+')[0] }}
+                                {{ Task['PickUp_Time'] == null ? '----' : Task['PickUp_Time'].split("T")[0] }}
+                                <br>
+                                {{ Task['PickUp_Time'] != null ?
+                                    'الساعة : ' + Task['PickUp_Time'].split("T")[1].split['+'][0] : '' }}
                             </td>
                         </tr>
                         <tr>
                             <th>طريقة الأستلام</th>
-                            <td>{{ Task['PickUp_Option'] }}</td>
+                            <td>{{ Task['PickUp_Option'] == null ? '----' : Task['PickUp_Option'] }}</td>
                         </tr>
                         <tr>
                             <th>دليفري نوت</th>
-                            <td>{{ Task['Delivery_Note'] }}</td>
+                            <td>{{ Task['Delivery_Note'] == null ? '----' : Task['Delivery_Note'] }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -40,24 +41,26 @@
                     <tbody>
                         <tr>
                             <th class="col-6">اسم الشركة</th>
-                            <td class="col-6">{{ Task['Delivery_Place']['name'] }}</td>
+                            <td class="col-6">{{ Task['Delivery_Place'] == null ? '----' : Task['Delivery_Place'] }}</td>
                         </tr>
                         <tr>
                             <th>لوكيشن التسليم</th>
                             <td>
-                                <a :href="Task['Delivery_Location']">عرض الخريطة</a>
+                                <a v-if="Task['Delivery_Location'] != null" :href="Task['Delivery_Location']">عرض
+                                    الخريطة</a>
+                                <p v-else>----</p>
                             </td>
                         </tr>
                         <tr>
                             <th>عنوان التسلم</th>
-                            <td>{{ Task['Shipping_Details'] }}</td>
+                            <td>{{ Task['Shipping_Details'] == null ? '----' : Task['Shipping_Details'] }}</td>
                         </tr>
                         <tr>
-                            <th>رقم الهاتف</th>
-                            <td>{{ Task['Shipping_Phone_No'] }}</td>
+                            <th>رقم التواصل</th>
+                            <td>{{ Task['Shipping_Phone_No'] == null ? '----' : Task['Shipping_Phone_No'] }}</td>
                         </tr>
                         <tr>
-                            <th>تحصيل اموال</th>
+                            <th>مبلغ التحصيل</th>
                             <td>{{ Task['Collecting_Value'] != null ? Task['Collecting_Value'] : 'بدون تحصيل' }}</td>
                         </tr>
                         <tr>
@@ -73,44 +76,6 @@
                     </tbody>
                 </table>
             </div>
-
-
-
-            <!-- <table class="col-12 table table-hover table-bordered">
-                <thead>
-                    <tr>
-                        <th>-</th>
-                        <th>اسم المهمة</th>
-                        <th>عنوان التوصيل</th>
-                        <th>رقم الهاتف</th>
-                        <th>تاريخ بداية المهمة</th>
-                        <th>تاريخ التسليم</th>
-                        <th>انهاء</th>
-                        <th>أضافة مصروف</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(Task, index) in          this.$store.state['OpenDelivery']         " :key="Task">
-                        <td>{{ index + 1 }}</td>
-                        <td>{{ Task['Name'] }}</td>
-                        <td>
-                            {{ Task['Shipping_Details'] == null ? 'لم يتم تسجيل العنوان' : Task['Shipping_Details'] }}
-                        </td>
-                        <td>
-                            {{ Task['Shipping_Phone_No'] == null ? 'لم يتم رقهم الهاتف' : Task['Shipping_Phone_No'] }}
-                        </td>
-                        <td>{{ Task['Starting_Date'] }}</td>
-                        <td>{{ Task['DeadLine_Date'] }}</td>
-                        <td>
-                            <button class="btn btn-danger" @click="this.EndTask(Task['id'])">انهاء المهمة</button>
-                        </td>
-                        <td>
-                            <button class="btn btn-info"
-                                @click="this.AddExpenseIndex = 1; this.GetTaskExpenses(Task['id'])">اضافة</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table> -->
         </div>
 
         <div class="col-12" id="PopupPage" v-if=" this.AddExpenseIndex == 1 " @click=" this.AddExpenseIndex = 0 ">
@@ -150,7 +115,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="      Expense, index       in       this.TaskExpenses      " :key=" Expense ">
+                            <tr v-for="                                                     Expense, index                                                      in                                                      this.TaskExpenses                                                     "
+                                :key=" Expense ">
                                 <td>{{ Expense['Expense_Name'] }}</td>
                                 <td><b>{{ Expense['Expense_Value'] }}</b></td>
                                 <td>{{ Expense['Last_Update'].indexOf('T') != -1 ? Expense['Last_Update'].split('T')[0] :
@@ -185,7 +151,7 @@ export default {
         };
     },
     created() {
-        console.log(this.$store.state['OpenDelivery'][0]);
+
     },
     methods: {
         EndTask(Task_ID) {
@@ -271,7 +237,6 @@ export default {
                 Due_Task_ID: this.OpenTask,
                 Task_Type: "Operation",
             }).then(function (res) {
-                console.log(res.data);
                 main.$store.state['LoaderIndex'] = 0;
                 main.$swal.fire({
                     title: 'تم اضافة المصروف بنجاح',

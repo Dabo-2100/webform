@@ -6,30 +6,64 @@
         </div>
         <div class="col-12 TasksDiv" v-else>
             <h1 class="col-12 TabHeader">مهام التسعير</h1>
-            <table class="col-12 table table-hover table-bordered">
+            <div class="col-12 Task_Card" v-for="PriceTask, index in      this.$store.state['Price_Tasks']     "
+                :key="PriceTask">
+                <table class="col-12 table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th>اسم المهمة</th>
+                            <td>{{ PriceTask['Name'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>تفاصيل المهمة</th>
+                            <td>
+                                <p>{{
+                                    PriceTask['Requirement_Details'] }}
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>تاريخ التسليم</th>
+                            <td>{{ PriceTask['Created_Date'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>طريقة التسعير </th>
+                            <td>
+                                <select class="form-select" v-model="this.PricingWay"
+                                    @change="this.SelectPricingWay(PriceTask['Task_ID'], index)">
+                                    <option value="0" hidden disabled>اختار الطريقة</option>
+                                    <option value="1">يدوي</option>
+                                    <option value="2">اوتوماتيك</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- <table class="col-12 table table-hover table-bordered">
                 <thead>
                     <tr>
                         <th>-</th>
                         <th class="col-3">اسم المهمة</th>
-                        <th v-if="this.$store.state['CurrentWidth'] > 767">تفاصيل المهمة</th>
+                        <th v-if=" this.$store.state['CurrentWidth'] > 767 ">تفاصيل المهمة</th>
                         <th>التسليم في</th>
-                        <th v-if="this.$store.state['CurrentWidth'] > 767">عدد القطع</th>
+                        <th v-if=" this.$store.state['CurrentWidth'] > 767 ">عدد القطع</th>
                         <th>طريقة التسعير</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="PriceTask, index in this.$store.state['Price_Tasks']" :key="PriceTask">
+                    <tr v-for=" PriceTask, index  in  this.$store.state['Price_Tasks'] " :key=" PriceTask ">
                         <td>{{ index + 1 }}</td>
                         <td>{{ PriceTask['Name'] }}</td>
-                        <td v-if="this.$store.state['CurrentWidth'] > 767">
+                        <td v-if=" this.$store.state['CurrentWidth'] > 767 ">
                             <pre>{{
                                 PriceTask['Requirement_Details'] }}</pre>
                         </td>
                         <td>{{ PriceTask['Created_Date'] }}</td>
-                        <td v-if="this.$store.state['CurrentWidth'] > 767">{{ PriceTask['Quantity'] }}</td>
+                        <td v-if=" this.$store.state['CurrentWidth'] > 767 ">{{ PriceTask['Quantity'] }}</td>
                         <td>
-                            <select class="form-select" v-model="this.PricingWay"
-                                @change="this.SelectPricingWay(PriceTask['Task_ID'], index)">
+                            <select class="form-select" v-model=" this.PricingWay "
+                                @change=" this.SelectPricingWay(PriceTask['Task_ID'], index) ">
                                 <option value="0" hidden disabled>اختار الطريقة</option>
                                 <option value="1">يدوي</option>
                                 <option value="2">اوتوماتيك</option>
@@ -37,10 +71,10 @@
                         </td>
                     </tr>
                 </tbody>
-            </table>
+            </table> -->
         </div>
         <div id="ManualPrice" v-if="this.Manual_Price_PopUp == 1"
-            @click="this.Manual_Price_PopUp = 0; this.PricingWay = 0;">
+            @click="this.Manual_Price_PopUp = 0; this.PricingWay = 0; ">
             <div class="col-11 col-md-9 col-lg-6" @click=" $event.stopPropagation() " id="TheBox">
                 <h1 class="col-12">تسعير المنتج يدوياً</h1>
 
@@ -108,7 +142,7 @@ export default {
                 this.Open_Task = Task_ID;
                 this.Manual_Price_PopUp = 1;
                 this.Open_Task_Index = Task_Index;
-                console.log(this.$store.state['Price_Tasks'][this.Open_Task_Index]);
+                // console.log(this.$store.state['Price_Tasks'][this.Open_Task_Index]);
             }
         },
         OpenTask(Task_ID) {
@@ -242,5 +276,16 @@ export default {
         font-size: 1.2rem;
         margin-bottom: 1rem !important;
     }
+}
+
+.Task_Card {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    margin-bottom: 1rem;
 }
 </style>

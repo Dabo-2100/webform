@@ -51,7 +51,7 @@ export default {
   align-content: flex-start;
 
   @media screen and (max-width: 767px) {
-    flex-direction: column-reverse;
+    flex-direction: column;
   }
 }
 </style>

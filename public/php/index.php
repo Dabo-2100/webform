@@ -288,7 +288,7 @@ if ($api_name == "GetOpenProjects") {
     echo json_encode($final);
 }
 if ($api_name == "GetDeliveryTasks") {
-    echo SearchRecords("Operation_Tasks", $code = 0, $pdo, "(Task_Type.id:equals:Delivery)");
+    echo SearchRecords("Operation_Tasks", $code = 0, $pdo, "(Task_Type:equals:Delivery)");
 }
 
 if ($api_name == "GetTaskExpenses") {

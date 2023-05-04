@@ -4,10 +4,10 @@
         <table class="col-12 table table-hover table-bordered">
             <thead>
                 <tr>
-                    <th class="col-2">-</th>
-                    <th class="col-4">اسم المادة</th>
+                    <th class="col-1">-</th>
+                    <th class="col-5">الإسم</th>
                     <th class="col-3">السعر</th>
-                    <th class="col-2">وحدة القياس</th>
+                    <th class="col-2">الوحدة</th>
                 </tr>
             </thead>
             <tbody>
@@ -82,8 +82,8 @@ export default {
                         raw_material_price: main.RawMaterial[index]['Price'],
                         raw_material_id: main.RawMaterial[index]['id'],
                     }).then(function (res) {
-                        console.log()
-                        console.log(res.data);
+                        // console.log()
+                        // console.log(res.data);
                         main.$store.state['LoaderIndex'] = 0;
                         main.$swal.fire(
                             'تم تعديل سعر الخامة بنجاح',
@@ -123,6 +123,19 @@ export default {
     table {
         text-align: center;
         vertical-align: middle;
+        font-size: 1.3rem;
+
+        th {
+            font-size: 1.2rem;
+        }
+
+        td {
+            input {
+                font-size: 1.2rem;
+                padding: 0.25rem;
+                width: 7rem;
+            }
+        }
     }
 }
 </style>

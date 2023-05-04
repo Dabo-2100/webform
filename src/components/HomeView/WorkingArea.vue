@@ -1,5 +1,5 @@
 <template>
-    <div id="WorkingArea">
+    <div id="WorkingArea" @click="this.$store.state['SideMenuIndex'] = 0">
         <component :is="this.$store.state['CurrentComponent']"></component>
     </div>
 </template>

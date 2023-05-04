@@ -1,6 +1,7 @@
 <template>
     <transition name="fade" mode="out-in">
-        <div id="SideMenu" :class="this.$store.state['CurrentWidth'] <= 767 ? 'Vertical' : ''">
+        <div id="SideMenu" v-if="(this.$store.state['CurrentWidth'] > 767) ||
+            (this.$store.state['CurrentWidth'] <= 767 && this.$store.state['SideMenuIndex'] == 1)">
             <ul id="MenuSelections">
                 <!-- <li v-for="Selection, index in this.TheTabs" :key="Selection"
                     @click="Selection['TabView'] != false ? this.$store.state['CurrentComponent'] = Selection['TabView'] : this.LogOut()">
@@ -11,59 +12,67 @@
                     <span v-if="Selection['Index'] != false">{{ Selection['Index'] }}</span>
                 </li> -->
                 <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1"
-                    @click="this.$store.state['CurrentComponent'] = this.Selections[0]['TabView']">
-                    <font-awesome-icon :icon="this.Selections[0]['Icon']" />
+                    @click="this.GetPricingTasks(); this.$store.state['CurrentComponent'] = this.Selections[0]['TabView']; this.$store.state['SideMenuIndex'] = 0">
+                    <font-awesome-icon :icon=" this.Selections[0]['Icon'] " />
                     <p>{{ this.Selections[0]['ArabicName'] }}
                     </p>
-                    <span v-if="this.Selections[0]['Index'] != false">{{ this.Selections[0]['Index'] }}</span>
+                    <span v-if=" this.Selections[0]['Index'] != false ">{{ this.Selections[0]['Index'] }}</span>
                 </li>
 
-                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1"
-                    @click="this.$store.state['CurrentComponent'] = this.Selections[1]['TabView']">
-                    <font-awesome-icon :icon="this.Selections[1]['Icon']" />
+                <li v-if=" this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1 "
+                    @click=" this.GetOpenProjects(); this.$store.state['CurrentComponent'] = this.Selections[1]['TabView']; this.$store.state['SideMenuIndex'] = 0 ">
+                    <font-awesome-icon :icon=" this.Selections[1]['Icon'] " />
                     <p>{{ this.Selections[1]['ArabicName'] }}
                     </p>
-                    <span v-if="this.Selections[1]['Index'] != false">{{ this.Selections[1]['Index'] }}</span>
+                    <span v-if=" this.Selections[1]['Index'] != false ">{{ this.Selections[1]['Index'] }}</span>
                 </li>
-                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1"
-                    @click="this.$store.state['CurrentComponent'] = this.Selections[2]['TabView']">
-                    <font-awesome-icon :icon="this.Selections[2]['Icon']" />
+                <li v-if=" this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1 "
+                    @click=" this.GetOpenProjects(); this.$store.state['CurrentComponent'] = this.Selections[2]['TabView']; this.$store.state['SideMenuIndex'] = 0 ">
+                    <font-awesome-icon :icon=" this.Selections[2]['Icon'] " />
                     <p>{{ this.Selections[2]['ArabicName'] }}
                     </p>
-                    <span v-if="this.Selections[2]['Index'] != false">{{ this.Selections[2]['Index'] }}</span>
+                    <span v-if=" this.Selections[2]['Index'] != false ">{{ this.Selections[2]['Index'] }}</span>
                 </li>
-                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1"
-                    @click="this.$store.state['CurrentComponent'] = this.Selections[3]['TabView']">
-                    <font-awesome-icon :icon="this.Selections[3]['Icon']" />
+                <li v-if=" this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1 "
+                    @click=" this.$store.state['CurrentComponent'] = this.Selections[3]['TabView']; this.$store.state['SideMenuIndex'] = 0 ">
+                    <font-awesome-icon :icon=" this.Selections[3]['Icon'] " />
                     <p>{{ this.Selections[3]['ArabicName'] }}
                     </p>
-                    <span v-if="this.Selections[3]['Index'] != false">{{ this.Selections[3]['Index'] }}</span>
+                    <span v-if=" this.Selections[3]['Index'] != false ">{{ this.Selections[3]['Index'] }}</span>
                 </li>
-                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 2"
-                    @click="this.$store.state['CurrentComponent'] = this.Selections[4]['TabView']">
-                    <font-awesome-icon :icon="this.Selections[4]['Icon']" />
+                <li v-if=" this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 2 "
+                    @click=" this.GetDeliveryTasks(); this.$store.state['CurrentComponent'] = this.Selections[4]['TabView']; this.$store.state['SideMenuIndex'] = 0 ">
+                    <font-awesome-icon :icon=" this.Selections[4]['Icon'] " />
                     <p>{{ this.Selections[4]['ArabicName'] }}
                     </p>
-                    <span v-if="this.Selections[4]['Index'] != false">{{ this.Selections[4]['Index'] }}</span>
+                    <span v-if=" this.Selections[4]['Index'] != false ">{{ this.Selections[4]['Index'] }}</span>
                 </li>
-                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 2"
-                    @click="this.$store.state['CurrentComponent'] = this.Selections[5]['TabView']">
-                    <font-awesome-icon :icon="this.Selections[5]['Icon']" />
+
+                <li v-if=" this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 2 "
+                    @click=" this.GetDeliveryTasks(); this.$store.state['CurrentComponent'] = this.Selections[5]['TabView']; this.$store.state['SideMenuIndex'] = 0 ">
+                    <font-awesome-icon :icon=" this.Selections[5]['Icon'] " />
                     <p>{{ this.Selections[5]['ArabicName'] }}
                     </p>
-                    <span v-if="this.Selections[5]['Index'] != false">{{ this.Selections[5]['Index'] }}</span>
+                    <span v-if=" this.Selections[5]['Index'] != false ">{{ this.Selections[5]['Index'] }}</span>
                 </li>
-                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1 || this.$store.state['User_Type'] == 2"
-                    @click="this.LogOut()">
-                    <font-awesome-icon :icon="this.Selections[6]['Icon']" />
+                <li v-if=" this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1 || this.$store.state['User_Type'] == 2 "
+                    @click=" this.LogOut(); this.$store.state['SideMenuIndex'] = 0 ">
+                    <font-awesome-icon :icon=" this.Selections[6]['Icon'] " />
                     <p>{{ this.Selections[6]['ArabicName'] }}
                     </p>
-                    <span v-if="this.Selections[6]['Index'] != false">{{ this.Selections[6]['Index'] }}</span>
+                    <span v-if=" this.Selections[6]['Index'] != false ">{{ this.Selections[6]['Index'] }}</span>
                 </li>
             </ul>
 
         </div>
     </transition>
+    <div class="col-12" id="Upper_Bar" v-if=" this.$store.state['CurrentWidth'] <= 767 ">
+        <div class="col-6" id="TheSliderIcon">
+            <font-awesome-icon icon="fa-solid fa-bars" @click=" this.$store.state['SideMenuIndex'] = 1 " />
+            <p>القائمة</p>
+
+        </div>
+    </div>
 </template>
   
 <script>
@@ -99,6 +108,7 @@ export default {
                 window.location = 'https://accounts.zoho.com/oauth/v2/auth?response_type=code&client_id=1000.R3K41GUMKFVW5K825Z6PZ6JU1HTQ3Q&scope=ZohoCRM.modules.ALL,ZohoCRM.users.ALL&redirect_uri=https://webform.designido.net&prompt=consent';
             }
             else {
+                main.$store.state['LoaderIndex'] = 1;
                 if (token != null && token != undefined) {
                     axios.post(main.Api_Url, {
                         api_name: "CheckToken",
@@ -106,20 +116,20 @@ export default {
                         email: email
                     }).then(function (res) {
                         if (res.data['user_id'] !== undefined) {
-                            console.log('User_Type is : ' + res.data['user_type']);
                             main.$store.state['User_Type'] = res.data['user_type'];
                             if (res.data['user_type'] == 1) {
-                                main.GetPricingTasks();
-                                main.GetOpenProjects();
+                                main.GetPricingTasksIndex();
+                                main.GetOpenProjectsIndex();
                             }
                             else if (res.data['user_type'] == 0) {
-                                main.GetPricingTasks();
-                                main.GetOpenProjects();
-                                main.GetDeliveryTasks();
+                                main.GetPricingTasksIndex();
+                                main.GetOpenProjectsIndex();
+                                main.GetDeliveryTasksIndex();
                             }
                             else {
-                                main.GetDeliveryTasks();
+                                main.GetDeliveryTasksIndex();
                             }
+                            main.$store.state['LoaderIndex'] = 0;
                         }
                         else {
                             localStorage.clear();
@@ -138,13 +148,6 @@ export default {
 
     },
     methods: {
-        AvialbleTabs(Tab) {
-            let main = this;
-            if (Tab['User_Type'].indexOf(main.$store.state['User_Type']) != -1) {
-                console.log(Tab);
-                return Tab;
-            }
-        },
         GetPricingTasks() {
             let main = this;
             main.$store.state['LoaderIndex'] = 1;
@@ -159,64 +162,158 @@ export default {
                 let Final_array = res.data;
                 main.Selections[0]['Index'] = Final_array.length;
                 main.$store.state['Price_Tasks'] = Final_array;
+                // console.log(Final_array);
                 main.$store.state['LoaderIndex'] = 0;
+            });
+        },
+        GetPricingTasksIndex() {
+            let main = this;
+            let Zoho_ID = localStorage.getItem('Zoho_ID');
+            if (localStorage.getItem('user_type') == 0) {
+                Zoho_ID = 0;
+            }
+            axios.post(main.Api_Url, {
+                api_name: "GetPricingTasks",
+                Zoho_ID: Zoho_ID,
+            }).then(function (res) {
+                let Final_array = res.data;
+                main.Selections[0]['Index'] = Final_array.length;
+                // console.log(Final_array);
+                // main.$store.state['Price_Tasks'] = Final_array;
+                // main.$store.state['LoaderIndex'] = 0;
             });
         },
         GetOpenProjects() {
             let main = this;
             main.$store.state['LoaderIndex'] = 1;
+            function GetDoneTasks(Task) {
+                if (Task['Task_Done'] == 1) {
+                    return Task;
+                }
+            }
+            function GetOpenTasks(Task) {
+                if (Task['Task_Done'] == 0) {
+                    return Task;
+                }
+            }
+
+
             let Zoho_ID = localStorage.getItem('Zoho_ID');
             if (localStorage.getItem('user_type') == 0) {
                 Zoho_ID = 0;
             }
-            main.$store.state['LoaderIndex'] = 1;
             axios.post(main.Api_Url, {
                 api_name: "GetOpenProjects",
                 Zoho_ID: Zoho_ID,
 
             }).then(function (res) {
                 let Final_array = res.data;
-                function GetDoneTasks(Task) {
-                    if (Task['Task_Done'] == 1) {
-                        return Task;
-                    }
+                let OpenTasks = [];
+                let DoneTasks = [];
+                if (Final_array.length > 0) {
+                    OpenTasks = Final_array.filter(GetOpenTasks);
+                    DoneTasks = Final_array.filter(GetDoneTasks);
                 }
-                function GetOpenTasks(Task) {
-                    if (Task['Task_Done'] == 0) {
-                        return Task;
-                    }
-                }
-                main.$store.state['Production_Tasks'] = Final_array.filter(GetOpenTasks);
-                main.$store.state['DoneTasks'] = Final_array.filter(GetDoneTasks);
-                main.Selections[1]['Index'] = Final_array.filter(GetOpenTasks).length;
-                main.Selections[2]['Index'] = Final_array.filter(GetDoneTasks).length;
+                main.Selections[1]['Index'] = OpenTasks.length;
+                main.Selections[2]['Index'] = DoneTasks.length;
+                main.$store.state['Production_Tasks'] = OpenTasks;
+                main.$store.state['DoneTasks'] = DoneTasks;
                 main.$store.state['LoaderIndex'] = 0;
             });
         },
+        GetOpenProjectsIndex() {
+            function GetDoneTasks(Task) {
+                if (Task['Task_Done'] == 1) {
+                    return Task;
+                }
+            }
+            function GetOpenTasks(Task) {
+                if (Task['Task_Done'] == 0) {
+                    return Task;
+                }
+            }
+
+            let main = this;
+            let Zoho_ID = localStorage.getItem('Zoho_ID');
+            if (localStorage.getItem('user_type') == 0) {
+                Zoho_ID = 0;
+            }
+            axios.post(main.Api_Url, {
+                api_name: "GetOpenProjects",
+                Zoho_ID: Zoho_ID,
+
+            }).then(function (res) {
+                let Final_array = res.data;
+                let OpenTasks = [];
+                let DoneTasks = [];
+                if (Final_array.length > 0) {
+                    OpenTasks = Final_array.filter(GetOpenTasks);
+                    DoneTasks = Final_array.filter(GetDoneTasks);
+                }
+                main.Selections[1]['Index'] = OpenTasks.length;
+                main.Selections[2]['Index'] = DoneTasks.length;
+            });
+        },
+
+
         GetDeliveryTasks() {
             let main = this;
             main.$store.state['LoaderIndex'] = 1;
+            function GetOpenTasks(Task) {
+                if (Task['Task_Done'] == 0) {
+                    return Task;
+                }
+            }
+            function GetDoneTasks(Task) {
+                if (Task['Task_Done'] == 1) {
+                    return Task;
+                }
+            }
             axios.post(main.Api_Url, {
                 api_name: "GetDeliveryTasks"
             }).then(function (res) {
                 let Final_array = res.data['data'];
-                function GetOpenTasks(Task) {
-                    if (Task['Task_Done'] == 0) {
-                        return Task;
-                    }
+                let OpenTasks = [];
+                let DoneTasks = [];
+                if (Final_array.length > 0) {
+                    OpenTasks = Final_array.filter(GetOpenTasks);
+                    DoneTasks = Final_array.filter(GetDoneTasks);
                 }
-                function GetDoneTasks(Task) {
-                    if (Task['Task_Done'] == 1) {
-                        return Task;
-                    }
-                }
+                main.Selections[4]['Index'] = OpenTasks.length;
+                main.Selections[5]['Index'] = DoneTasks.length;
+                main.$store.state['OpenDelivery'] = OpenTasks;
+                main.$store.state['DoneDelivery'] = DoneTasks;
                 main.$store.state['LoaderIndex'] = 0;
-                main.$store.state['OpenDelivery'] = Final_array.filter(GetOpenTasks);
-                main.$store.state['DoneDelivery'] = Final_array.filter(GetDoneTasks);
-                main.Selections[4]['Index'] = Final_array.filter(GetOpenTasks).length;
-                main.Selections[5]['Index'] = Final_array.filter(GetDoneTasks).length;
             });
         },
+        GetDeliveryTasksIndex() {
+            let main = this;
+            function GetOpenTasks(Task) {
+                if (Task['Task_Done'] == "0") {
+                    return Task;
+                }
+            }
+            function GetDoneTasks(Task) {
+                if (Task['Task_Done'] == "1") {
+                    return Task;
+                }
+            }
+
+            axios.post(main.Api_Url, {
+                api_name: "GetDeliveryTasks"
+            }).then(function (res) {
+                let Final_array = res.data['data'];
+                let OpenTasks = [];
+                let DoneTasks = [];
+                if (Final_array.length > 0) {
+                    OpenTasks = Final_array.filter(GetOpenTasks);
+                    DoneTasks = Final_array.filter(GetDoneTasks);
+                }
+                main.Selections[4]['Index'] = OpenTasks.length;
+                main.Selections[5]['Index'] = DoneTasks.length;
+            });
+        },
+
         LogOut() {
             localStorage.clear();
             this.$router.push({ name: 'login' });
@@ -226,9 +323,9 @@ export default {
 
     },
     computed: {
-        TheTabs() {
-            return this.Selections.filter(this.AvialbleTabs);
-        }
+        // TheTabs() {
+        //     return this.Selections.filter(this.AvialbleTabs);
+        // }
     },
 }
 </script>
@@ -241,8 +338,18 @@ export default {
     overflow: auto;
 
     @media screen and (max-width: 767px) {
+        height: 100vh;
         width: 100%;
-        height: auto !important;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-content: center;
+        justify-content: flex-start;
+        align-items: center;
+        position: fixed;
+        padding: 1rem;
+        top: 0;
+        left: 0;
     }
 
     #MenuSelections {
@@ -253,13 +360,14 @@ export default {
         align-items: flex-start;
 
         @media screen and (max-width: 767px) {
-            flex-wrap: wrap;
-            flex-direction: row;
-            align-content: flex-start;
-            justify-content: space-evenly;
+            flex-wrap: nowrap;
+            flex-direction: column;
+            justify-content: flex-start;
             padding: 0.5rem;
             padding-bottom: 1.4rem;
             padding-top: 0;
+            display: flex;
+            align-items: center;
         }
 
         li {
@@ -279,7 +387,7 @@ export default {
                 justify-content: flex-start;
                 flex-direction: column;
                 padding: 0;
-                padding-top: 1.4rem;
+                padding-top: 4.4rem;
             }
 
             svg {
@@ -296,7 +404,7 @@ export default {
                 transition: all ease 300ms;
 
                 @media screen and (max-width: 767px) {
-                    font-size: 1.165rem;
+                    font-size: 1.5rem;
                     padding-top: 0.25rem;
                 }
             }
@@ -321,9 +429,29 @@ export default {
     }
 }
 
+#Upper_Bar {
+    background: #1e4a84;
+    padding: 1rem;
+
+    #TheSliderIcon {
+        color: white;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-content: center;
+        justify-content: flex-start;
+        align-items: center;
+
+        p {
+            font-size: 1.2rem;
+            padding: 0 1rem;
+        }
+    }
+}
+
 .fade-enter-active,
 .fade-leave-active {
-    transition: width 350ms ease;
+    transition: width 500ms ease;
 }
 
 .fade-enter-from,

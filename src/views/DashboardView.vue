@@ -2,6 +2,9 @@
     <div class="col-12" id="DashboardView">
         <div class="col-12 Filter">
             <img src="@/assets/TheLogo.png">
+            <div class="col-12">
+
+            </div>
         </div>
     </div>
 </template>
