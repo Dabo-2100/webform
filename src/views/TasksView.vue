@@ -75,7 +75,7 @@
         </div>
         <div id="ManualPrice" v-if="this.Manual_Price_PopUp == 1"
             @click="this.Manual_Price_PopUp = 0; this.PricingWay = 0;">
-            <div class="col-11 col-md-9 col-lg-6" @click=" $event.stopPropagation()" id="TheBox">
+            <div class="col-11 col-md-9 col-lg-6" @click=" $event.stopPropagation() " id="TheBox">
                 <h1 class="col-12">تسعير المنتج يدوياً</h1>
 
                 <table class="col-12 table table-bordered">
@@ -87,7 +87,7 @@
                         <tr>
                             <th>تفاصيل المهمة</th>
                             <td>
-                                <pre>{{ this.$store.state['Price_Tasks'][Open_Task_Index]['Requirement_Details'] }}</pre>
+                                <p>{{ this.$store.state['Price_Tasks'][Open_Task_Index]['Requirement_Details'] }}</p>
                             </td>
                         </tr>
                         <tr>
@@ -100,12 +100,12 @@
                         </tr>
                         <tr>
                             <th>السعر للقطعة الواحدة</th>
-                            <td><input type="number" v-model="this.FinalManualPrice" placeholder="ادخل سعر القطعة"></td>
+                            <td><input type="number" v-model=" this.FinalManualPrice " placeholder="ادخل سعر القطعة"></td>
                         </tr>
                     </tbody>
                 </table>
 
-                <button class="btn btn-success" @click=" UpdatePriceManual(this.Open_Task, this.FinalManualPrice)">سجل
+                <button class="btn btn-success" @click=" UpdatePriceManual(this.Open_Task, this.FinalManualPrice) ">سجل
                     السعر</button>
             </div>
 
@@ -158,33 +158,38 @@ export default {
         },
         UpdatePriceManual(Price_Task_ID, Final_Unit_Price) {
             let main = this;
-            this.$swal.fire({
-                title: 'هل تريد ارسال السعر للقطعة الواحدة = ' + Final_Unit_Price + " جنيه مصري",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'انهاء',
-                cancelButtonText: 'ليس الأن'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    main.$store.state['LoaderIndex'] = 1;
-                    axios.post(main.Api_Url, {
-                        api_name: "SendDataToZoho",
-                        Task_ID: Price_Task_ID,
-                        ThePrice: Final_Unit_Price,
-                    }).then(function (res) {
+            if (Final_Unit_Price == '' || Final_Unit_Price == 0) {
+                alert('من فضلك ادخل السعر اولاً');
+            } else {
+                this.$swal.fire({
+                    title: 'هل تريد ارسال السعر للقطعة الواحدة = ' + Final_Unit_Price + " جنيه مصري",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ارسال',
+                    cancelButtonText: 'ليس الأن'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        main.$store.state['LoaderIndex'] = 1;
+                        axios.post(main.Api_Url, {
+                            api_name: "SendDataToZoho",
+                            Task_ID: Price_Task_ID,
+                            ThePrice: Final_Unit_Price,
+                        }).then(function (res) {
+                            main.$store.state['LoaderIndex'] = 0;
+                            main.$swal.fire(
+                                'تم انهاء المهمة بنجاح',
+                            )
+                            location.reload();
+                        });
+                    }
+                    else {
                         main.$store.state['LoaderIndex'] = 0;
-                        main.$swal.fire(
-                            'تم انهاء المهمة بنجاح',
-                        )
-                        location.reload();
-                    });
-                }
-                else {
-                    main.$store.state['LoaderIndex'] = 0;
-                }
-            })
+                    }
+                })
+
+            }
         }
     },
     watch: {
@@ -238,23 +243,18 @@ export default {
     }
 
     table {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         text-align: center;
         vertical-align: middle;
 
-        pre {
-            margin: 0;
-            padding: 0;
-            font-size: 1.2rem;
-        }
-
         th,
         td {
-            padding: 0 1.5rem;
+            padding: 1.2rem 0.5rem;
+
         }
 
         select {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
         }
     }
 
@@ -285,6 +285,11 @@ export default {
         font-size: 1.2rem;
         margin-bottom: 1rem !important;
     }
+
+    button {
+        font-size: 1.2rem;
+        padding: 0.5rem;
+    }
 }
 
 .Task_Card {
@@ -296,4 +301,5 @@ export default {
     align-items: center;
     background-color: white;
     margin-bottom: 1rem;
-}</style>
+}
+</style>

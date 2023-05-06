@@ -6,13 +6,14 @@
         </div>
         <div class="col-12" v-else>
             <h1 class="col-12 TabHeader">المشاريع المفتوحة</h1>
-            <div class="col-12 Task_Card" v-for="Task, index in       this.$store.state['Production_Tasks']      "
+            <div class="col-12 Task_Card"
+                v-for="Task, index in                         this.$store.state['Production_Tasks']                        "
                 :key="Task">
                 <table class="col-12 table table-bordered">
                     <tbody>
                         <tr>
-                            <th>اسم المهمة</th>
-                            <td>{{ Task['Task_Name'] }}</td>
+                            <th class="col-5">اسم المهمة</th>
+                            <td class="col-7">{{ Task['Task_Name'] }}</td>
                         </tr>
                         <tr>
                             <th>تفاصيل المهمة</th>
@@ -42,50 +43,52 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>انهاء المهمة </th>
-                            <td>
-                                <button class="btn btn-danger" @click="this.EndTask(Task['Task_ID'])">انهاء المهمة</button>
+                            <td colspan="2">
+                                <button class="btn btn-info"
+                                    @click="this.AddExpenseIndex = 1; this.GetTaskExpenses(Task['Task_ID'])"> اضافة
+                                    مصروف</button>
                             </td>
                         </tr>
                         <tr>
-                            <th>اضافة مصروف</th>
-                            <td>
-                                <button class="btn btn-info"
-                                    @click="this.AddExpenseIndex = 1; this.GetTaskExpenses(Task['Task_ID'])">اضافة</button>
+                            <td colspan="2">
+                                <button class="btn btn-danger" @click=" this.EndTask(Task['Task_ID']) ">انهاء
+                                    المهمة</button>
                             </td>
                         </tr>
+
 
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div class="col-12" id="PopupPage" v-if="this.AddExpenseIndex == 1" @click=" this.AddExpenseIndex = 0">
-            <div class="col-11 col-sm-10 col-md-8 col-lg-6" id="ExpenseBox" @click=" $event.stopPropagation();">
+        <div class="col-12" id="PopupPage" v-if=" this.AddExpenseIndex == 1 " @click=" this.AddExpenseIndex = 0 ">
+            <div class="col-11 col-sm-10 col-md-8 col-lg-6" id="ExpenseBox" @click=" $event.stopPropagation(); ">
                 <font-awesome-icon class="CloseSign" icon="fa-solid fa-x" id="CloseForm"
-                    @click=" this.AddExpenseIndex = 0" />
+                    @click=" this.AddExpenseIndex = 0 " />
                 <div class="col-12" id="AddNewExpense">
                     <h1 class="col-12 Header">اضافة مصروف جديد</h1>
                     <table class="col-12 table table-bordered">
                         <thead>
                             <tr>
-                                <th>اسم المصروف</th>
-                                <th>المبلغ</th>
+                                <th class="col-5">المبلغ</th>
+                                <th class="col-7">اسم المصروف</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><input class="col-12" v-model="this.NewExpense['Name']" type="text"></td>
-                                <td><input class="col-12" v-model="this.NewExpense['Value']" type="number"></td>
+                                <td><input class="col-12" v-model=" this.NewExpense['Value'] " type="number"></td>
+                                <td><input class="col-12" v-model=" this.NewExpense['Name'] " type="text"
+                                        placeholder="--------"></td>
                             </tr>
                         </tbody>
                     </table>
                     <button class="btn btn-success"
-                        v-if="(this.NewExpense['Name'] != '') && (this.NewExpense['Value'] != 0)"
-                        @click=" this.AddNewExpense()">اضف المصروف</button>
+                        v-if=" (this.NewExpense['Name'] != '') && (this.NewExpense['Value'] != 0) "
+                        @click=" this.AddNewExpense() ">اضف المصروف</button>
                 </div>
                 <hr class="col-12">
-                <div class="col-12" id="LastExpenses" v-if="this.TaskExpenses.length > 0">``
+                <div class="col-12" id="LastExpenses" v-if=" this.TaskExpenses.length > 0 ">``
                     <h1 class="col-12 Header">المصروفات السابقة</h1>
                     <table class="col-12 table table-bordered table-hover">
                         <thead>
@@ -97,14 +100,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="                                                  Expense, index                                                   in                                                   this.TaskExpenses                                                  "
-                                :key="Expense">
+                            <tr v-for="                                                                    Expense, index                                                                     in                                                                     this.TaskExpenses                                                                    "
+                                :key=" Expense ">
                                 <td>{{ Expense['Expense_Name'] }}</td>
                                 <td><b>{{ Expense['Expense_Value'] }}</b></td>
                                 <td>{{ Expense['Last_Update'].indexOf('T') != -1 ? Expense['Last_Update'].split('T')[0] :
                                     'اليوم' }}
                                 </td>
-                                <td><button class="btn btn-danger" @click=" this.DeleteExpense(index)">حذف</button></td>
+                                <td><button class="btn btn-danger" @click=" this.DeleteExpense(index) ">حذف</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -236,7 +239,7 @@ export default {
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'انهاء',
+                confirmButtonText: 'حذف',
                 cancelButtonText: 'ليس الأن'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -331,6 +334,7 @@ export default {
         h1 {
             font-size: 2rem;
             text-align: center;
+
         }
 
         img {
@@ -344,23 +348,31 @@ export default {
         padding: 1rem;
     }
 
+    button {
+        width: 100%;
+        font-size: 1.3rem;
+        padding: 1rem;
+    }
+
     table {
         text-align: center;
         vertical-align: middle;
         margin: 0;
+        font-size: 1.3rem;
 
-        pre {
-            margin: 0;
-            padding: 0;
+        th,
+        td {
+            padding: 1.2rem 0.5rem;
         }
 
         select {
-            width: 80%;
+            width: 100%;
+            font-size: 1.3rem;
             padding: 0.4rem;
         }
 
-        button {
-            width: 80%;
+        input {
+            padding: 0.5rem;
         }
     }
 

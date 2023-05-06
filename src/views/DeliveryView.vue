@@ -6,7 +6,7 @@
         </div>
         <div class="col-12" v-else>
             <h1 class="col-12 TabHeader">مشاوير التوصيل المطلوبة</h1>
-            <div class="col-12 Task_Card" v-for="Task in this.$store.state['OpenDelivery'] " :key="Task">
+            <div class="col-12 Task_Card" v-for="Task in   this.$store.state['OpenDelivery']   " :key="Task">
                 <h1 class="col-12">معلومات الأستلام</h1>
                 <table class="col-12 table table-bordered">
                     <tbody>
@@ -68,7 +68,7 @@
                                     مصروف</button>
                             </td>
                             <td>
-                                <button class="btn btn-danger" @click=" this.EndTask(Task['id'])">تم
+                                <button class="btn btn-danger" @click=" this.EndTask(Task['id']) ">تم
                                     التوصيل</button>
                             </td>
                         </tr>
@@ -77,32 +77,32 @@
             </div>
         </div>
 
-        <div class="col-12" id="PopupPage" v-if="this.AddExpenseIndex == 1" @click=" this.AddExpenseIndex = 0">
-            <div class="col-11 col-sm-10 col-md-8 col-lg-6" id="ExpenseBox" @click=" $event.stopPropagation();">
+        <div class="col-12" id="PopupPage" v-if=" this.AddExpenseIndex == 1 " @click=" this.AddExpenseIndex = 0 ">
+            <div class="col-11 col-sm-10 col-md-8 col-lg-6" id="ExpenseBox" @click=" $event.stopPropagation(); ">
                 <font-awesome-icon class="CloseSign" icon="fa-solid fa-x" id="CloseForm"
-                    @click=" this.AddExpenseIndex = 0" />
+                    @click=" this.AddExpenseIndex = 0 " />
                 <div class="col-12" id="AddNewExpense">
                     <h1 class="col-12 Header">اضافة مصروف جديد</h1>
                     <table class="col-12 table table-bordered">
                         <thead>
                             <tr>
-                                <th>اسم المصروف</th>
-                                <th>المبلغ</th>
+                                <th class="col-5">المبلغ</th>
+                                <th class="col-7">اسم المصروف</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><input class="col-12" v-model="this.NewExpense['Name']" type="text"></td>
-                                <td><input class="col-12" v-model="this.NewExpense['Value']" type="number"></td>
+                                <td><input class="col-12" v-model=" this.NewExpense['Value'] " type="number"></td>
+                                <td><input class="col-12" v-model=" this.NewExpense['Name'] " type="text"></td>
                             </tr>
                         </tbody>
                     </table>
                     <button class="btn btn-success"
-                        v-if="(this.NewExpense['Name'] != '') && (this.NewExpense['Value'] != 0)"
-                        @click=" this.AddNewExpense()">اضف المصروف</button>
+                        v-if=" (this.NewExpense['Name'] != '') && (this.NewExpense['Value'] != 0) "
+                        @click=" this.AddNewExpense() ">اضف المصروف</button>
                 </div>
                 <hr class="col-12">
-                <div class="col-12" id="LastExpenses" v-if="this.TaskExpenses.length > 0">``
+                <div class="col-12" id="LastExpenses" v-if=" this.TaskExpenses.length > 0 ">``
                     <h1 class="col-12 Header">المصروفات السابقة</h1>
                     <table class="col-12 table table-bordered table-hover">
                         <thead>
@@ -114,14 +114,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="                                                     Expense, index                                                      in                                                      this.TaskExpenses                                                     "
-                                :key="Expense">
+                            <tr v-for="                                                       Expense, index                                                        in                                                        this.TaskExpenses                                                       "
+                                :key=" Expense ">
                                 <td>{{ Expense['Expense_Name'] }}</td>
                                 <td><b>{{ Expense['Expense_Value'] }}</b></td>
                                 <td>{{ Expense['Last_Update'].indexOf('T') != -1 ? Expense['Last_Update'].split('T')[0] :
                                     'اليوم' }}
                                 </td>
-                                <td><button class="btn btn-danger" @click=" this.DeleteExpense(index)">حذف</button></td>
+                                <td><button class="btn btn-danger" @click=" this.DeleteExpense(index) ">حذف</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -257,7 +257,7 @@ export default {
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'انهاء',
+                confirmButtonText: 'حذف',
                 cancelButtonText: 'ليس الأن'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -363,13 +363,31 @@ export default {
         padding: 1rem;
     }
 
+    button {
+        width: 100%;
+        font-size: 1.3rem;
+        padding: 1rem;
+    }
+
     table {
         text-align: center;
         vertical-align: middle;
+        margin: 0;
+        font-size: 1.2rem;
 
-        pre {
-            margin: 0;
-            padding: 0;
+        th,
+        td {
+            padding: 1.2rem 0.5rem;
+        }
+
+        select {
+            width: 100%;
+            font-size: 1.2rem;
+            padding: 0.4rem;
+        }
+
+        input {
+            padding: 0.5rem;
         }
     }
 

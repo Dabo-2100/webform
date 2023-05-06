@@ -19,7 +19,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="Task, index in    this.$store.state['DoneTasks']   " :key="Task">
+                    <tr v-for="Task, index in       this.$store.state['DoneTasks']      " :key="Task">
                         <td>{{ index + 1 }}</td>
                         <td>{{ Task['Task_Name'] }}</td>
                         <!-- <td>
@@ -53,14 +53,14 @@
                     <table class="col-12 table table-bordered">
                         <thead>
                             <tr>
-                                <th>اسم المصروف</th>
-                                <th>المبلغ</th>
+                                <th class="col-5">المبلغ</th>
+                                <th class="col-7">اسم المصروف</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><input class="col-12" v-model=" this.NewExpense['Name'] " type="text"></td>
                                 <td><input class="col-12" v-model=" this.NewExpense['Value'] " type="number"></td>
+                                <td><input class="col-12" v-model=" this.NewExpense['Name'] " type="text"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -81,7 +81,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="   Expense, index    in    this.TaskExpenses   " :key=" Expense ">
+                            <tr v-for="      Expense, index       in       this.TaskExpenses      " :key=" Expense ">
                                 <td>{{ Expense['Expense_Name'] }}</td>
                                 <td><b>{{ Expense['Expense_Value'] }}</b></td>
                                 <td>{{ Expense['Last_Update'].indexOf('T') != -1 ? Expense['Last_Update'].split('T')[0] :
@@ -217,7 +217,7 @@ export default {
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'انهاء',
+                confirmButtonText: 'حذف',
                 cancelButtonText: 'ليس الأن'
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -323,13 +323,33 @@ export default {
         padding: 1rem;
     }
 
+    button {
+        width: 100%;
+        font-size: 1.3rem;
+        padding: 1rem;
+    }
+
     table {
         text-align: center;
         vertical-align: middle;
+        text-align: center;
+        vertical-align: middle;
+        margin: 0;
+        font-size: 1.3rem;
 
-        pre {
-            margin: 0;
-            padding: 0;
+        th,
+        td {
+            padding: 1.2rem 0.5rem;
+        }
+
+        select {
+            width: 100%;
+            font-size: 1.3rem;
+            padding: 0.4rem;
+        }
+
+        input {
+            padding: 0.5rem;
         }
     }
 }
