@@ -11,43 +11,28 @@
                     <tr>
                         <th>-</th>
                         <th>اسم المهمة</th>
-                        <!-- <th>تفاصيل المهمة</th> -->
-                        <!-- <th>تاريخ بداية المهمة</th> -->
                         <th>تاريخ التسليم</th>
-                        <!-- <th>المرحلة الحالية</th> -->
-                        <th>أضافة مصروف</th>
+                        <th>المصروفات</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="Task, index in       this.$store.state['DoneTasks']      " :key="Task">
                         <td>{{ index + 1 }}</td>
                         <td>{{ Task['Task_Name'] }}</td>
-                        <!-- <td>
-                            <pre>{{
-                                Task['Task_Details'] }}</pre>
-                        </td> -->
                         <td>{{ Task['Starting_Date'] }}</td>
-                        <!-- <td>{{ Task['Deadline_Date'] }}</td> -->
-                        <!-- <td>
-                            <select :value="Task['Task_Stage_ID']" disabled
-                                @change="this.UpdateTaskStage($event, Task['Task_ID'], index)">
-                                <option :value="Stage['Stage_ID']" v-for="Stage in Task['TaskStages']" :key="Stage">{{
-                                    Stage['Arabic_Name'] }}</option>
-                            </select>
-                        </td> -->
                         <td>
                             <button class="btn btn-info"
-                                @click="this.AddExpenseIndex = 1; this.GetTaskExpenses(Task['Task_ID'])">اضافة</button>
+                                @click="this.AddExpenseIndex = 1; this.GetTaskExpenses(Task['Task_ID'])">عرض</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <div class="col-12" id="PopupPage" v-if=" this.AddExpenseIndex == 1 " @click=" this.AddExpenseIndex = 0 ">
-            <div class="col-11 col-sm-10 col-md-8 col-lg-6" id="ExpenseBox" @click=" $event.stopPropagation(); ">
+        <div class="col-12" id="PopupPage" v-if="this.AddExpenseIndex == 1" @click=" this.AddExpenseIndex = 0">
+            <div class="col-11 col-sm-10 col-md-8 col-lg-6" id="ExpenseBox" @click=" $event.stopPropagation();">
                 <font-awesome-icon class="CloseSign" icon="fa-solid fa-x" id="CloseForm"
-                    @click=" this.AddExpenseIndex = 0 " />
+                    @click=" this.AddExpenseIndex = 0" />
                 <div class="col-12" id="AddNewExpense">
                     <h1 class="col-12 Header">اضافة مصروف جديد</h1>
                     <table class="col-12 table table-bordered">
@@ -59,19 +44,21 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td><input class="col-12" v-model=" this.NewExpense['Value'] " type="number"></td>
-                                <td><input class="col-12" v-model=" this.NewExpense['Name'] " type="text"></td>
+                                <td><input class="col-12" v-model="this.NewExpense['Value']" type="number"
+                                        placeholder="المبلغ"></td>
+                                <td><input class="col-12" v-model="this.NewExpense['Name']" type="text"
+                                        placeholder="المصروف"></td>
                             </tr>
                         </tbody>
                     </table>
                     <button class="btn btn-success"
-                        v-if=" (this.NewExpense['Name'] != '') && (this.NewExpense['Value'] != 0) "
-                        @click=" this.AddNewExpense() ">اضف المصروف</button>
+                        v-if="(this.NewExpense['Name'] != '') && (this.NewExpense['Name'] != null) && (this.NewExpense['Value'] != null) && (this.NewExpense['Value'] != 0)"
+                        @click=" this.AddNewExpense()">اضف المصروف</button>
                 </div>
                 <hr class="col-12">
-                <div class="col-12" id="LastExpenses" v-if=" this.TaskExpenses.length > 0 ">
+                <div class="col-12" id="LastExpenses" v-if="this.TaskExpenses.length > 0">
                     <h1 class="col-12 Header">المصروفات السابقة</h1>
-                    <table class="col-12 table table-bordered table-hover" v-if=" this.TaskExpenses.length > 0 ">
+                    <table class="col-12 table table-bordered table-hover" v-if="this.TaskExpenses.length > 0">
                         <thead>
                             <tr>
                                 <th>المصروف</th>
@@ -81,13 +68,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="      Expense, index       in       this.TaskExpenses      " :key=" Expense ">
+                            <tr v-for="      Expense, index       in       this.TaskExpenses      " :key="Expense">
                                 <td>{{ Expense['Expense_Name'] }}</td>
                                 <td><b>{{ Expense['Expense_Value'] }}</b></td>
                                 <td>{{ Expense['Last_Update'].indexOf('T') != -1 ? Expense['Last_Update'].split('T')[0] :
                                     'اليوم' }}
                                 </td>
-                                <td><button class="btn btn-danger" @click=" this.DeleteExpense(index) ">حذف</button></td>
+                                <td><button class="btn btn-danger" @click=" this.DeleteExpense(index)">حذف</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -108,8 +95,8 @@ export default {
             Api_Url: this.$store.state['Api_Url'],
             AddExpenseIndex: 0,
             NewExpense: {
-                Name: "",
-                Value: 0,
+                Name: null,
+                Value: null,
             },
             TaskExpenses: [],
             OpenTask: 0,
@@ -167,17 +154,19 @@ export default {
         },
         GetTaskExpenses(Task_ID) {
             let main = this;
-            main.$store.state['LoaderIndex'] = 1;
-            axios.post(this.Api_Url, {
-                api_name: "GetTaskExpenses",
-                Task_ID: Task_ID
-            }).then(function (res) {
-                main.OpenTask = Task_ID;
-                if (res.data.length > 0) {
-                    main.TaskExpenses = res.data;
-                }
-                main.$store.state['LoaderIndex'] = 0;
-            });
+            if (main.OpenTask != Task_ID && main.TaskExpenses.length == 0) {
+                main.$store.state['LoaderIndex'] = 1;
+                axios.post(this.Api_Url, {
+                    api_name: "GetTaskExpenses",
+                    Task_ID: Task_ID
+                }).then(function (res) {
+                    main.OpenTask = Task_ID;
+                    if (res.data.length > 0) {
+                        main.TaskExpenses = res.data;
+                    }
+                    main.$store.state['LoaderIndex'] = 0;
+                });
+            }
         },
         AddNewExpense() {
             let main = this;
@@ -196,16 +185,19 @@ export default {
                 Expense_Value: this.NewExpense['Value'],
                 Due_Task_ID: this.OpenTask,
             }).then(function (res) {
-                main.$store.state['LoaderIndex'] = 0;
-                main.$swal.fire({
-                    title: 'تم اضافة المصروف بنجاح',
-                    icon: 'success',
-                });
+                main.NewExpense = {
+                    Name: null,
+                    Value: null,
+                }
+                setTimeout(() => {
+                    main.$store.state['LoaderIndex'] = 0;
+                    main.$swal.fire({
+                        title: 'تم اضافة المصروف بنجاح',
+                        icon: 'success',
+                    });
+                }, 2000);
             });
-            this.NewExpense = {
-                Name: "",
-                Value: 0,
-            }
+
         },
         DeleteExpense(index) {
             let main = this;

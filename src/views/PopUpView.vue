@@ -16,12 +16,12 @@
           <td>{{ SheetSize["height"] }} x {{ SheetSize["width"] }}</td>
           <td>
             <div class="TheSheet" @click="SelectOpti(
-                $event,
-                index,
-                0,
-                Landscape_Copies[index]['TotalCopies'],
-                this.TotalPiecesSize[index]['SheetToPieces']
-              )
+              $event,
+              index,
+              0,
+              Landscape_Copies[index]['TotalCopies'],
+              this.TotalPiecesSize[index]['SheetToPieces']
+            )
               "
               :style="'height : ' + SheetSize['width'] / 10 + 'rem;' + 'width : ' + SheetSize['height'] / 10 + 'rem;'">
               <div class="TheCopy" v-for="Copy in Landscape_Copies[index]['TotalCopies']" :key="Copy" :style="'height : ' +
@@ -46,12 +46,12 @@
 
           <td>
             <div v-if="this.Landscape_Copies[index]" class="TheSheet" @click="SelectOpti(
-                $event,
-                index,
-                0,
-                SheetSize['TotalCopies'],
-                this.TotalPiecesSize[index]['SheetToPieces']
-              )
+              $event,
+              index,
+              0,
+              SheetSize['TotalCopies'],
+              this.TotalPiecesSize[index]['SheetToPieces']
+            )
               " :style="'height : ' +
     SheetSize['width'] / 10 +
     'rem;' +
@@ -295,7 +295,7 @@ export default {
         NumberOfPicesInThousands * faceIndex * ColorIndex * RawTraj
       );
       // if (FinalPrintingPrice != 'Infinity') {
-      //   // console.log(main.PiecesSize);
+      // console.log(main.PiecesSize);
       // }
       let FinalPrice = PaperPrice + FinalCTP + FinalPrintingPrice;
       main.TheCalcResult["PaperPrice"] = PaperPrice;

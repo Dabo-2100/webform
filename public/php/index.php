@@ -93,6 +93,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     $api_name = @$_GET["api_name"];
     echo "Do Not Allow To Be There <br>";
+    // echo get_records("Work_Tasks", 0, $pdo);
+    // echo SearchRecords("Price_Tasks", $code = 0, $pdo, "(Owner.id:equals:" . $Owner_ID . ")")
+    echo SearchRecords("Work_Tasks", $code = 0, $pdo, "id:equals:4432004000009212255");
+    
 }
 
 if ($api_name == "RefreshAccessToken") {
@@ -210,13 +214,13 @@ if ($api_name == "GetPricingTasks") {
 
     if ($response2 != null) {
         foreach ($response2['data'] as $Task) {
-            $Created_Date = $Task['Starting_Date'];
-            $Task_ID = $Task['id'];
-            $Requirement_ID = $Task['What_to_price']['id'];
-            $response = json_decode(SearchRecords("Deal_Requirements", $code = 0, $pdo, "(id:equals:" . $Requirement_ID . ")"), true);
-            $Requirement_Details = $response['data'][0]['Requirement_Details'];
-            $Quantity = $response['data'][0]['Quantity'];
-            $Name = $response['data'][0]['Name'];
+            @$Created_Date = $Task['Starting_Date'];
+            @$Task_ID = $Task['id'];
+            @$Requirement_ID = $Task['What_to_price']['id'];
+            @$response = json_decode(SearchRecords("Deal_Requirements", $code = 0, $pdo, "(id:equals:" . $Requirement_ID . ")"), true);
+            @$Requirement_Details = $response['data'][0]['Requirement_Details'];
+            @$Quantity = $response['data'][0]['Quantity'];
+            @$Name = $response['data'][0]['Name'];
             $data = array(
                 "Requirement_Details" => $Requirement_Details,
                 "Quantity" => $Quantity,
@@ -243,26 +247,26 @@ if ($api_name == "GetOpenProjects") {
 
     if ($response2 != null) {
         foreach ($response2['data'] as $Task) {
-            $Task_ID = $Task['id'];
-            $Task_Name = $Task['Name'];
-            $Task_Done = $Task['Task_Done'];
+            @$Task_ID = $Task['id'];
+            @$Task_Name = $Task['Name'];
+            @$Task_Done = $Task['Task_Done'];
             // $Photo = $Task['Photo'];
-            $Task_Stage_ID = $Task['Task_Stage']['id'];
-            $Task_Stage_Name = $Task['Task_Stage']['name'];
-            $Task_Details = $Task['Task_Details'];
-            $Starting_Date = $Task['Starting_Date'];
-            $Deadline_Date = $Task['Deadline_Date'];
-            $Requirement_ID = $Task['Deal_Requiremenet']['id'];
+            @$Task_Stage_ID = $Task['Task_Stage']['id'];
+            @$Task_Stage_Name = $Task['Task_Stage']['name'];
+            @$Task_Details = $Task['Task_Details'];
+            @$Starting_Date = $Task['Starting_Date'];
+            @$Deadline_Date = $Task['Deadline_Date'];
+            @$Requirement_ID = $Task['Deal_Requiremenet']['id'];
             //Get The Task Stages
-            $Task_Type = $Task['Task_Type'];
-            $response2 = json_decode(SearchRecords("Task_Stages", $code = 0, $pdo, "(Project_Type:equals:" . $Task_Type . ")"), true);
-            $All_Stages = [];
+            @$Task_Type = $Task['Task_Type'];
+            @$response2 = json_decode(SearchRecords("Task_Stages", $code = 0, $pdo, "(Project_Type:equals:" . $Task_Type . ")"), true);
+            @$All_Stages = [];
             if ($response2 != null) {
                 foreach ($response2['data'] as $Stage) {
-                    $Stage_ID = $Stage['id'];
-                    $Stage_Name = $Stage['Name'];
-                    $Arabic_Name = $Stage['Arabic_Name'];
-                    $Stage_Order = $Stage['Stage_Order'];
+                    @$Stage_ID = $Stage['id'];
+                    @$Stage_Name = $Stage['Name'];
+                    @$Arabic_Name = $Stage['Arabic_Name'];
+                    @$Stage_Order = $Stage['Stage_Order'];
                     $data = array(
                         "Stage_ID" => $Stage_ID,
                         "Stage_Name" => $Stage_Name,
@@ -304,15 +308,15 @@ if ($api_name == "GetTaskExpenses") {
     $AllExpenses = [];
     if ($res != null) {
         foreach ($res['data'] as $Expense) {
-            $Expense_ID = $Expense['id'];
-            $Expense_Name = $Expense['Name'];
-            $Expense_Value = $Expense['Expense_Value'];
+            @$Expense_ID = $Expense['id'];
+            @$Expense_Name = $Expense['Name'];
+            @$Expense_Value = $Expense['Expense_Value'];
             if ($Task_Type == null) {
-                $Due_Task_ID = $Expense['Due_Task']['id'];
+                @$Due_Task_ID = $Expense['Due_Task']['id'];
             } else {
-                $Due_Task_ID = $Expense['Operation_Task']['id'];
+                @$Due_Task_ID = $Expense['Operation_Task']['id'];
             }
-            $Last_Update = $Expense['Modified_Time'];
+            @$Last_Update = $Expense['Modified_Time'];
             $data = array(
                 "Expense_ID" => $Expense_ID,
                 "Expense_Name" => $Expense_Name,

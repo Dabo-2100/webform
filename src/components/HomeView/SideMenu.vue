@@ -84,11 +84,11 @@ export default {
         return {
             Api_Url: this.$store.state['Api_Url'],
             Selections: [
-                { name: "Pricing Tasks", Icon: "fa-solid fa-money-check-dollar", ArabicName: "مهام التسعير", Index: 0, TabView: "TasksView", User_Type: [0, 1] },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-box-open", ArabicName: "مهام التصنيع", Index: 0, TabView: "ProductionView", User_Type: [0, 1] },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "المهام المنتهية", Index: 0, TabView: "DoneView", User_Type: [0, 1] },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-money-check-dollar", ArabicName: "طلبات التسعير", Index: 0, TabView: "TasksView", User_Type: [0, 1] },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-box-open", ArabicName: "طلبات التصنيع", Index: 0, TabView: "ProductionView", User_Type: [0, 1] },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "الطلبات المنتهية", Index: 0, TabView: "DoneView", User_Type: [0, 1] },
                 { name: "Pricing Tasks", Icon: "fa-solid fa-dollar-sign", ArabicName: "اسعار الخامات", Index: false, TabView: "MaterialView", User_Type: [0, 1] },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "مهام التوصيل", Index: false, TabView: "DeliveryView", User_Type: [0, 2] },
+                { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "طلبات التوصيل", Index: false, TabView: "DeliveryView", User_Type: [0, 2] },
                 { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "المشاوير المنتهية", Index: false, TabView: "DoneDeliveryView", User_Type: [0, 2] },
                 { name: "Pricing Tasks", Icon: "fa-solid fa-power-off", ArabicName: "تسجيل الخروج", Index: false, TabView: false, User_Type: [0, 1, 2] },
             ],
@@ -263,7 +263,7 @@ export default {
             let main = this;
             main.$store.state['LoaderIndex'] = 1;
             function GetOpenTasks(Task) {
-                if (Task['Task_Done'] == 0) {
+                if (Task['Task_Done'] == 0 && Task['PickUp_Location'] != null) {
                     return Task;
                 }
             }
@@ -292,7 +292,7 @@ export default {
         GetDeliveryTasksIndex() {
             let main = this;
             function GetOpenTasks(Task) {
-                if (Task['Task_Done'] == "0") {
+                if (Task['Task_Done'] == "0" && Task['PickUp_Location'] != null) {
                     return Task;
                 }
             }
@@ -306,6 +306,7 @@ export default {
                 api_name: "GetDeliveryTasks"
             }).then(function (res) {
                 let Final_array = res.data['data'];
+                // console.log(Final_array);
                 let OpenTasks = [];
                 let DoneTasks = [];
                 if (Final_array != null) {
@@ -339,7 +340,7 @@ export default {
 #SideMenu {
     display: flex;
     background: #131d26;
-    height: 100vh;
+    min-height: 100vh;
     overflow: auto;
 
     @media screen and (max-width: 767px) {

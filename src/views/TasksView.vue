@@ -5,36 +5,42 @@
             <h1>لا يوجد مهمات تسعير جديدة</h1>
         </div>
         <div class="col-12 TasksDiv" v-else>
-            <h1 class="col-12 TabHeader">مهام التسعير</h1>
+            <h1 class="col-12 TabHeader" style="font-size : 1.5rem; font-weight : 700; text-align : center;">طلبات التسعير
+            </h1>
             <div class="col-12 Task_Card" v-for="PriceTask, index in      this.$store.state['Price_Tasks']     "
                 :key="PriceTask">
                 <table class="col-12 table table-bordered">
                     <tbody>
                         <tr>
-                            <th>اسم المهمة</th>
+                            <th>اسم الطلب</th>
                             <td>{{ PriceTask['Name'] }}</td>
                         </tr>
                         <tr>
-                            <th>تفاصيل المهمة</th>
+                            <th>تفاصيل الطلب</th>
                             <td>
-                                <p>{{
-                                    PriceTask['Requirement_Details'] }}
-                                </p>
+                                {{ PriceTask['Requirement_Details'] }}
                             </td>
                         </tr>
                         <tr>
-                            <th>تاريخ التسليم</th>
+                            <th>تاريخ الطلب</th>
                             <td>{{ PriceTask['Created_Date'] }}</td>
                         </tr>
                         <tr>
-                            <th>طريقة التسعير </th>
-                            <td>
-                                <select class="form-select" v-model="this.PricingWay"
+                            <th>عدد القطع</th>
+                            <td>{{ PriceTask['Quantity'] }}</td>
+                        </tr>
+                        <tr>
+                            <!-- <th>طريقة التسعير </th> -->
+                            <td colspan="2">
+                                <button class="btn btn-primary col-12"
+                                    @click="this.SelectPricingWay(PriceTask['Task_ID'], index); this.PricingWay = 1;">تسعير
+                                    الطلب</button>
+                                <!-- <select class="form-select" v-model="this.PricingWay"
                                     @change="this.SelectPricingWay(PriceTask['Task_ID'], index)">
                                     <option value="0" hidden disabled>اختار الطريقة</option>
                                     <option value="1">يدوي</option>
-                                    <!-- <option value="2">اوتوماتيك</option> -->
-                                </select>
+                                    <option value="2">اوتوماتيك</option>
+                                </select> -->
                             </td>
                         </tr>
                     </tbody>
@@ -75,37 +81,35 @@
         </div>
         <div id="ManualPrice" v-if="this.Manual_Price_PopUp == 1"
             @click="this.Manual_Price_PopUp = 0; this.PricingWay = 0;">
-            <div class="col-11 col-md-9 col-lg-6" @click=" $event.stopPropagation() " id="TheBox">
-                <h1 class="col-12">تسعير المنتج يدوياً</h1>
-
+            <div class="col-11 col-md-9 col-lg-6" @click=" $event.stopPropagation()" id="TheBox">
                 <table class="col-12 table table-bordered">
                     <tbody>
-                        <tr>
-                            <th>اسم المهمة</th>
+                        <!-- <tr>
+                            <th>اسم الطلب</th>
                             <td>{{ this.$store.state['Price_Tasks'][Open_Task_Index]['Name'] }}</td>
                         </tr>
                         <tr>
-                            <th>تفاصيل المهمة</th>
+                            <th>تفاصيل الطلب</th>
                             <td>
                                 <p>{{ this.$store.state['Price_Tasks'][Open_Task_Index]['Requirement_Details'] }}</p>
                             </td>
-                        </tr>
+                        </tr> -->
                         <tr>
                             <th>عدد القطع</th>
                             <td>{{ this.$store.state['Price_Tasks'][Open_Task_Index]['Quantity'] }}</td>
                         </tr>
-                        <tr>
-                            <th>ميعاد طلب التسعير </th>
+                        <!-- <tr>
+                            <th>ميعاد الطلب</th>
                             <td>{{ this.$store.state['Price_Tasks'][Open_Task_Index]['Created_Date'] }}</td>
-                        </tr>
+                        </tr> -->
                         <tr>
-                            <th>السعر للقطعة الواحدة</th>
-                            <td><input type="number" v-model=" this.FinalManualPrice " placeholder="ادخل سعر القطعة"></td>
+                            <th>سعر القطعة</th>
+                            <td><input type="number" v-model="this.FinalManualPrice" placeholder="ادخل سعر القطعة"></td>
                         </tr>
                     </tbody>
                 </table>
 
-                <button class="btn btn-success" @click=" UpdatePriceManual(this.Open_Task, this.FinalManualPrice) ">سجل
+                <button class="btn btn-success" @click=" UpdatePriceManual(this.Open_Task, this.FinalManualPrice)">سجل
                     السعر</button>
             </div>
 
@@ -126,12 +130,13 @@ export default {
             PricingWay: 0,
             Open_Task: 0,
             Open_Task_Index: -1,
-            FinalManualPrice: 0,
+            FinalManualPrice: null,
             Manual_Price_PopUp: 0,
         };
     },
     created() {
         let main = this;
+        // console.log(this.$store.state['Price_Tasks']);
     },
     methods: {
         SelectPricingWay(Task_ID, Task_Index) {
@@ -158,11 +163,11 @@ export default {
         },
         UpdatePriceManual(Price_Task_ID, Final_Unit_Price) {
             let main = this;
-            if (Final_Unit_Price == '' || Final_Unit_Price == 0) {
+            if (Final_Unit_Price == '' || Final_Unit_Price == 0 || Final_Unit_Price == null) {
                 alert('من فضلك ادخل السعر اولاً');
             } else {
                 this.$swal.fire({
-                    title: 'هل تريد ارسال السعر للقطعة الواحدة = ' + Final_Unit_Price + " جنيه مصري",
+                    title: 'هل تريد ارسال السعر للقطعة الواحدة = ' + Final_Unit_Price + " جنيه ؟",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -246,15 +251,25 @@ export default {
         font-size: 1.3rem;
         text-align: center;
         vertical-align: middle;
+        margin: 0;
+
+        th {
+            font-size: 1rem;
+        }
 
         th,
         td {
-            padding: 1.2rem 0.5rem;
+            padding: 0.7rem 0.5rem;
 
         }
 
         select {
             font-size: 1.3rem;
+        }
+
+        button {
+            font-size: 1.3rem;
+            padding: 0.5rem;
         }
     }
 
@@ -290,6 +305,19 @@ export default {
         font-size: 1.2rem;
         padding: 0.5rem;
     }
+
+    input {
+        font-size: 1.2rem;
+        padding: 0.5rem;
+    }
+}
+
+pre {
+    max-width: 90%;
+    overflow: auto;
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin: 0 !important;
 }
 
 .Task_Card {
@@ -301,5 +329,9 @@ export default {
     align-items: center;
     background-color: white;
     margin-bottom: 1rem;
+    padding: 0.5rem;
+    box-shadow: 1px 1px 1px grey;
+    border: solid 1px;
+    border-radius: 0.25rem;
 }
 </style>
