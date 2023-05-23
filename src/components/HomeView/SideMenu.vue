@@ -448,9 +448,10 @@ export default {
         align-content: center;
         justify-content: flex-start;
         align-items: center;
+        font-size: 1.8rem;
 
         p {
-            font-size: 1.2rem;
+            font-size: 1.7rem;
             padding: 0 1rem;
         }
     }

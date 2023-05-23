@@ -59,6 +59,10 @@
                             <td>{{ Task['Shipping_Phone_No'] == null ? '----' : Task['Shipping_Phone_No'] }}</td>
                         </tr>
                         <tr>
+                            <th>اسم المستلم</th>
+                            <td>{{ Task['Delivery_Phone_Name'] == null ? '----' : Task['Delivery_Phone_Name'] }}</td>
+                        </tr>
+                        <tr>
                             <th>مبلغ التحصيل</th>
                             <td>{{ Task['Collecting_Value'] != null ? Task['Collecting_Value'] : 'بدون تحصيل' }}</td>
                         </tr>
@@ -151,7 +155,7 @@ export default {
         };
     },
     created() {
-
+        console.log(this.$store.state['OpenDelivery']);
     },
     methods: {
         EndTask(Task_ID) {
@@ -204,7 +208,6 @@ export default {
 
         },
         GetTaskExpenses(Task_ID) {
-
             let main = this;
             main.$store.state['LoaderIndex'] = 1;
             axios.post(this.Api_Url, {
