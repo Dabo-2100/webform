@@ -3,14 +3,6 @@
         <div id="SideMenu" v-if="(this.$store.state['CurrentWidth'] > 767) ||
             (this.$store.state['CurrentWidth'] <= 767 && this.$store.state['SideMenuIndex'] == 1)">
             <ul id="MenuSelections">
-                <!-- <li v-for="Selection, index in this.TheTabs" :key="Selection"
-                    @click="Selection['TabView'] != false ? this.$store.state['CurrentComponent'] = Selection['TabView'] : this.LogOut()">
-                    <font-awesome-icon :icon="Selection['Icon']" />
-                    <p>{{ this.$store.state['UserLang'] == 1 ? Selection['ArabicName'] :
-                        Selection['ArabicName'] }}
-                    </p>
-                    <span v-if="Selection['Index'] != false">{{ Selection['Index'] }}</span>
-                </li> -->
                 <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1"
                     @click="this.GetPricingTasks(); this.$store.state['CurrentComponent'] = this.Selections[0]['TabView']; this.$store.state['SideMenuIndex'] = 0">
                     <font-awesome-icon :icon="this.Selections[0]['Icon']" />
@@ -67,8 +59,8 @@
         </div>
     </transition>
     <div class="col-12" id="Upper_Bar" v-if="this.$store.state['CurrentWidth'] <= 767">
-        <div class="col-6" id="TheSliderIcon">
-            <font-awesome-icon icon="fa-solid fa-bars" @click=" this.$store.state['SideMenuIndex'] = 1" />
+        <div class="col-6" id="TheSliderIcon" @click=" this.$store.state['SideMenuIndex'] = 1">
+            <font-awesome-icon icon="fa-solid fa-bars" />
             <p>القائمة</p>
         </div>
     </div>
