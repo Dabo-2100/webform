@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
-const Server_Url = "http://localhost/webform/public/";
-// const Server_Url = "";
+// const Server_Url = "http://localhost/webform/public/";
+const Server_Url = "";
 export default createStore({
   state: {
     Api_Url: Server_Url + "php/index.php",
@@ -15,6 +15,7 @@ export default createStore({
     Production_Tasks: [],
     DoneTasks: [],
     OpenDelivery: [],
+    OpenPurchase: [],
     DoneDelivery: [],
     ShowPopUp: 0,
     UserLang: 2,

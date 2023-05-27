@@ -1,12 +1,12 @@
 <template>
     <div class="col-12" id="DeliveryView">
-        <div class="col-12" v-if="this.$store.state['OpenDelivery'].length <= 0" id="NoTasks">
+        <div class="col-12" v-if="this.$store.state['OpenPurchase'].length <= 0" id="NoTasks">
             <img src="@/assets/NoTasks.png">
-            <h1>لا توجد مشاوير توصيل مطلوب العمل عليها</h1>
+            <h1>لا توجد طلبات شراء مطلوبة منك</h1>
         </div>
         <div class="col-12" v-else>
-            <h1 class="col-12 TabHeader">مشاوير التوصيل المطلوبة</h1>
-            <div class="col-12 Task_Card" v-for="Task in   this.$store.state['OpenDelivery']   " :key="Task">
+            <h1 class="col-12 TabHeader">طلبات الشراء المطلوبة</h1>
+            <div class="col-12 Task_Card" v-for="Task in   this.$store.state['OpenPurchase']   " :key="Task">
                 <h1 class="col-12">معلومات الأستلام</h1>
                 <table class="col-12 table table-bordered">
                     <tbody>

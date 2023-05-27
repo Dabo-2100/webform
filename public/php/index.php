@@ -96,7 +96,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // echo get_records("Work_Tasks", 0, $pdo);
     // echo SearchRecords("Price_Tasks", $code = 0, $pdo, "(Owner.id:equals:" . $Owner_ID . ")")
     echo SearchRecords("Work_Tasks", $code = 0, $pdo, "id:equals:4432004000009212255");
-    
 }
 
 if ($api_name == "RefreshAccessToken") {
@@ -257,6 +256,7 @@ if ($api_name == "GetOpenProjects") {
             @$Starting_Date = $Task['Starting_Date'];
             @$Deadline_Date = $Task['Deadline_Date'];
             @$Requirement_ID = $Task['Deal_Requiremenet']['id'];
+            @$response4 = json_decode(SearchRecords("Deal_Requirements", $code = 0, $pdo, "(id:equals:" . $Requirement_ID . ")"), true);
             //Get The Task Stages
             @$Task_Type = $Task['Task_Type'];
             @$response2 = json_decode(SearchRecords("Task_Stages", $code = 0, $pdo, "(Project_Type:equals:" . $Task_Type . ")"), true);
@@ -286,6 +286,7 @@ if ($api_name == "GetOpenProjects") {
                 "Requirement_ID" => $Requirement_ID,
                 "TaskStages" => $All_Stages,
                 "Task_Done" => $Task_Done,
+                "Request_Details" => $response4,
                 // "Photo" => $Photo
             );
             array_push($final, $data);
@@ -294,7 +295,7 @@ if ($api_name == "GetOpenProjects") {
     echo json_encode($final);
 }
 if ($api_name == "GetDeliveryTasks") {
-    echo SearchRecords("Operation_Tasks", $code = 0, $pdo, "(Task_Type:equals:Delivery)");
+    echo get_records("Operation_Tasks", 0, $pdo);
 }
 
 if ($api_name == "GetTaskExpenses") {

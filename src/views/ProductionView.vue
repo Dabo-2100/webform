@@ -14,6 +14,10 @@
                             <td class="col-7">{{ Task['Task_Name'] }}</td>
                         </tr>
                         <tr>
+                            <th class="col-5">العدد المطلوب</th>
+                            <td class="col-7">{{ Task['Request_Details']['data'][0]['Quantity'] }}</td>
+                        </tr>
+                        <tr>
                             <th>تفاصيل المهمة</th>
                             <td>
                                 <p>{{
@@ -134,7 +138,7 @@ export default {
         };
     },
     created() {
-        // console.log(this.$store.state['Production_Tasks'][0]);
+        // console.log(this.$store.state['Production_Tasks'][0]['Request_Details']['data'][0]);
     },
     methods: {
         EndTask(Task_ID) {

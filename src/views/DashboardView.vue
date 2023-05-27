@@ -5,17 +5,22 @@
             <div class="col-12" id="AllCards">
                 <div class="col-6 Card" v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1"
                     @click="this.$store.state['CurrentComponent'] = 'TasksView'">
-                    <h1 class="col-12">مهام التسعير</h1>
+                    <h1 class="col-12">طلبات التسعير</h1>
                     <span class="col-12">{{ this.$store.state['Price_Tasks'].length }}</span>
                 </div>
                 <div class="col-6 Card" v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1"
                     @click="this.$store.state['CurrentComponent'] = 'ProductionView'">
-                    <h1 class="col-12"> المشاريع المفتوحة</h1>
+                    <h1 class="col-12"> مهام تحت التشغيل</h1>
                     <span class="col-12">{{ this.$store.state['Production_Tasks'].length }}</span>
                 </div>
                 <div class="col-6 Card" v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 2"
                     @click="this.$store.state['CurrentComponent'] = 'DeliveryView'">
                     <h1 class="col-12">مشاوير التوصيل</h1>
+                    <span class="col-12">{{ this.$store.state['OpenDelivery'].length }}</span>
+                </div>
+                <div class="col-6 Card" v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 2"
+                    @click="this.$store.state['CurrentComponent'] = 'DeliveryView'">
+                    <h1 class="col-12">طلبات الشراء</h1>
                     <span class="col-12">{{ this.$store.state['OpenDelivery'].length }}</span>
                 </div>
             </div>

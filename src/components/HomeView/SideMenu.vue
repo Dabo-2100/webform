@@ -18,6 +18,7 @@
                     </p>
                     <span v-if="this.Selections[1]['Index'] != false">{{ this.Selections[1]['Index'] }}</span>
                 </li>
+
                 <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1"
                     @click=" this.GetOpenProjects(); this.$store.state['CurrentComponent'] = this.Selections[2]['TabView']; this.$store.state['SideMenuIndex'] = 0">
                     <font-awesome-icon :icon="this.Selections[2]['Icon']" />
@@ -25,15 +26,17 @@
                     </p>
                     <span v-if="this.Selections[2]['Index'] != false">{{ this.Selections[2]['Index'] }}</span>
                 </li>
+
                 <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1"
-                    @click=" this.$store.state['CurrentComponent'] = this.Selections[3]['TabView']; this.$store.state['SideMenuIndex'] = 0">
+                    @click=" this.GetOpenProjects(); this.$store.state['CurrentComponent'] = this.Selections[3]['TabView']; this.$store.state['SideMenuIndex'] = 0">
                     <font-awesome-icon :icon="this.Selections[3]['Icon']" />
                     <p>{{ this.Selections[3]['ArabicName'] }}
                     </p>
                     <span v-if="this.Selections[3]['Index'] != false">{{ this.Selections[3]['Index'] }}</span>
                 </li>
+
                 <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 2"
-                    @click=" this.GetDeliveryTasks(); this.$store.state['CurrentComponent'] = this.Selections[4]['TabView']; this.$store.state['SideMenuIndex'] = 0">
+                    @click="GetPurchaseTasks(); this.$store.state['CurrentComponent'] = this.Selections[4]['TabView']; this.$store.state['SideMenuIndex'] = 0">
                     <font-awesome-icon :icon="this.Selections[4]['Icon']" />
                     <p>{{ this.Selections[4]['ArabicName'] }}
                     </p>
@@ -47,12 +50,20 @@
                     </p>
                     <span v-if="this.Selections[5]['Index'] != false">{{ this.Selections[5]['Index'] }}</span>
                 </li>
-                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 1 || this.$store.state['User_Type'] == 2"
-                    @click=" this.LogOut(); this.$store.state['SideMenuIndex'] = 0" style="padding-top: 10rem;">
+
+                <li v-if="this.$store.state['User_Type'] == 0 || this.$store.state['User_Type'] == 2"
+                    @click=" this.GetDeliveryTasks(); this.$store.state['CurrentComponent'] = this.Selections[6]['TabView']; this.$store.state['SideMenuIndex'] = 0">
                     <font-awesome-icon :icon="this.Selections[6]['Icon']" />
                     <p>{{ this.Selections[6]['ArabicName'] }}
                     </p>
-                    <span v-if="this.Selections[6]['Index'] != false">{{ this.Selections[6]['Index'] }}</span>
+                    <span v-if="this.Selections[6]['Index'] != false">{{ this.Selections[5]['Index'] }}</span>
+                </li>
+
+                <li @click=" this.LogOut(); this.$store.state['SideMenuIndex'] = 0">
+                    <font-awesome-icon :icon="this.Selections[7]['Icon']" />
+                    <p>{{ this.Selections[7]['ArabicName'] }}
+                    </p>
+                    <span v-if="this.Selections[7]['Index'] != false">{{ this.Selections[7]['Index'] }}</span>
                 </li>
             </ul>
 
@@ -76,13 +87,14 @@ export default {
         return {
             Api_Url: this.$store.state['Api_Url'],
             Selections: [
-                { name: "Pricing Tasks", Icon: "fa-solid fa-money-check-dollar", ArabicName: "طلبات التسعير", Index: 0, TabView: "TasksView", User_Type: [0, 1] },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-box-open", ArabicName: "طلبات التصنيع", Index: 0, TabView: "ProductionView", User_Type: [0, 1] },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "الطلبات المنتهية", Index: 0, TabView: "DoneView", User_Type: [0, 1] },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-dollar-sign", ArabicName: "اسعار الخامات", Index: false, TabView: "MaterialView", User_Type: [0, 1] },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "طلبات التوصيل", Index: false, TabView: "DeliveryView", User_Type: [0, 2] },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-list-check", ArabicName: "المشاوير المنتهية", Index: false, TabView: "DoneDeliveryView", User_Type: [0, 2] },
-                { name: "Pricing Tasks", Icon: "fa-solid fa-power-off", ArabicName: "تسجيل الخروج", Index: false, TabView: false, User_Type: [0, 1, 2] },
+                { Icon: "fa-solid fa-money-check-dollar", ArabicName: "طلبات التسعير", Index: 0, TabView: "TasksView" },
+                { Icon: "fa-solid fa-list-check", ArabicName: "مهام تحت التشغيل", Index: 0, TabView: "ProductionView" },
+                { Icon: "fa-solid fa-dollar-sign", ArabicName: "المهام المنتهية", Index: false, TabView: "DoneView" },
+                { Icon: "fa-solid fa-list-check", ArabicName: "اسعار الخامات", Index: false, TabView: "MaterialView" },
+                { Icon: "fa-solid fa-list-check", ArabicName: "طلبات الشراء", Index: false, TabView: "PurchaseView" },
+                { Icon: "fa-solid fa-list-check", ArabicName: "طلبات التوصيل", Index: false, TabView: "DeliveryView" },
+                { Icon: "fa-solid fa-list-check", ArabicName: "المشاوير المنتهية", Index: false, TabView: "DoneDeliveryView" },
+                { Icon: "fa-solid fa-power-off", ArabicName: "تسجيل الخروج", Index: false, TabView: false },
             ],
         };
     },
@@ -115,10 +127,12 @@ export default {
                             else if (res.data['user_type'] == 0) {
                                 main.GetPricingTasksIndex();
                                 main.GetOpenProjectsIndex();
-                                main.GetDeliveryTasksIndex();
+                                main.GetDeliveryTasks();
+                                main.GetPurchaseTasks();
                             }
                             else {
-                                main.GetDeliveryTasksIndex();
+                                main.GetDeliveryTasks();
+                                main.GetPurchaseTasks();
                             }
                             main.$store.state['LoaderIndex'] = 0;
                         }
@@ -255,12 +269,12 @@ export default {
             let main = this;
             main.$store.state['LoaderIndex'] = 1;
             function GetOpenTasks(Task) {
-                if (Task['Task_Done'] == 0 && Task['PickUp_Location'] != null) {
+                if (Task['Task_Done'] == 0 && Task['Task_Type'] == "Delivery" && Task['PickUp_Location'] != null) {
                     return Task;
                 }
             }
             function GetDoneTasks(Task) {
-                if (Task['Task_Done'] == 1) {
+                if (Task['Task_Done'] == 1 && (Task['Task_Type'] == "Delivery" || Task['Task_Type'] == "Purchase")) {
                     return Task;
                 }
             }
@@ -274,41 +288,33 @@ export default {
                     OpenTasks = Final_array.filter(GetOpenTasks);
                     DoneTasks = Final_array.filter(GetDoneTasks);
                 }
-                main.Selections[4]['Index'] = OpenTasks.length;
-                main.Selections[5]['Index'] = DoneTasks.length;
+                main.Selections[5]['Index'] = OpenTasks.length;
+                main.Selections[6]['Index'] = DoneTasks.length;
                 main.$store.state['OpenDelivery'] = OpenTasks;
                 main.$store.state['DoneDelivery'] = DoneTasks;
                 main.$store.state['LoaderIndex'] = 0;
             });
         },
-        GetDeliveryTasksIndex() {
+
+        GetPurchaseTasks() {
             let main = this;
             function GetOpenTasks(Task) {
-                if (Task['Task_Done'] == "0" && Task['PickUp_Location'] != null) {
+                if (Task['Task_Done'] == "0" && Task['Task_Type'] == "Purchase") {
                     return Task;
                 }
             }
-            function GetDoneTasks(Task) {
-                if (Task['Task_Done'] == "1") {
-                    return Task;
-                }
-            }
-
             axios.post(main.Api_Url, {
                 api_name: "GetDeliveryTasks"
             }).then(function (res) {
                 let Final_array = res.data['data'];
-                // console.log(Final_array);
+                
                 let OpenTasks = [];
-                let DoneTasks = [];
                 if (Final_array != null) {
                     OpenTasks = Final_array.filter(GetOpenTasks);
-                    DoneTasks = Final_array.filter(GetDoneTasks);
                 }
                 main.Selections[4]['Index'] = OpenTasks.length;
-                main.Selections[5]['Index'] = DoneTasks.length;
-                main.$store.state['OpenDelivery'] = OpenTasks;
-                main.$store.state['DoneDelivery'] = DoneTasks;
+                main.$store.state['OpenPurchase'] = OpenTasks;
+                console.log(OpenTasks);
             });
         },
 
