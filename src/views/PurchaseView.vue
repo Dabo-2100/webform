@@ -6,34 +6,47 @@
         </div>
         <div class="col-12" v-else>
             <h1 class="col-12 TabHeader">طلبات الشراء المطلوبة</h1>
-            <div class="col-12 Task_Card" v-for="Task in   this.$store.state['OpenPurchase']   " :key="Task">
-                <h1 class="col-12">معلومات الأستلام</h1>
+            <div class="col-12 Task_Card" v-for="Task in this.$store.state['OpenPurchase']" :key="Task">
+                <h1 class="col-12">بيانات طلب الشراء</h1>
                 <table class="col-12 table table-bordered">
                     <tbody>
                         <tr>
-                            <th class="col-6">مكان الاستلام</th>
-                            <td class="col-6">{{ Task['PickUp_Location'] == null ? '----' : Task['PickUp_Location'] }}</td>
+                            <th class="col-6">مكان الشراء</th>
+                            <td class="col-6">{{ Task['Purchase_Place'] == null ? '----' : Task['Purchase_Place'] }}</td>
                         </tr>
                         <tr>
-                            <th>موعد الأستلام</th>
+                            <th>سعر الشراء</th>
                             <td>
-                                {{ Task['PickUp_Time'] == null ? '----' : Task['PickUp_Time'].split("T")[0] }}
-                                <br>
-                                {{ Task['PickUp_Time'] != null ?
-                                    'الساعة : ' + Task['PickUp_Time'].split("T")[1].split('+')[0] : '' }}
+                                {{ Task['Purchase_Price'] == null ? '----' : Task['Purchase_Price'] + ' جنيهاً' }}
                             </td>
                         </tr>
                         <tr>
-                            <th>طريقة الأستلام</th>
-                            <td>{{ Task['PickUp_Option'] == null ? '----' : Task['PickUp_Option'] }}</td>
+                            <th>عنوان الشراء</th>
+                            <td>{{ Task['Purchase_Address'] == null ? '----' : Task['Purchase_Address'] }}</td>
                         </tr>
                         <tr>
-                            <th>دليفري نوت</th>
-                            <td>{{ Task['Delivery_Note'] == null ? '----' : Task['Delivery_Note'] }}</td>
+                            <th>اللوكيشن</th>
+                            <td>
+                                <a v-if="Task['Purchase_Location'] != null" :href="Task['Purchase_Location']">عرض
+                                    الخريطة</a>
+                                <p v-else>----</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>تفاصيل امر الشراء</th>
+                            <td>{{ Task['Details'] == null ? '----' : Task['Details'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>الاسم</th>
+                            <td>{{ Task['Contact_Name'] == null ? '----' : Task['Contact_Name'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>رقم التليفون</th>
+                            <td>{{ Task['Contact_Phone'] == null ? '----' : Task['Contact_Phone'] }}</td>
                         </tr>
                     </tbody>
                 </table>
-
+                <!-- 
                 <h1 class="col-12">معلومات التسليم</h1>
                 <table class="col-12 table table-bordered">
                     <tbody>
@@ -77,7 +90,7 @@
                             </td>
                         </tr>
                     </tbody>
-                </table>
+                </table> -->
             </div>
         </div>
 

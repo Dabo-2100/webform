@@ -66,7 +66,7 @@ export default {
         flex-wrap: wrap;
         align-content: flex-start;
         justify-content: center;
-        padding-top: 5rem;
+        padding-top: 2rem;
         background-color: #0000004d;
 
         img {
@@ -80,7 +80,7 @@ export default {
         flex-wrap: nowrap;
         justify-content: center;
         align-items: center;
-        padding-top: 6rem;
+        padding-top: 2rem;
 
         .Card {
             color: white;

@@ -281,7 +281,7 @@ export default {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    align-content: flex-start;
+    align-content: center;
     justify-content: center;
     align-items: center;
     padding: 1rem;

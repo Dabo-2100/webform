@@ -92,10 +92,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $api_name = @$POST_data["api_name"];
 } else {
     $api_name = @$_GET["api_name"];
-    echo "Do Not Allow To Be There <br>";
-    // echo get_records("Work_Tasks", 0, $pdo);
-    // echo SearchRecords("Price_Tasks", $code = 0, $pdo, "(Owner.id:equals:" . $Owner_ID . ")")
-    echo SearchRecords("Work_Tasks", $code = 0, $pdo, "id:equals:4432004000009212255");
+    // echo "Do Not Allow To Be There <br>";
+    $response2 = json_decode(SearchRecords("Price_Tasks", $code = 0, $pdo, "(Done_Task:equals:No)"));
+    print_r($response2);
 }
 
 if ($api_name == "RefreshAccessToken") {
@@ -204,22 +203,22 @@ if ($api_name == "GetPaperCutSize") {
 if ($api_name == "GetPricingTasks") {
     $Owner_ID = htmlspecialchars(@$POST_data["Zoho_ID"]);
     $final = [];
-
     if ($Owner_ID == 0) {;
-        $response2 = json_decode(get_records("Price_Tasks", 0, $pdo), true);
+        $response2 = json_decode(SearchRecords("Price_Tasks", $code = 0, $pdo, "(Done_Task:equals:No)"), true);
     } else {
-        $response2 = json_decode(SearchRecords("Price_Tasks", $code = 0, $pdo, "(Owner.id:equals:" . $Owner_ID . ")"), true);
+        $response2 = json_decode(SearchRecords("Price_Tasks", $code = 0, $pdo, "(Done_Task:equals:No)"), true);
     }
-
     if ($response2 != null) {
         foreach ($response2['data'] as $Task) {
+            // print_r($Task);
             @$Created_Date = $Task['Starting_Date'];
+            @$Deadline_Date = $Task['Deadline_Date'];
             @$Task_ID = $Task['id'];
+            @$Name = $Task['Name'];
             @$Requirement_ID = $Task['What_to_price']['id'];
             @$response = json_decode(SearchRecords("Deal_Requirements", $code = 0, $pdo, "(id:equals:" . $Requirement_ID . ")"), true);
-            @$Requirement_Details = $response['data'][0]['Requirement_Details'];
             @$Quantity = $response['data'][0]['Quantity'];
-            @$Name = $response['data'][0]['Name'];
+            @$Requirement_Details = $Task['Request_Details'];
             $data = array(
                 "Requirement_Details" => $Requirement_Details,
                 "Quantity" => $Quantity,

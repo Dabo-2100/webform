@@ -165,9 +165,9 @@ export default {
                 Zoho_ID: Zoho_ID,
             }).then(function (res) {
                 let Final_array = res.data;
+                console.log(Final_array);
                 main.Selections[0]['Index'] = Final_array.length;
                 main.$store.state['Price_Tasks'] = Final_array;
-                // console.log(Final_array);
                 main.$store.state['LoaderIndex'] = 0;
             });
         },
@@ -189,6 +189,7 @@ export default {
                 // main.$store.state['LoaderIndex'] = 0;
             });
         },
+
         GetOpenProjects() {
             let main = this;
             main.$store.state['LoaderIndex'] = 1;
@@ -202,8 +203,6 @@ export default {
                     return Task;
                 }
             }
-
-
             let Zoho_ID = localStorage.getItem('Zoho_ID');
             if (localStorage.getItem('user_type') == 0) {
                 Zoho_ID = 0;
@@ -264,7 +263,6 @@ export default {
             });
         },
 
-
         GetDeliveryTasks() {
             let main = this;
             main.$store.state['LoaderIndex'] = 1;
@@ -307,7 +305,6 @@ export default {
                 api_name: "GetDeliveryTasks"
             }).then(function (res) {
                 let Final_array = res.data['data'];
-                
                 let OpenTasks = [];
                 if (Final_array != null) {
                     OpenTasks = Final_array.filter(GetOpenTasks);
@@ -327,9 +324,6 @@ export default {
 
     },
     computed: {
-        // TheTabs() {
-        //     return this.Selections.filter(this.AvialbleTabs);
-        // }
     },
 }
 </script>
