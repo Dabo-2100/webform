@@ -69,6 +69,7 @@
 
         </div>
     </transition>
+
     <div class="col-12" id="Upper_Bar" v-if="this.$store.state['CurrentWidth'] <= 767">
         <div class="col-6" id="TheSliderIcon" @click=" this.$store.state['SideMenuIndex'] = 1">
             <font-awesome-icon icon="fa-solid fa-bars" />
@@ -107,50 +108,48 @@ export default {
             api_name: "CheckTheConnection",
             TheUserID: Zoho_ID,
         }).then(function (res) {
-            if (res.data['code'] !== undefined && res.data['code'] == 'INVALID_TOKEN') {
-                window.location = 'https://accounts.zoho.com/oauth/v2/auth?response_type=code&client_id=1000.R3K41GUMKFVW5K825Z6PZ6JU1HTQ3Q&scope=ZohoCRM.modules.ALL,ZohoCRM.users.ALL&redirect_uri=https://webform.designido.net&prompt=consent';
-            }
-            else {
-                main.$store.state['LoaderIndex'] = 1;
-                if (token != null && token != undefined) {
-                    axios.post(main.Api_Url, {
-                        api_name: "CheckToken",
-                        token: token,
-                        email: email
-                    }).then(function (res) {
-                        if (res.data['user_id'] !== undefined) {
-                            main.$store.state['User_Type'] = res.data['user_type'];
-                            if (res.data['user_type'] == 1) {
-                                main.GetPricingTasksIndex();
-                                main.GetOpenProjectsIndex();
-                            }
-                            else if (res.data['user_type'] == 0) {
-                                main.GetPricingTasksIndex();
-                                main.GetOpenProjectsIndex();
-                                main.GetDeliveryTasks();
-                                main.GetPurchaseTasks();
-                            }
-                            else {
-                                main.GetDeliveryTasks();
-                                main.GetPurchaseTasks();
-                            }
-                            main.$store.state['LoaderIndex'] = 0;
-                        }
-                        else {
-                            localStorage.clear();
-                            main.$router.push({ name: 'login' });
-                        }
-                    });
-                }
-                else {
-                    localStorage.clear();
-                    main.$router.push({ name: 'login' });
-                }
-            }
+            console.log(res.data);
+            // if (res.data['code'] !== undefined && res.data['code'] == 'INVALID_TOKEN') {
+            //     window.location = 'https://accounts.zoho.com/oauth/v2/auth?response_type=code&client_id=1000.R3K41GUMKFVW5K825Z6PZ6JU1HTQ3Q&scope=ZohoCRM.modules.ALL,ZohoCRM.users.ALL&redirect_uri=https://webform.designido.net&prompt=consent';
+            // }
+            // else {
+            //     main.$store.state['LoaderIndex'] = 1;
+            //     if (token != null && token != undefined) {
+            //         axios.post(main.Api_Url, {
+            //             api_name: "CheckToken",
+            //             token: token,
+            //             email: email
+            //         }).then(function (res) {
+            //             if (res.data['user_id'] !== undefined) {
+            //                 main.$store.state['User_Type'] = res.data['user_type'];
+            //                 if (res.data['user_type'] == 1) {
+            //                     main.GetPricingTasksIndex();
+            //                     main.GetOpenProjectsIndex();
+            //                 }
+            //                 else if (res.data['user_type'] == 0) {
+            //                     main.GetPricingTasksIndex();
+            //                     main.GetOpenProjectsIndex();
+            //                     main.GetDeliveryTasks();
+            //                     main.GetPurchaseTasks();
+            //                 }
+            //                 else {
+            //                     main.GetDeliveryTasks();
+            //                     main.GetPurchaseTasks();
+            //                 }
+            //                 main.$store.state['LoaderIndex'] = 0;
+            //             }
+            //             else {
+            //                 localStorage.clear();
+            //                 main.$router.push({ name: 'login' });
+            //             }
+            //         });
+            //     }
+            //     else {
+            //         localStorage.clear();
+            //         main.$router.push({ name: 'login' });
+            //     }
+            // }
         });
-
-
-
     },
     methods: {
         GetPricingTasks() {
@@ -189,7 +188,6 @@ export default {
                 // main.$store.state['LoaderIndex'] = 0;
             });
         },
-
         GetOpenProjects() {
             let main = this;
             main.$store.state['LoaderIndex'] = 1;
@@ -262,7 +260,6 @@ export default {
                 main.$store.state['DoneTasks'] = DoneTasks;
             });
         },
-
         GetDeliveryTasks() {
             let main = this;
             main.$store.state['LoaderIndex'] = 1;
@@ -293,7 +290,6 @@ export default {
                 main.$store.state['LoaderIndex'] = 0;
             });
         },
-
         GetPurchaseTasks() {
             let main = this;
             function GetOpenTasks(Task) {
@@ -314,16 +310,10 @@ export default {
                 console.log(OpenTasks);
             });
         },
-
         LogOut() {
             localStorage.clear();
             this.$router.push({ name: 'login' });
         }
-    },
-    watch: {
-
-    },
-    computed: {
     },
 }
 </script>

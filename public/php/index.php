@@ -2,99 +2,16 @@
 header("Access-Control-Allow-Origin: *"); //To Allow Access From Other Servers
 header("Access-Control-Allow-Methods: POST"); //To Allow POST 
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+require_once 'functions.php';
 $pdo = require_once 'connect.php';
 $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-
-function get_access_token($code = 0, $pdo)
-{
-    $fianl = '';
-    if ($code == 0) {
-        $sql = "SELECT access_token From app_info WHERE (record_id = 1)";
-        $statement = $pdo->prepare($sql);
-        $statement->execute();
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
-        if ($result) {
-            $fianl = $result["access_token"];
-        }
-    } else {
-        $post = [
-            'code' => $code,
-            'redirect_uri' => 'https://webform.designido.net',
-            'client_id' => '1000.R3K41GUMKFVW5K825Z6PZ6JU1HTQ3Q',
-            'client_secret' => '95853f787c210aab15a7fa69b90d565470fe0c5e75',
-            'grant_type' => 'authorization_code',
-        ];
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://accounts.zoho.com/oauth/v2/token");
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-        $response = curl_exec($ch);
-        $response = json_decode($response, true);
-        if (count($response) < 3) {
-            $fianl = $response['error'];
-        } else {
-            $fianl = $response['access_token'];
-            $sql = "UPDATE app_info SET access_token = :access_token WHERE (record_id = 1)";
-            $statement = $pdo->prepare($sql);
-            $statement->bindParam(':access_token', $fianl);
-            $statement->execute();
-        }
-    }
-    return $fianl;
-};
-
-function get_records($Module, $code = 0, $pdo)
-{
-    $Access_Token = 0;
-    if ($code == 0) {
-        $Access_Token = get_access_token(0, $pdo);
-    } else {
-        $Access_Token = get_access_token($code, $pdo);
-    }
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, "https://www.zohoapis.com/crm/v2/" . $Module);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Authorization: Zoho-oauthtoken ' . $Access_Token,
-        'Content-Type: application/x-www-form-urlencoded'
-    ));
-    $response = curl_exec($ch);
-    return $response;
-};
-
-function SearchRecords($Module, $code = 0, $pdo, $SearchCritera)
-{
-    $Access_Token = 0;
-    if ($code == 0) {
-        $Access_Token = get_access_token(0, $pdo);
-    } else {
-        $Access_Token = get_access_token($code, $pdo);
-    }
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, "https://www.zohoapis.com/crm/v2/" . $Module . "/" . "search?criteria=(" . $SearchCritera . ")");
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Authorization: Zoho-oauthtoken ' . $Access_Token,
-        'Content-Type: application/x-www-form-urlencoded'
-    ));
-    $response = curl_exec($ch);
-    return $response;
-};
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $Post_object = file_get_contents('php://input');
     $POST_data = json_decode($Post_object, true);
     $api_name = @$POST_data["api_name"];
 } else {
     $api_name = @$_GET["api_name"];
-    // echo "Do Not Allow To Be There <br>";
-    $response2 = json_decode(SearchRecords("Price_Tasks", $code = 0, $pdo, "(Done_Task:equals:No)"));
-    print_r($response2);
+    echo "Do Not Allow To Be There <br>";
 }
 
 if ($api_name == "RefreshAccessToken") {
@@ -186,12 +103,13 @@ if ($api_name == "GetTaskId") {
 
 if ($api_name == "CheckTheConnection") {
     $TheUserID = htmlspecialchars(@$POST_data["TheUserID"]);
-    echo get_records("users", 0, $pdo);
+    echo get_records("Task_Stages", 0, $pdo);
 }
 
 if ($api_name == "GetAllProducts") {
     echo get_records("Products", 0, $pdo);
 }
+
 if ($api_name == "GetRawMaterials") {
     echo get_records("Raw_Materials", 0, $pdo);
 }
@@ -293,6 +211,7 @@ if ($api_name == "GetOpenProjects") {
     }
     echo json_encode($final);
 }
+
 if ($api_name == "GetDeliveryTasks") {
     echo get_records("Operation_Tasks", 0, $pdo);
 }
@@ -610,7 +529,6 @@ if ($api_name == "UpdateRawMaterialPrice") {
     var_dump($jsonResponse);
     var_dump($responseInfo['http_code']);
 }
-
 
 if ($api_name == "GetAllUsers") {
     $curl_pointer = curl_init();

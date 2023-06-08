@@ -19,8 +19,8 @@ $statements = [
     )',
 ];
 
-// connect to the database
-$pdo = require 'connect.php';
+// // connect to the database
+// $pdo = require 'connect.php';
 
 // execute SQL statements
 foreach ($statements as $statement) {
