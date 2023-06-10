@@ -1,4 +1,4 @@
-1<?php
+<?php
     function get_access_token($code = 0, $pdo)
     {
         $fianl = '';

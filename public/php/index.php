@@ -597,7 +597,7 @@ if ($api_name == "Login") {
     }
     $res = json_decode(SearchRecords("users", $code = 0, $pdo, "(email:equals:" . $email . ")"), true);
     @$Zoho_ID = $res['users'][0]['id'];
-    if ($Zoho_ID == null) {
+    if ($Zoho_ID == null || $Zoho_ID == false) {
         $Zoho_Error = true;
     }
     $data = array(
