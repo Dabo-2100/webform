@@ -44,6 +44,16 @@
                             <th>رقم التليفون</th>
                             <td>{{ Task['Contact_Phone'] == null ? '----' : Task['Contact_Phone'] }}</td>
                         </tr>
+                        <tr>
+                            <td><button class="btn btn-info"
+                                    @click="this.AddExpenseIndex = 1; this.GetTaskExpenses(Task['id'])"> اضافة
+                                    مصروف</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger" @click=" this.EndTask(Task['id'])">تم
+                                    التوصيل</button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
                 <!-- 

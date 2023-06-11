@@ -289,7 +289,7 @@ export default {
         GetPurchaseTasks() {
             let main = this;
             function GetOpenTasks(Task) {
-                if (Task['Task_Done'] == "0" && Task['Task_Type'] == "Purchase") {
+                if (Task['Task_Done'] == "0" && Task['Task_Type'] == "Purchase" && Task['Purchase_Place'] != null) {
                     return Task;
                 }
             }
