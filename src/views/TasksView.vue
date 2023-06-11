@@ -30,6 +30,10 @@
                             <td>{{ PriceTask['Quantity'] }}</td>
                         </tr>
                         <tr>
+                            <th>اسم المسئول</th>
+                            <td>{{ PriceTask['Deal_Owner'] }}</td>
+                        </tr>
+                        <tr>
                             <!-- <th>طريقة التسعير </th> -->
                             <td colspan="2">
                                 <button class="btn btn-primary col-12"

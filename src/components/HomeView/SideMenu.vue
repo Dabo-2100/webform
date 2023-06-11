@@ -182,9 +182,6 @@ export default {
                 let Final_array = res.data;
                 main.Selections[0]['Index'] = Final_array.length;
                 main.$store.state['Price_Tasks'] = Final_array;
-                // console.log(Final_array);
-                // main.$store.state['Price_Tasks'] = Final_array;
-                // main.$store.state['LoaderIndex'] = 0;
             });
         },
         GetOpenProjects() {
@@ -448,6 +445,3 @@ export default {
     width: 0;
 }
 </style>
-  
-  
-  

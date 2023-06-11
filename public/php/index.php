@@ -134,6 +134,7 @@ if ($api_name == "GetPricingTasks") {
             @$Task_ID = $Task['id'];
             @$Name = $Task['Name'];
             @$Requirement_ID = $Task['What_to_price']['id'];
+            @$Deal_Owner = $Task['Deal_Owner']['name'];
             @$response = json_decode(SearchRecords("Deal_Requirements", $code = 0, $pdo, "(id:equals:" . $Requirement_ID . ")"), true);
             @$Quantity = $response['data'][0]['Quantity'];
             @$Requirement_Details = $Task['Request_Details'];
@@ -145,6 +146,7 @@ if ($api_name == "GetPricingTasks") {
                 "Task_ID" => $Task_ID,
                 "Pricing_Way" => 0,
                 "Final_Unit_Price" => 0,
+                "Deal_Owner" => $Deal_Owner,
             );
             array_push($final, $data);
         }
