@@ -47,8 +47,9 @@ export default {
                 api_name: "RefreshAccessToken",
                 the_code: TheCode,
             }).then(function (res) {
-                console.log(res.data);
-                // main.$router.push({ name: 'login' });
+                // console.log(res.data);
+                main.$store.state['LoaderIndex'] = 0;
+                main.$router.push({ name: 'login' });
             });
         }
         else {

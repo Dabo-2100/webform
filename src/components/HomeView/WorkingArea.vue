@@ -44,7 +44,7 @@ export default {
 <style lang="scss" scoped>
 #WorkingArea {
     width: 80%;
-    height: auto;
+    height: 100vh;
     flex-grow: 1;
     display: flex;
     overflow-y: auto;
