@@ -1,0 +1,73 @@
+{
+    "data": [
+        {
+            "Owner": {
+                "name": "Abdelfattah Mahmoud",
+                "id": "4432004000007195001",
+                "email": "abdelfattah.mahmoud@designido.net"
+            },
+            "Final_Unit_Price": 308,
+            "$currency_symbol": "EGP",
+            "$field_states": null,
+            "$review_process": {
+                "approve": false,
+                "reject": false,
+                "resubmit": false
+            },
+            "Requirement_Details": "Wireless, Mechanical",
+            "Name": "PC Keyboard",
+            "Last_Activity_Time": "2023-06-17T18:11:12+03:00",
+            "$review": null,
+            "$state": "save",
+            "Unsubscribed_Mode": null,
+            "$process_flow": false,
+            "Deal_Name": {
+                "name": "Test Deal 1",
+                "id": "4432004000011201003"
+            },
+            "$locked_for_me": false,
+            "Production_Details": "اللي بيعمل صوت تكتكة",
+            "id": "4432004000011201037",
+            "Profit_Value": null,
+            "$approved": true,
+            "The_Final_Price": 3080,
+            "$approval": {
+                "delegate": false,
+                "approve": false,
+                "reject": false,
+                "resubmit": false
+            },
+            "Sample_need": "No",
+            "Unsubscribed_Time": null,
+            "Quantity": 10,
+            "$editable": true,
+            "Date": null,
+            "$orchestration": false,
+            "Deal_Number": "DN36",
+            "Profit_Way": "%",
+            "Pricing_InCharge": null,
+            "Deal_Owner1": {
+                "name": "Abdelfattah Mahmoud",
+                "id": "4432004000007195001"
+            },
+            "$in_merge": false,
+            "Locked__s": false,
+            "Requirement_Expense": null,
+            "Tag": [],
+            "Pricing_Way": "Manual",
+            "$zia_owner_assignment": "owner_recommendation_unavailable",
+            "Profit_Margin": 40,
+            "$approval_state": "approved",
+            "Requirement_Cost": 2200,
+            "Unit_Price": 220
+        }
+    ],
+    "info": {
+        "per_page": 200,
+        "count": 1,
+        "page": 1,
+        "sort_by": "id",
+        "sort_order": "desc",
+        "more_records": false
+    }
+}

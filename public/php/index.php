@@ -11,7 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $api_name = @$POST_data["api_name"];
 } else {
     $api_name = @$_GET["api_name"];
-    echo "Do Not Allow To Be There <br>";
+    // echo "Do Not Allow To Be There <br>";
+    // DownloadAttachment("Price_Tasks", "4432004000011372197", $pdo);
 }
 
 if ($api_name == "RefreshAccessToken") {
@@ -136,7 +137,7 @@ if ($api_name == "GetPricingTasks") {
             @$Requirement_ID = $Task['What_to_price']['id'];
             @$Deal_Owner = $Task['Deal_Owner']['name'];
             @$response = json_decode(SearchRecords("Deal_Requirements", $code = 0, $pdo, "(id:equals:" . $Requirement_ID . ")"), true);
-            @$Quantity = $response['data'][0]['Quantity'];
+            @$Quantity = $Task['Request_Quantity'];
             @$Requirement_Details = $Task['Request_Details'];
             $data = array(
                 "Requirement_Details" => $Requirement_Details,
@@ -631,4 +632,10 @@ if ($api_name == "CheckToken") {
         "user_type" => $user_type,
     );
     echo json_encode($data);
+}
+
+if ($api_name == "GetRecordAttachements") {
+    $Module_Name = htmlspecialchars(@$POST_data["Module_Name"]);
+    $Record_ID = htmlspecialchars(@$POST_data["Record_ID"]);
+    echo DownloadAttachment($Module_Name, $Record_ID, $pdo);
 }
