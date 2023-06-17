@@ -122,11 +122,12 @@ if ($api_name == "GetPaperCutSize") {
 if ($api_name == "GetPricingTasks") {
     $Owner_ID = htmlspecialchars(@$POST_data["Zoho_ID"]);
     $final = [];
-    if ($Owner_ID == 0) {;
-        $response2 = json_decode(SearchRecords("Price_Tasks", $code = 0, $pdo, "(Done_Task:equals:No)"), true);
-    } else {
-        $response2 = json_decode(SearchRecords("Price_Tasks", $code = 0, $pdo, "(Done_Task:equals:No)"), true);
-    }
+    $response2 = json_decode(SearchRecords("Price_Tasks", $code = 0, $pdo, "(Done_Task:equals:No)and(To_Webfrom:equals:Yes)"), true);
+    // if ($Owner_ID == 0) {;
+
+    // } else {
+    //     $response2 = json_decode(SearchRecords("Price_Tasks", $code = 0, $pdo, "(Done_Task:equals:No)"), true);
+    // }
     if ($response2 != null) {
         foreach ($response2['data'] as $Task) {
             // print_r($Task);

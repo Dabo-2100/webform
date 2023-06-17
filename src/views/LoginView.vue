@@ -99,7 +99,7 @@ export default {
                     }).then(function (res) {
                         main.LoginIndex = 0;
                         main.$store.state['LoaderIndex'] = 0;
-                        console.log(res.data);
+                        // console.log(res.data);
                         if (res.data['Zoho_Error'] == true) {
                             if (res.data['Login_Error'] == false) {
                                 localStorage.setItem("email", res.data['email']);

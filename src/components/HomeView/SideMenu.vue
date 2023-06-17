@@ -279,7 +279,7 @@ export default {
         })
         .then(function (res) {
           let Final_array = res.data;
-          console.log(Final_array);
+          // console.log(Final_array);
           main.Selections[0]["Index"] = Final_array.length;
           main.$store.state["Price_Tasks"] = Final_array;
           main.$store.state["LoaderIndex"] = 0;
@@ -438,7 +438,7 @@ export default {
           }
           main.Selections[4]["Index"] = OpenTasks.length;
           main.$store.state["OpenPurchase"] = OpenTasks;
-          console.log(OpenTasks);
+          // console.log(OpenTasks);
         });
     },
     LogOut() {

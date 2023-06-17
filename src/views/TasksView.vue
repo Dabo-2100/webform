@@ -38,7 +38,7 @@
               <td>{{ PriceTask["Quantity"] }}</td>
             </tr>
             <tr>
-              <th>عدد القطع</th>
+              <th>الصور المرفقة</th>
               <td>
                 <button
                   v-if="!PriceTask['Attachments'] && PriceTask['Attachments'] != 0"
@@ -282,7 +282,7 @@ export default {
           Module_Name: "Price_Tasks",
         })
         .then(function (res) {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data) {
             main.$store.state["Price_Tasks"][index]["Attachments"] = res.data;
           } else {
